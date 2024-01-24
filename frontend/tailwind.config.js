@@ -4,10 +4,9 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'bg-auth': "url('/assets/images/background-auth.jpg')"
-      }
+        "bg-auth": "url('/assets/images/background-auth.jpg')",
+      },
     },
   },
   plugins: [],
-}
-
+};

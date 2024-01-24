@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import OptionIcon from "../icons/Options";
-import navLinks from "../../constants/define";
+import { generateNavLinks } from "../../constants/define";
+const { useTranslation } = require("react-i18next");
 const Header = () => {
+  const { t } = useTranslation();
+  const navLinks = generateNavLinks(t);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -39,14 +42,14 @@ const Header = () => {
               to="/login"
               className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
             >
-              Đăng nhập
+              {t("login")}
             </Link>
             <Link
               onClick={handleClickHiddenMenu}
               to="/register"
               className="text-white bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
             >
-              Đăng ký
+              {t("register")}
             </Link>
             <button
               type="button"

@@ -1,15 +1,30 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import OptionIcon from "../icons/Options";
+import VietnamIcon from "../icons/Vietnam";
+import UnitedKingDomIcon from "../icons/UnitedKingdom";
 import { generateNavLinks } from "../../constants/define";
-const { useTranslation } = require("react-i18next");
+import i18n from "i18next";
+import useLanguageState from "../../stores/languageState";
+import { useTranslation } from "react-i18next";
 const Header = () => {
   const { t } = useTranslation();
   const navLinks = generateNavLinks(t);
+  const { currentLanguage } = useLanguageState();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+  const [isVietnamese, setIsVietnamese] = useState(currentLanguage === "vie");
+  const handleClickLanguage = () => {
+    setIsVietnamese(!isVietnamese);
+    if (isVietnamese) {
+      i18n.changeLanguage("eng");
+    } else {
+      i18n.changeLanguage("vie");
+    }
+  };
+
   window.addEventListener("click", (e) => {
     if (e.target.closest("header")) return;
     setIsMenuOpen(false);
@@ -57,6 +72,9 @@ const Header = () => {
               onClick={toggleMenu}
             >
               <OptionIcon />
+            </button>
+            <button onClick={handleClickLanguage} className="">
+              {!isVietnamese ? <VietnamIcon /> : <UnitedKingDomIcon />}
             </button>
           </div>
           <div

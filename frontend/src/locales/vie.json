@@ -21,5 +21,8 @@
   "about": "Giới thiệu",
   "errorNotFound": "Không tìm thấy trang bạn yêu cầu",
   "backtoHome": "Quay lại",
-  "home": "Trang chủ"
+  "home": "Trang chủ",
+  "name": "Họ tên",
+  "loginWithFacebook": "Đăng nhập với Facebook",
+  "loginWithGoogle": "Đăng nhập với Google"
 }

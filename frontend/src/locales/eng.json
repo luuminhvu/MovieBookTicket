@@ -21,5 +21,8 @@
   "about": "About Us",
   "errorNotFound": "Oops! Looks like you're lost.",
   "backtoHome": "Let's get you back ",
-  "home": "Home"
+  "home": "Home",
+  "name": "Name",
+  "loginWithFacebook": "Login with Facebook",
+  "loginWithGoogle": "Login with Google"
 }

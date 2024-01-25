@@ -2,6 +2,7 @@ import React from "react";
 import FacebookIcon from "../../components/icons/Facebook";
 import GoogleIcon from "../../components/icons/Google";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 export default function Login() {
   const { t } = useTranslation();
   return (
@@ -13,7 +14,7 @@ export default function Login() {
         <form className="mt-6">
           <div className="mb-2">
             <label
-              for="email"
+              htmlFor="email"
               className="block text-sm font-semibold text-gray-800"
             >
               {t("emailAddress")}
@@ -25,7 +26,7 @@ export default function Login() {
           </div>
           <div className="mb-2">
             <label
-              for="password"
+              htmlFor="password"
               className="block text-sm font-semibold text-gray-800"
             >
               {t("password")}
@@ -35,9 +36,9 @@ export default function Login() {
               className="block w-full px-4 py-2 mt-2 text-black bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
           </div>
-          <a href="#" className="text-xs text-blue-500 hover:underline">
+          <Link href="#" className="text-xs text-blue-500 hover:underline">
             {t("forgotPassword")}
-          </a>
+          </Link>
           <div className="mt-6">
             <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-black rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600">
               {t("login")}
@@ -74,9 +75,9 @@ export default function Login() {
         <p className="mt-8 text-xs font-light text-center text-gray-700">
           {" "}
           {t("dontHaveAnAccount")}{" "}
-          <a href="#" className="font-medium text-blue-500 hover:underline">
+          <Link href="#" className="font-medium text-blue-500 hover:underline">
             {t("registerQuick")}
-          </a>
+          </Link>
         </p>
       </div>
     </div>

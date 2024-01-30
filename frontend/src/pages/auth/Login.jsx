@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import FacebookIcon from "../../components/icons/Facebook";
 import GoogleIcon from "../../components/icons/Google";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import Eye from "../../components/icons/Eye";
+import EyeSlash from "../../components/icons/EyeSlash";
 export default function Login() {
   const { t } = useTranslation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const handleSubmitLogin = (e) => {
+    e.preventDefault();
+
+    console.log([email, password]);
+  };
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <div className="relative flex flex-col justify-center min-h-[80vh] overflow-hidden">
       <div className="w-full p-6 m-auto bg-white rounded-md shadow-xl lg:max-w-xl">
@@ -21,6 +31,8 @@ export default function Login() {
             </label>
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="block w-full px-4 py-2 mt-2 text-black bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
           </div>
@@ -31,16 +43,29 @@ export default function Login() {
             >
               {t("password")}
             </label>
-            <input
-              type="password"
-              className="block w-full px-4 py-2 mt-2 text-black bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
-            />
+            <div className="flex">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="block w-full px-4 py-2 mt-2 text-black bg-white focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40 border rounded-md"
+              />
+              <div
+                className="px-4 py-2 mt-2 ml-1 text-black bg-white rounded-md flex items-center justify-center cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeSlash /> : <Eye />}
+              </div>
+            </div>
           </div>
           <Link href="#" className="text-xs text-blue-500 hover:underline">
             {t("forgotPassword")}
           </Link>
           <div className="mt-6">
-            <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-black rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600">
+            <button
+              onClick={handleSubmitLogin}
+              className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-black rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600"
+            >
               {t("login")}
             </button>
           </div>

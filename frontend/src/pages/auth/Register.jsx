@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import FacebookIcon from "../../components/icons/Facebook";
 import GoogleIcon from "../../components/icons/Google";
+import Eye from "../../components/icons/Eye";
+import EyeSlash from "../../components/icons/EyeSlash";
 
 export default function Register() {
   const { t } = useTranslation();
+  const [usename, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] =
+    useState(false);
   return (
     <div>
       <div className="flex flex-col items-center min-h-[90vh] pt-6 sm:justify-center sm:pt-0 bg-gray-50">
@@ -25,6 +34,8 @@ export default function Register() {
               </label>
               <div className="flex flex-col items-start">
                 <input
+                  value={usename}
+                  onChange={(e) => setUsername(e.target.value)}
                   type="text"
                   className="block w-full px-4 py-2 mt-2 text-black bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
@@ -39,6 +50,8 @@ export default function Register() {
               </label>
               <div className="flex flex-col items-start">
                 <input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   className="block w-full px-4 py-2 mt-2 text-black bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
@@ -51,11 +64,19 @@ export default function Register() {
               >
                 {t("password")}
               </label>
-              <div className="flex flex-col items-start">
+              <div className="flex">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="block w-full px-4 py-2 mt-2 text-black bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
+                <div
+                  className="px-4 py-2 mt-2 ml-1 text-black bg-white rounded-md flex items-center justify-center cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeSlash /> : <Eye />}
+                </div>
               </div>
             </div>
             <div className="mt-4">
@@ -65,11 +86,21 @@ export default function Register() {
               >
                 {t("confirmPassword")}
               </label>
-              <div className="flex flex-col items-start">
+              <div className="flex">
                 <input
-                  type="password"
+                  value={passwordConfirmation}
+                  onChange={(e) => setPasswordConfirmation(e.target.value)}
+                  type={showPasswordConfirmation ? "text" : "password"}
                   className="block w-full px-4 py-2 mt-2 text-black bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
+                <div
+                  className="px-4 py-2 mt-2 ml-1 text-black bg-white rounded-md flex items-center justify-center cursor-pointer"
+                  onClick={() =>
+                    setShowPasswordConfirmation(!showPasswordConfirmation)
+                  }
+                >
+                  {showPasswordConfirmation ? <EyeSlash /> : <Eye />}
+                </div>
               </div>
             </div>
             <Link to="" className="text-xs text-blue-500 hover:underline">

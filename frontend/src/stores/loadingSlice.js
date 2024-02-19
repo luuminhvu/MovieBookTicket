@@ -13,5 +13,7 @@ export const loadingSlice = createSlice({
     },
   },
 });
-export default loadingSlice.reducer;
-export const { setLoading } = loadingSlice.actions;
+
+export const { setLoading } = loadingSlice.actions; // Xuất các hành động của slice
+
+export default loadingSlice.reducer; // Xuất reducer của slice

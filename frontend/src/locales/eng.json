@@ -24,5 +24,10 @@
   "home": "Home",
   "name": "Name",
   "loginWithFacebook": "Login with Facebook",
-  "loginWithGoogle": "Login with Google"
+  "loginWithGoogle": "Login with Google",
+  "tooShort": "Too Short !",
+  "tooLong": "Too Long !",
+  "invalidEmail": "Invalid Email !",
+  "required": "Required !",
+  "passwordMustMatch": "Password must match !"
 }

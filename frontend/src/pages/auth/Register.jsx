@@ -1,20 +1,46 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, parsePath } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import FacebookIcon from "../../components/icons/Facebook";
 import GoogleIcon from "../../components/icons/Google";
 import Eye from "../../components/icons/Eye";
 import EyeSlash from "../../components/icons/EyeSlash";
-
+import api from "../../utils/api";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 export default function Register() {
   const { t } = useTranslation();
-  const [usename, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      email: "",
+      password: "",
+      passwordConfirmation: "",
+    },
+    validationSchema: Yup.object({
+      username: Yup.string()
+        .min(6, t("tooShort"))
+        .max(50, t("tooLong"))
+        .required(t("required")),
+      email: Yup.string().email(t("invalidEmail")).required(t("required")),
+      password: Yup.string()
+        .min(6, t("tooShort"))
+        .max(50, t("tooLong"))
+        .required(t("required")),
+      passwordConfirmation: Yup.string()
+        .oneOf([Yup.ref("password"), null], t("passwordMustMatch"))
+        .required(t("required")),
+    }),
+    onSubmit: (values) => {
+      console.log(values);
+      // api.post("/user/register", values).then((res) => {
+      //   console.log(res);
+      // });
+    },
+  });
   return (
     <div>
       <div className="flex flex-col items-center min-h-[90vh] pt-6 sm:justify-center sm:pt-0 bg-gray-50">
@@ -24,7 +50,7 @@ export default function Register() {
           </Link>
         </div>
         <div className="w-full px-6 py-4 mt-6 overflow-hidden bg-white shadow-md sm:max-w-lg sm:rounded-lg">
-          <form>
+          <form onSubmit={formik.handleSubmit}>
             <div>
               <label
                 htmlFor="name"
@@ -34,12 +60,16 @@ export default function Register() {
               </label>
               <div className="flex flex-col items-start">
                 <input
-                  value={usename}
-                  onChange={(e) => setUsername(e.target.value)}
+                  name="username"
+                  value={formik.values.username}
                   type="text"
+                  onChange={formik.handleChange}
                   className="block w-full px-4 py-2 mt-2 text-black bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
               </div>
+              {formik.errors.username && formik.touched.username && (
+                <p className="text-sx text-red-500">{formik.errors.username}</p>
+              )}
             </div>
             <div className="mt-4">
               <label
@@ -50,12 +80,16 @@ export default function Register() {
               </label>
               <div className="flex flex-col items-start">
                 <input
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  name="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
                   type="email"
                   className="block w-full px-4 py-2 mt-2 text-black bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
               </div>
+              {formik.errors.email && formik.touched.email && (
+                <p className="text-sx text-red-500">{formik.errors.email}</p>
+              )}
             </div>
             <div className="mt-4">
               <label
@@ -66,9 +100,10 @@ export default function Register() {
               </label>
               <div className="flex">
                 <input
+                  name="password"
                   type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
                   className="block w-full px-4 py-2 mt-2 text-black bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
                 <div
@@ -78,6 +113,9 @@ export default function Register() {
                   {showPassword ? <EyeSlash /> : <Eye />}
                 </div>
               </div>
+              {formik.errors.password && formik.touched.password && (
+                <p className="text-sx text-red-500">{formik.errors.password}</p>
+              )}
             </div>
             <div className="mt-4">
               <label
@@ -88,8 +126,9 @@ export default function Register() {
               </label>
               <div className="flex">
                 <input
-                  value={passwordConfirmation}
-                  onChange={(e) => setPasswordConfirmation(e.target.value)}
+                  name="passwordConfirmation"
+                  value={formik.values.passwordConfirmation}
+                  onChange={formik.handleChange}
                   type={showPasswordConfirmation ? "text" : "password"}
                   className="block w-full px-4 py-2 mt-2 text-black bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
@@ -102,12 +141,21 @@ export default function Register() {
                   {showPasswordConfirmation ? <EyeSlash /> : <Eye />}
                 </div>
               </div>
+              {formik.errors.passwordConfirmation &&
+                formik.touched.passwordConfirmation && (
+                  <p className="text-sx text-red-500">
+                    {formik.errors.passwordConfirmation}
+                  </p>
+                )}
             </div>
             <Link to="" className="text-xs text-blue-500 hover:underline">
               {t("forgotPassword")}
             </Link>
             <div className="flex z-1 items-center mt-4">
-              <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-black rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600">
+              <button
+                type="submit"
+                className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-black rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600"
+              >
                 {t("register")}
               </button>
             </div>
@@ -115,7 +163,11 @@ export default function Register() {
           <div className="mt-4 text-grey-600">
             {t("alreadyHaveAnAccount")}{" "}
             <span>
-              <Link className="text-blue-500 hover:underline" href="#">
+              <Link
+                to="/login"
+                className="text-blue-500 hover:underline"
+                href="#"
+              >
                 {t("login")}
               </Link>
             </span>
@@ -127,17 +179,13 @@ export default function Register() {
           </div>
           <div className="my-6 space-y-2">
             <button
-              aria-label="Login with Google"
               type="button"
               className="flex items-center justify-center w-full p-2 space-x-4 border rounded-md focus:ring-2 focus:ring-offset-1 dark:border-gray-400 focus:ring-violet-400"
             >
               <GoogleIcon />
               <p>{t("loginWithGoogle")}</p>
             </button>
-            <button
-              aria-label="Login with GitHub"
-              className="flex items-center justify-center w-full p-2 space-x-4 border rounded-md focus:ring-2 focus:ring-offset-1 dark:border-gray-400 focus:ring-violet-400"
-            >
+            <button className="flex items-center justify-center w-full p-2 space-x-4 border rounded-md focus:ring-2 focus:ring-offset-1 dark:border-gray-400 focus:ring-violet-400">
               <FacebookIcon />
               <p>{t("loginWithFacebook")}</p>
             </button>

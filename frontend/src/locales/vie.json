@@ -24,5 +24,10 @@
   "home": "Trang chủ",
   "name": "Họ tên",
   "loginWithFacebook": "Đăng nhập với Facebook",
-  "loginWithGoogle": "Đăng nhập với Google"
+  "loginWithGoogle": "Đăng nhập với Google",
+  "tooShort": "Quá ngắn !",
+  "tooLong": "Quá dài !",
+  "invalidEmail": "Email không hợp lệ !",
+  "required": "Trường này không được để trống !",
+  "passwordMustMatch": "Mật khẩu không khớp !"
 }

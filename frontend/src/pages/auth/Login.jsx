@@ -100,7 +100,10 @@ export default function Login() {
         <p className="mt-8 text-xs font-light text-center text-gray-700">
           {" "}
           {t("dontHaveAnAccount")}{" "}
-          <Link href="#" className="font-medium text-blue-500 hover:underline">
+          <Link
+            to="/register"
+            className="font-medium text-blue-500 hover:underline"
+          >
             {t("registerQuick")}
           </Link>
         </p>

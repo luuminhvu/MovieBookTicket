@@ -7,6 +7,8 @@ import { generateNavLinks } from "../../constants/define";
 import i18n from "i18next";
 import useLanguageState from "../../stores/languageState";
 import { useTranslation } from "react-i18next";
+import { UseSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 const Header = () => {
   const { t } = useTranslation();
   const navLinks = generateNavLinks(t);

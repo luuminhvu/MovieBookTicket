@@ -1,18 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, parsePath } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import FacebookIcon from "../../components/icons/Facebook";
 import GoogleIcon from "../../components/icons/Google";
 import Eye from "../../components/icons/Eye";
 import EyeSlash from "../../components/icons/EyeSlash";
-import api from "../../utils/api";
+import { register } from "../../stores/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 export default function Register() {
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
+  useEffect(() => {
+    if (auth.username) {
+      navigate("/");
+    }
+  }, [auth.username, navigate]);
+
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -36,9 +47,7 @@ export default function Register() {
     }),
     onSubmit: (values) => {
       console.log(values);
-      // api.post("/user/register", values).then((res) => {
-      //   console.log(res);
-      // });
+      dispatch(register(values));
     },
   });
   return (

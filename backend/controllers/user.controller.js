@@ -1,6 +1,6 @@
 const db = require("../config/dbconfig");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const { genAccessToken } = require("../utils/genToken");
 const SuccessResponse = require("../common/Response/Success");
 const ErrorResponse = require("../common/Response/Error");
 const register = async (req, res) => {
@@ -33,8 +33,13 @@ const register = async (req, res) => {
         resolve();
       });
     });
-
-    SuccessResponse(res, 200, "User registered successfully");
+    const user = {
+      username: req.body.username,
+      email: req.body.email,
+      role: "customer",
+    };
+    const token = genAccessToken(user);
+    SuccessResponse(res, 200, "User registered successfully", token);
   } catch (error) {
     ErrorResponse(res, 500, "Internal Server Error");
     console.log(error);

@@ -7,11 +7,14 @@ import "./plugins/i18n";
 import loadingSlice from "./stores/loadingSlice";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
+import authSlice, { loadingUserLogin } from "./stores/authSlice";
 const store = configureStore({
   reducer: {
     loading: loadingSlice,
+    auth: authSlice,
   },
 });
+store.dispatch(loadingUserLogin());
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

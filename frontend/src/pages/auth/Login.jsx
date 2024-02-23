@@ -1,20 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FacebookIcon from "../../components/icons/Facebook";
 import GoogleIcon from "../../components/icons/Google";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import Eye from "../../components/icons/Eye";
 import EyeSlash from "../../components/icons/EyeSlash";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../stores/authSlice";
+import { useNavigate } from "react-router-dom";
+import { setLoading } from "../../stores/loadingSlice";
 export default function Login() {
+  const auth = useSelector((state) => state.auth);
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmitLogin = (e) => {
+  const dispatch = useDispatch();
+  const values = { email, password };
+  const handleSubmitLogin = async (e) => {
     e.preventDefault();
-
-    console.log([email, password]);
+    dispatch(setLoading(true));
+    try {
+      const res = await dispatch(login(values));
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setLoading(false));
+    }
   };
   const [showPassword, setShowPassword] = useState(false);
+  useEffect(() => {
+    if (auth.username) {
+      navigate("/");
+    }
+  }, [auth.username, navigate]);
   return (
     <div className="relative flex flex-col justify-center min-h-[80vh] overflow-hidden">
       <div className="w-full p-6 m-auto bg-white rounded-md shadow-xl lg:max-w-xl">

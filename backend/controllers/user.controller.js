@@ -42,8 +42,41 @@ const register = async (req, res) => {
     SuccessResponse(res, 200, "User registered successfully", token);
   } catch (error) {
     ErrorResponse(res, 500, "Internal Server Error");
+  }
+};
+
+const login = async (req, res) => {
+  try {
+    const q = "SELECT * FROM `user` WHERE email = ?";
+    const data = await new Promise((resolve, reject) => {
+      db.query(q, [req.body.email], (err, data) => {
+        if (err) return ErrorResponse(res, 500, "Internal Server Error");
+        resolve(data);
+      });
+    });
+
+    if (data.length === 0) {
+      return ErrorResponse(res, 400, "Email or password is incorrect");
+    }
+
+    const user = data[0];
+    const validPassword = bcrypt.compareSync(req.body.password, user.Password);
+    if (!validPassword) {
+      return ErrorResponse(res, 400, "Invalid password");
+    }
+    const newUser = {
+      userId: user.UserID,
+      username: user.Username,
+      email: user.Email,
+      role: user.Role,
+    };
+
+    const token = genAccessToken(newUser);
+    SuccessResponse(res, 200, "User logged in successfully", token);
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error");
     console.log(error);
   }
 };
 
-module.exports = { register };
+module.exports = { register, login };

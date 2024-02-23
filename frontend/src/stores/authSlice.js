@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import api from "../utils/api";
 import { jwtDecode } from "jwt-decode";
 import { setLocalStorage, removeLocalStorage } from "../services/datastore";
@@ -27,6 +26,18 @@ export const register = createAsyncThunk(
     }
   }
 );
+export const login = createAsyncThunk(
+  "auth/login",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await api.post("/user/login", values);
+      setLocalStorage("token", response.data.data);
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -43,6 +54,20 @@ const authSlice = createSlice({
           loginStatus: "success",
         };
       }
+    },
+    logout(state) {
+      removeLocalStorage("token");
+      return {
+        ...state,
+        token: null,
+        username: "",
+        email: "",
+        role: "",
+        loginError: "",
+        loginStatus: "",
+        registerError: "",
+        registerStatus: "",
+      };
     },
   },
   extraReducers: (builder) => {
@@ -66,7 +91,30 @@ const authSlice = createSlice({
       state.registerError = action.payload;
       state.registerStatus = "failed";
     });
+    builder.addCase(login.fulfilled, (state, action) => {
+      const user = jwtDecode(action.payload);
+      if (action.payload) {
+        return {
+          ...state,
+          token: action.payload,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+          loginStatus: "success",
+          loginError: "",
+        };
+      } else {
+        return state;
+      }
+    });
+    builder.addCase(login.rejected, (state, action) => {
+      state.loginError = action.payload;
+      state.loginStatus = "failed";
+    });
+    builder.addCase(login.pending, (state, action) => {
+      state.loginStatus = "loading";
+    });
   },
 });
 export default authSlice.reducer;
-export const { loadingUserLogin } = authSlice.actions;
+export const { loadingUserLogin, logout } = authSlice.actions;

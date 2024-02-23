@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
+import { setLoading } from "../../stores/loadingSlice";
 export default function Register() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -45,9 +46,14 @@ export default function Register() {
         .oneOf([Yup.ref("password"), null], t("passwordMustMatch"))
         .required(t("required")),
     }),
-    onSubmit: (values) => {
-      console.log(values);
-      dispatch(register(values));
+    onSubmit: async (values) => {
+      dispatch(setLoading(true));
+      try {
+        await dispatch(register(values));
+        dispatch(setLoading(false));
+      } catch (error) {
+        dispatch(setLoading(false));
+      }
     },
   });
   return (

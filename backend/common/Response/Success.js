@@ -3,6 +3,7 @@ const SuccessResponse = (res, statusCode, message, data) => {
     status: "success",
     message: message,
     data: data,
+    type: "success",
   });
 };
 

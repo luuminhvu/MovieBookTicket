@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../stores/authSlice";
 import { useNavigate } from "react-router-dom";
 import { setLoading } from "../../stores/loadingSlice";
+import { showToast } from "../../components/common/Toast";
 export default function Login() {
   const auth = useSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function Login() {
     try {
       const res = await dispatch(login(values));
       dispatch(setLoading(false));
+      showToast(res.payload.message, res.payload.type);
     } catch (error) {
       dispatch(setLoading(false));
     }

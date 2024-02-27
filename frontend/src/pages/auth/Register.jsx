@@ -11,6 +11,7 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { setLoading } from "../../stores/loadingSlice";
+import { showToast } from "../../components/common/Toast";
 export default function Register() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -49,8 +50,9 @@ export default function Register() {
     onSubmit: async (values) => {
       dispatch(setLoading(true));
       try {
-        await dispatch(register(values));
+        const res = await dispatch(register(values));
         dispatch(setLoading(false));
+        showToast(res.payload.message, res.payload.type);
       } catch (error) {
         dispatch(setLoading(false));
       }

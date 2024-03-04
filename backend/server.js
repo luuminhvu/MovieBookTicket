@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const db = require("./config/dbconfig");
 const userRouter = require("./routers/user");
+const movieRouter = require("./routers/movie");
 const dotenv = require("dotenv");
 require("dotenv").config();
 const app = express();
@@ -17,6 +18,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/movie", movieRouter);
 
 db.connect((err) => {
   if (err) {

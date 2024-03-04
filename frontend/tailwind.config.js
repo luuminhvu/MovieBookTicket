@@ -3,9 +3,6 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{jsx,js,ts,tsx}"],
   theme: {
     extend: {
-      backgroundImage: {
-        "bg-auth": "url('/assets/images/background-auth.jpg')",
-      },
       colors: {
         primary: {
           50: "#eff6ff",
@@ -58,6 +55,16 @@ module.exports = {
         "Noto Color Emoji",
       ],
     },
+    keyframes: {
+      "spin-slow": {
+        "0%": { transform: "rotate(0deg)" },
+        "100%": { transform: "rotate(360deg)" },
+      },
+    },
+    animation: {
+      "spin-slow": "spin-slow 3s linear infinite", // Adjust the duration as needed
+    },
   },
+  variants: {},
   plugins: [],
 };

@@ -24,7 +24,7 @@ export default function Login() {
     try {
       const res = await dispatch(login(values));
       dispatch(setLoading(false));
-      showToast(res.payload.message, res.payload.type);
+      showToast(res.payload.message, res.payload.status);
     } catch (error) {
       dispatch(setLoading(false));
     }

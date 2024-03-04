@@ -8,13 +8,16 @@ import loadingSlice from "./stores/loadingSlice";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice, { loadingUserLogin } from "./stores/authSlice";
+import movieSlice, { fetchMovies } from "./stores/movieSlice";
 const store = configureStore({
   reducer: {
     loading: loadingSlice,
     auth: authSlice,
+    movie: movieSlice,
   },
 });
 store.dispatch(loadingUserLogin());
+store.dispatch(fetchMovies());
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

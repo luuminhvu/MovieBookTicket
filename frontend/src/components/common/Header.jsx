@@ -115,10 +115,10 @@ const Header = () => {
             </button>
           </div>
           <div
-            className={`absolute top-full inset-x-0 z-0 lg:hidden ${
+            className={`absolute top-full inset-x-0 lg:hidden ${
               isMenuOpen ? "block" : "hidden"
             }`}
-            style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.8)", zIndex: 99 }}
           >
             {/* Mobile menu */}
             <ul className="flex flex-col text-black">
@@ -137,7 +137,7 @@ const Header = () => {
           </div>
 
           <div className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1">
-            <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+            <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 z-50">
               {navLinks.map((link) => (
                 <li key={link.name}>
                   <Link

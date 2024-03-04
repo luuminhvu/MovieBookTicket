@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, parsePath } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import FacebookIcon from "../../components/icons/Facebook";
 import GoogleIcon from "../../components/icons/Google";
@@ -52,7 +52,7 @@ export default function Register() {
       try {
         const res = await dispatch(register(values));
         dispatch(setLoading(false));
-        showToast(res.payload.message, res.payload.type);
+        showToast(res.payload.message, res.payload.status);
       } catch (error) {
         dispatch(setLoading(false));
       }

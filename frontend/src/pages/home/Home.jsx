@@ -53,7 +53,7 @@ const Home = () => {
                       </div>
                     </div>
 
-                    <h2 className="text-base mt-2 text-[#337ab7] font-bold">
+                    <h2 className="text-base mt-2 text-[#337ab7] font-bold cursor-pointer hover:underline">
                       {movie.Name}
                     </h2>
                     <h2 className="text-sm mt-2 font-bold">

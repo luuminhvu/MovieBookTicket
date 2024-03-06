@@ -62,7 +62,7 @@ module.exports = {
       },
     },
     animation: {
-      "spin-slow": "spin-slow 3s linear infinite", // Adjust the duration as needed
+      "spin-slow": "spin-slow 3s linear infinite",
     },
   },
   variants: {},

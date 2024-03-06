@@ -2,6 +2,7 @@ import Login from "../pages/auth/Login.jsx";
 import Register from "../pages/auth/Register.jsx";
 import Home from "../pages/home/Home.jsx";
 import NotFound from "../pages/errors/NotFound.jsx";
+import Detail from "../pages/detail/Detail.jsx";
 
 const routers = [
   {
@@ -15,6 +16,10 @@ const routers = [
   {
     path: "/",
     component: Home,
+  },
+  {
+    path: "/detail/:id",
+    component: Detail,
   },
   {
     path: "*",

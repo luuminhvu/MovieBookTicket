@@ -18,7 +18,7 @@ const routers = [
     component: Home,
   },
   {
-    path: "/detail/:id",
+    path: "/movie/:id",
     component: Detail,
   },
   {

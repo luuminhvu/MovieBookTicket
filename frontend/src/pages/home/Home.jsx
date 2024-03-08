@@ -6,6 +6,7 @@ import TypewriterSpinner from "../../components/common/TypewriterSpinner";
 import Age from "../../components/common/Age18+";
 import Play from "../../components/icons/Play";
 import Player from "../../components/common/ReactPlayer";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const { movies, status } = useSelector((state) => state.movie);
@@ -53,9 +54,12 @@ const Home = () => {
                       </div>
                     </div>
 
-                    <h2 className="text-base mt-2 text-[#337ab7] font-bold cursor-pointer hover:underline">
+                    <Link
+                      to={`/movie/${movie.MovieID}`}
+                      className="text-base mt-2 text-[#337ab7] font-bold cursor-pointer hover:underline"
+                    >
                       {movie.Name}
-                    </h2>
+                    </Link>
                     <h2 className="text-sm mt-2 font-bold">
                       Thể loại:
                       <span className="text-sm font-thin"> {movie.Genres}</span>

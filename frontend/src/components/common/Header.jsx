@@ -90,14 +90,14 @@ const Header = () => {
                 <Link
                   onClick={handleClickHiddenMenu}
                   to="/login"
-                  className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+                  className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-0 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
                 >
                   {t("login")}
                 </Link>
                 <Link
                   onClick={handleClickHiddenMenu}
                   to="/register"
-                  className="text-white bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+                  className="text-white bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-5 py-2 lg:py-2.5 mr-1 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
                 >
                   {t("register")}
                 </Link>
@@ -105,7 +105,7 @@ const Header = () => {
             )}
             <button
               type="button"
-              className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              className="inline-flex items-center p-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
               onClick={toggleMenu}
             >
               <OptionIcon />
@@ -126,7 +126,7 @@ const Header = () => {
                 <li key={link.name}>
                   <Link
                     to={link.link}
-                    className="block py-2 pr-4 pl-3 text-gray-700 rounded font-bold hover:bg-gray-50 lg:hover:bg-transparent lg:text-gray-700 lg:p-0 dark:text-gray-100 dark:hover:bg-gray-900"
+                    className="block py-2 pr-4 pl-3 text-white rounded font-bold hover:bg-gray-700 lg:hover:bg-transparent lg:text-gray-700 lg:p-0 dark:text-gray-100 dark:hover:bg-gray-700"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {link.name}

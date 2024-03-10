@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { getDetailMovie } from "../../services/function";
 import dayjs from "dayjs";
 import Age from "../../components/common/Age18+";
+import DateSelector from "../../components/common/DatePicker";
 const Detail = () => {
   const params = useParams();
   const [movie, setMovie] = useState({});
@@ -122,6 +123,7 @@ const Detail = () => {
           </div>
         </div>
       </section>
+      <DateSelector />
     </>
   );
 };

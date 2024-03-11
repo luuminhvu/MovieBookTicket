@@ -60,9 +60,15 @@ module.exports = {
         "0%": { transform: "rotate(0deg)" },
         "100%": { transform: "rotate(360deg)" },
       },
+      "bounce-top": {
+        "0%": { transform: "translateY(-15px)" },
+        "50%": { transform: "translateY(0)" },
+        "100%": { transform: "translateY(-15px)" },
+      },
     },
     animation: {
       "spin-slow": "spin-slow 3s linear infinite",
+      "bounce-top": "bounce-top 1s linear infinite",
     },
   },
   variants: {},

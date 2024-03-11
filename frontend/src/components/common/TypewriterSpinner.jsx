@@ -13,7 +13,7 @@ const TypewriterSpinner = () => {
             options={{
               strings: ["Vui lòng đợi trong giây lát"],
               autoStart: true,
-              loop: false,
+              loop: true,
             }}
           />
         </h1>

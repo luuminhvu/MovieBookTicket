@@ -3,6 +3,7 @@ import Register from "../pages/auth/Register.jsx";
 import Home from "../pages/home/Home.jsx";
 import NotFound from "../pages/errors/NotFound.jsx";
 import Detail from "../pages/detail/Detail.jsx";
+import BookDate from "../pages/booking/BookDate.jsx";
 
 const routers = [
   {
@@ -20,6 +21,10 @@ const routers = [
   {
     path: "/movie/:id",
     component: Detail,
+  },
+  {
+    path: "/movie/bookings/:id",
+    component: BookDate,
   },
   {
     path: "*",

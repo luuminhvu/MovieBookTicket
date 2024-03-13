@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { getDetailMovie } from "../../services/function";
 import dayjs from "dayjs";
 import Age from "../../components/common/Age18+";
-import DateSelector from "../../components/common/DatePicker";
 import Player from "../../components/common/ReactPlayer";
 import TypewriterSpinner from "../../components/common/TypewriterSpinner";
 const Detail = () => {
@@ -137,9 +136,12 @@ const Detail = () => {
                       </span>
                     </div>
                   </div>
-                  <button className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg border-2 border-red-500 hover:border-transparent mt-5 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                  <Link
+                    to={`/movie/bookings/${movie.MovieID}`}
+                    className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg border-2 border-red-500 hover:border-transparent mt-5 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
+                  >
                     Mua vé
-                  </button>
+                  </Link>
                   <button
                     onClick={() => handlePlay(movie.Trailer)}
                     className="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg border-2 border-gray-500 hover:border-transparent ml-5 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
@@ -155,7 +157,6 @@ const Detail = () => {
           </div>
         </section>
       )}
-      <DateSelector />
     </>
   );
 };

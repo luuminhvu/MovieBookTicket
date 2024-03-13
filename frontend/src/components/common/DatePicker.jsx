@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import dayjs from "dayjs";
 
-const DateSelector = () => {
+const DateSelector = ({ onDateChange }) => {
   const [selectedDateIndex, setSelectedDateIndex] = useState(0);
   const currentDate = dayjs();
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -11,7 +11,7 @@ const DateSelector = () => {
 
   const handleDateChange = (index) => {
     setSelectedDateIndex(index);
-    console.log(dateArray[index].format("YYYY-MM-DD")); // Log ngày được chọn
+    onDateChange(dateArray[index]);
   };
 
   const renderDateButtons = () => {
@@ -21,7 +21,7 @@ const DateSelector = () => {
         isSelected
           ? "bg-purple-600 shadow-lg dark-shadow"
           : "bg-white shadow-md"
-      } hover:bg-purple-500 hover:shadow-lg hover-dark-shadow rounded-lg mx-1 transition-all duration-300 cursor-pointer justify-center w-64`;
+      } hover:bg-purple-500 hover:shadow-lg hover-dark-shadow rounded-lg mx-1 transition-all duration-300 cursor-pointer justify-center w-8 lg:w-32 md:w-16`;
 
       return (
         <div
@@ -57,7 +57,7 @@ const DateSelector = () => {
   };
 
   return (
-    <div className="flex justify-center mt-8 space-x-4">
+    <div className="flex justify-center mt-8 space-x-4 mb-6">
       {renderDateButtons()}
     </div>
   );

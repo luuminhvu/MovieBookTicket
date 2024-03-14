@@ -35,5 +35,24 @@ const getCinemaShowMovie = async (req, res, next) => {
     ErrorResponse(res, 500, "Internal Server Error", error);
   }
 };
+const getSeatForBooking = async (req, res, next) => {
+  try {
+    const ShowtimeID = req.body.ShowtimeID;
 
-module.exports = { getCinemaShowMovie };
+    const q =
+      "SELECT ss.ShowSeatID,cs.SeatName,cs.SeatType,ss.SeatStatus,ss.Price FROM cinemaseats cs JOIN showseats ss ON cs.CinemaSeatID = ss.CinemaSeatID WHERE ss.ShowtimeID = ?";
+
+    const rows = await new Promise((resolve, reject) => {
+      db.query(q, [ShowtimeID], (err, data) => {
+        if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+        resolve(data);
+      });
+    });
+
+    SuccessResponse(res, 200, "Seats fetched successfully", rows);
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error", error);
+  }
+};
+
+module.exports = { getCinemaShowMovie, getSeatForBooking };

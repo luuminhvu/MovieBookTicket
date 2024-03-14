@@ -4,6 +4,7 @@ import Home from "../pages/home/Home.jsx";
 import NotFound from "../pages/errors/NotFound.jsx";
 import Detail from "../pages/detail/Detail.jsx";
 import BookDate from "../pages/booking/BookDate.jsx";
+import BookSeat from "../pages/booking/BookSeat.jsx";
 
 const routers = [
   {
@@ -25,6 +26,10 @@ const routers = [
   {
     path: "/movie/bookings/:id",
     component: BookDate,
+  },
+  {
+    path: "/movie/bookings/:id/seats",
+    component: BookSeat,
   },
   {
     path: "*",

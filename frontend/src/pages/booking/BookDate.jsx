@@ -2,17 +2,30 @@ import React, { useEffect, useState } from "react";
 import Booking from "../../components/common/Booking";
 import DateSelector from "../../components/common/DatePicker";
 import dayjs from "dayjs";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getShowTimeMovie } from "../../services/function";
 import { setLoading } from "../../stores/loadingSlice";
 import Search from "../../components/icons/Search";
 const BookDate = () => {
   const id = useParams().id;
+  const navigate = useNavigate();
   const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [showTime, setShowTime] = useState([]);
   const handleDateChange = (selectedDate) => {
     setDate(selectedDate.format("YYYY-MM-DD"));
   };
+  const handleButtonClick = (cinemaName, cinemaHallName, startTime) => {
+    const queryParams = new URLSearchParams({
+      id: id,
+      date: date,
+      cinemaName: cinemaName,
+      cinemaHallName: cinemaHallName,
+      startTime: startTime,
+    });
+
+    return navigate(`/movie/bookings/${id}/seats?${queryParams.toString()}`);
+  };
+
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
@@ -51,7 +64,17 @@ const BookDate = () => {
                 </h1>
                 <div className="flex flex-wrap">
                   {time.Showtimes.map((showtime, idx) => (
-                    <button key={idx} className="mr-4 mb-4">
+                    <button
+                      onClick={() =>
+                        handleButtonClick(
+                          time.CinemaName,
+                          showtime.CinemaHallName,
+                          showtime.StartTime
+                        )
+                      }
+                      key={idx}
+                      className="mr-4 mb-4"
+                    >
                       <span className="text-xl text-gray-900 px-4 py-2 border-2 border-gray-500 rounded-lg hover:border-gray-800">
                         {showtime.StartTime.slice(0, 5)}
                       </span>

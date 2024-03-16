@@ -9,11 +9,15 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice, { loadingUserLogin } from "./stores/authSlice";
 import movieSlice, { fetchMovies } from "./stores/movieSlice";
+import seatSlice from "./stores/seatSlice";
+import showTimeSlice from "./stores/showTimeSlice";
 const store = configureStore({
   reducer: {
     loading: loadingSlice,
     auth: authSlice,
     movie: movieSlice,
+    seat: seatSlice,
+    show: showTimeSlice,
   },
 });
 store.dispatch(loadingUserLogin());

@@ -6,21 +6,30 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getShowTimeMovie } from "../../services/function";
 import { setLoading } from "../../stores/loadingSlice";
 import Search from "../../components/icons/Search";
+import { fetchShowtimes } from "../../stores/showTimeSlice";
+import { useDispatch, useSelector } from "react-redux";
 const BookDate = () => {
+  const dispatch = useDispatch();
+  const showTime = useSelector((state) => state.show.showtimes);
   const id = useParams().id;
   const navigate = useNavigate();
   const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
-  const [showTime, setShowTime] = useState([]);
   const handleDateChange = (selectedDate) => {
     setDate(selectedDate.format("YYYY-MM-DD"));
   };
-  const handleButtonClick = (cinemaName, cinemaHallName, startTime) => {
+  const handleButtonClick = (
+    cinemaName,
+    cinemaHallName,
+    startTime,
+    cinemaHallID
+  ) => {
     const queryParams = new URLSearchParams({
       id: id,
       date: date,
       cinemaName: cinemaName,
       cinemaHallName: cinemaHallName,
       startTime: startTime,
+      cinemaHallID: cinemaHallID,
     });
 
     return navigate(`/movie/bookings/${id}/seats?${queryParams.toString()}`);
@@ -30,15 +39,14 @@ const BookDate = () => {
     setLoading(true);
     const fetchData = async () => {
       try {
-        const showTime = await getShowTimeMovie(id, date);
-        setShowTime(showTime);
+        dispatch(fetchShowtimes({ MovieID: id, date: date }));
         setLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, [id, date]);
+  }, [id, date, dispatch]);
 
   return (
     <>
@@ -69,7 +77,8 @@ const BookDate = () => {
                         handleButtonClick(
                           time.CinemaName,
                           showtime.CinemaHallName,
-                          showtime.StartTime
+                          showtime.StartTime,
+                          showtime.CinemaHallID
                         )
                       }
                       key={idx}

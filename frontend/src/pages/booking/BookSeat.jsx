@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { setLoading } from "../../stores/loadingSlice";
 import { getDetailMovie } from "../../services/function";
 import dayjs from "dayjs";
@@ -7,17 +7,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchSeats } from "../../stores/seatSlice";
 import bgScreen from "../../assets/images/bg-screen.png";
 import Notice from "../../components/common/Notice";
+import { useNavigate } from "react-router-dom";
 const BookSeat = () => {
+  const navigate = useNavigate();
+  const id = useParams().id;
+  const date = useParams().date;
+  const { cinemaName, cinemaHallName, startTime, cinemaHallID } =
+    useLocation().state || {};
   const seat = useSelector((state) => state.seat.seats);
   const dispatch = useDispatch();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const id = queryParams.get("id");
-  const date = queryParams.get("date");
-  const cinemaName = queryParams.get("cinemaName");
-  const cinemaHallName = queryParams.get("cinemaHallName");
-  const startTime = queryParams.get("startTime");
-  const cinemaHallID = queryParams.get("cinemaHallID");
   const [movie, setMovie] = useState([]);
   const [bookingSeats, setBookingSeats] = useState([]);
   const putBookingSeats = (seat) => {
@@ -33,7 +31,6 @@ const BookSeat = () => {
       ]);
     }
   };
-  console.log(bookingSeats);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -79,7 +76,7 @@ const BookSeat = () => {
               style={{ margin: "0 auto" }}
             >
               {rowSeats.map((seat) => (
-                <div key={seat.ShowSeatID} className="m-2">
+                <div key={seat.CinemaSeatID} className="m-2">
                   <div
                     onClick={() => putBookingSeats(seat)}
                     className={`w-8 h-8 border rounded-full flex items-center justify-center hover:cursor-pointer ${
@@ -139,7 +136,21 @@ const BookSeat = () => {
             <p className="text-white">
               {bookingSeats.reduce((acc, event) => acc + event.Price, 0)}đ
             </p>
-            <button className="bg-green-500 px-4 py-2 rounded-lg mt-4">
+            <button
+              onClick={() => {
+                navigate("/movie/checkout", {
+                  state: {
+                    bookingSeats,
+                    movie,
+                    cinemaName,
+                    cinemaHallName,
+                    startTime,
+                    date,
+                  },
+                });
+              }}
+              className="bg-green-500 px-4 py-2 rounded-lg mt-4"
+            >
               Đặt vé
             </button>
           </div>

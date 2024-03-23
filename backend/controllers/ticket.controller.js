@@ -40,7 +40,7 @@ const getSeatForBooking = async (req, res, next) => {
   try {
     const { ShowtimeID, CinemaHallID } = req.body;
     const q =
-      "SELECT cs.SeatName,cs.SeatType,ss.SeatStatus,ss.Price FROM cinemaseats cs JOIN showseats ss ON cs.CinemaSeatID = ss.CinemaSeatID WHERE ss.ShowtimeID = ? AND cs.CinemaHallID = ?";
+      "SELECT cs.CinemaSeatID, cs.SeatName,cs.SeatType,ss.SeatStatus,ss.Price FROM cinemaseats cs JOIN showseats ss ON cs.CinemaSeatID = ss.CinemaSeatID WHERE ss.ShowtimeID = ? AND cs.CinemaHallID = ?";
 
     const rows = await new Promise((resolve, reject) => {
       db.query(q, [ShowtimeID, CinemaHallID], (err, data) => {

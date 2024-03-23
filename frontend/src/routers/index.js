@@ -5,6 +5,7 @@ import NotFound from "../pages/errors/NotFound.jsx";
 import Detail from "../pages/detail/Detail.jsx";
 import BookDate from "../pages/booking/BookDate.jsx";
 import BookSeat from "../pages/booking/BookSeat.jsx";
+import Checkout from "../pages/booking/Checkout.jsx";
 
 const routers = [
   {
@@ -28,8 +29,12 @@ const routers = [
     component: BookDate,
   },
   {
-    path: "/movie/bookings/:id/seats",
+    path: "/movie/bookings/:id/seats/:date",
     component: BookSeat,
+  },
+  {
+    path: "/movie/checkout",
+    component: Checkout,
   },
   {
     path: "*",

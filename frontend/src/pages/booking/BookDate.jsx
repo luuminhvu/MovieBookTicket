@@ -3,7 +3,7 @@ import Booking from "../../components/common/Booking";
 import DateSelector from "../../components/common/DatePicker";
 import dayjs from "dayjs";
 import { useParams, useNavigate } from "react-router-dom";
-import { getShowTimeMovie } from "../../services/function";
+// import { getShowTimeMovie } from "../../services/function";
 import { setLoading } from "../../stores/loadingSlice";
 import Search from "../../components/icons/Search";
 import { fetchShowtimes } from "../../stores/showTimeSlice";
@@ -23,16 +23,9 @@ const BookDate = () => {
     startTime,
     cinemaHallID
   ) => {
-    const queryParams = new URLSearchParams({
-      id: id,
-      date: date,
-      cinemaName: cinemaName,
-      cinemaHallName: cinemaHallName,
-      startTime: startTime,
-      cinemaHallID: cinemaHallID,
+    navigate(`/movie/bookings/${id}/seats/${date}`, {
+      state: { cinemaName, cinemaHallName, startTime, cinemaHallID },
     });
-
-    return navigate(`/movie/bookings/${id}/seats?${queryParams.toString()}`);
   };
 
   useEffect(() => {

@@ -21,10 +21,17 @@ const BookDate = () => {
     cinemaName,
     cinemaHallName,
     startTime,
-    cinemaHallID
+    cinemaHallID,
+    showTimeID
   ) => {
     navigate(`/movie/bookings/${id}/seats/${date}`, {
-      state: { cinemaName, cinemaHallName, startTime, cinemaHallID },
+      state: {
+        cinemaName,
+        cinemaHallName,
+        startTime,
+        cinemaHallID,
+        showTimeID,
+      },
     });
   };
 
@@ -71,7 +78,8 @@ const BookDate = () => {
                           time.CinemaName,
                           showtime.CinemaHallName,
                           showtime.StartTime,
-                          showtime.CinemaHallID
+                          showtime.CinemaHallID,
+                          showtime.ShowtimeID
                         )
                       }
                       key={idx}

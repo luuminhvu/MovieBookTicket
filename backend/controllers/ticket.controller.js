@@ -7,7 +7,7 @@ const getCinemaShowMovie = async (req, res, next) => {
     const date = req.body.date;
     const MovieID = req.body.MovieID;
     const q =
-      "SELECT c.Name as CinemaName, ch.CinemaHallID, ch.Name as CinemaHallName, st.MovieID, tf.StartTime as StartTime FROM `showtimes` as st JOIN `cinemahalls` as ch ON st.CinemaHallID = ch.CinemaHallID JOIN `cinemas` as c ON ch.CinemaID = c.CinemaID JOIN `timeframes` as tf ON st.TimeFrameID = tf.TimeFrameID WHERE st.MovieID = ? AND DATE(st.Date) = ?";
+      "SELECT c.Name as CinemaName, ch.CinemaHallID, ch.Name as CinemaHallName,st.ShowtimeID, st.MovieID, tf.StartTime as StartTime FROM `showtimes` as st JOIN `cinemahalls` as ch ON st.CinemaHallID = ch.CinemaHallID JOIN `cinemas` as c ON ch.CinemaID = c.CinemaID JOIN `timeframes` as tf ON st.TimeFrameID = tf.TimeFrameID WHERE st.MovieID = ? AND DATE(st.Date) = ?";
     const rows = await new Promise((resolve, reject) => {
       db.query(q, [MovieID, date], (err, data) => {
         if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
@@ -23,6 +23,7 @@ const getCinemaShowMovie = async (req, res, next) => {
         CinemaHallName: row.CinemaHallName,
         StartTime: row.StartTime,
         CinemaHallID: row.CinemaHallID,
+        ShowtimeID: row.ShowtimeID,
       });
     });
 

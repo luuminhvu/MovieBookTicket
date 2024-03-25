@@ -12,7 +12,7 @@ const BookSeat = () => {
   const navigate = useNavigate();
   const id = useParams().id;
   const date = useParams().date;
-  const { cinemaName, cinemaHallName, startTime, cinemaHallID } =
+  const { cinemaName, cinemaHallName, startTime, cinemaHallID, showTimeID } =
     useLocation().state || {};
   const seat = useSelector((state) => state.seat.seats);
   const dispatch = useDispatch();
@@ -146,6 +146,7 @@ const BookSeat = () => {
                     cinemaHallName,
                     startTime,
                     date,
+                    showTimeID,
                   },
                 });
               }}

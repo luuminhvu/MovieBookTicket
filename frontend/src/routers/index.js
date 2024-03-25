@@ -6,6 +6,7 @@ import Detail from "../pages/detail/Detail.jsx";
 import BookDate from "../pages/booking/BookDate.jsx";
 import BookSeat from "../pages/booking/BookSeat.jsx";
 import Checkout from "../pages/booking/Checkout.jsx";
+import PaymentSuccess from "../pages/booking/Success.jsx";
 
 const routers = [
   {
@@ -35,6 +36,10 @@ const routers = [
   {
     path: "/movie/checkout",
     component: Checkout,
+  },
+  {
+    path: "payment/result",
+    component: PaymentSuccess,
   },
   {
     path: "*",

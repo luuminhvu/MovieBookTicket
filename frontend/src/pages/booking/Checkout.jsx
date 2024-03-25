@@ -1,20 +1,48 @@
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import api from "../../utils/api";
 const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState("card");
+  const [agree, setAgree] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { bookingSeats, movie, cinemaName, cinemaHallName, startTime, date } =
-    location.state;
+  const {
+    bookingSeats,
+    movie,
+    cinemaName,
+    cinemaHallName,
+    startTime,
+    date,
+    showTimeID,
+  } = location.state;
+  const total = bookingSeats.reduce((acc, seat) => acc + seat.Price, 0);
   const [secondsLeft, setSecondsLeft] = useState(300);
-
+  const handleCheckout = async (e) => {
+    if (paymentMethod === "vnpay") {
+      try {
+        const res = await api.post("/payment", {
+          bankCode: "",
+          total,
+          movieId: movie.MovieID,
+          seatId: bookingSeats.map((seat) => seat.CinemaSeatID),
+          showtimeId: showTimeID,
+        });
+        window.location.href = res.data.data.data;
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      e.preventDefault();
+      alert("Thanh toán bằng thẻ tạm thời không khả dụng");
+    }
+  };
   useEffect(() => {
     const timer = setInterval(() => {
       setSecondsLeft((prevSecondsLeft) => {
         if (prevSecondsLeft === 0) {
           clearInterval(timer);
-          navigate.push("/");
+          navigate("/");
         }
         return prevSecondsLeft - 1;
       });
@@ -75,8 +103,8 @@ const Checkout = () => {
                   type="radio"
                   className="w-5 h-5 cursor-pointer"
                   id="paypal"
-                  checked={paymentMethod === "paypal"}
-                  onChange={() => setPaymentMethod("paypal")}
+                  checked={paymentMethod === "vnpay"}
+                  onChange={() => setPaymentMethod("vnpay")}
                 />
                 <label for="paypal" className="ml-4 flex gap-2 cursor-pointer">
                   <img
@@ -207,7 +235,13 @@ const Checkout = () => {
         </div>
         <div className="mt-10">
           <div className="">
-            <input type="checkbox" name="agree" id="agree" className="mr-2" />
+            <input
+              onChange={() => setAgree(!agree)}
+              type="checkbox"
+              name="agree"
+              id="agree"
+              className="mr-2"
+            />
             <label for="agree" className="text-sm">
               Tôi đồng ý với điều khoản sử dụng và mua vé cho người có độ tuổi
               phù hợp
@@ -222,7 +256,9 @@ const Checkout = () => {
             Huỷ
           </button>
           <button
+            onClick={handleCheckout}
             type="button"
+            disabled={!agree}
             className="px-6 py-3.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
             Thanh toán

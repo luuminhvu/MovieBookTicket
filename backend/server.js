@@ -5,6 +5,7 @@ const db = require("./config/dbconfig");
 const userRouter = require("./routers/user");
 const movieRouter = require("./routers/movie");
 const ticketRouter = require("./routers/ticket");
+const paymentRouter = require("./routers/payment");
 const dotenv = require("dotenv");
 require("dotenv").config();
 const app = express();
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/movie", movieRouter);
 app.use("/api/v1/ticket", ticketRouter);
+app.use("/api/v1/payment", paymentRouter);
 
 db.connect((err) => {
   if (err) {

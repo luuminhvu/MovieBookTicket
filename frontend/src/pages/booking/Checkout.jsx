@@ -2,7 +2,9 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../../utils/api";
+import { useSelector } from "react-redux";
 const Checkout = () => {
+  const userId = useSelector((state) => state.auth.userId);
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [agree, setAgree] = useState(false);
   const location = useLocation();
@@ -22,6 +24,7 @@ const Checkout = () => {
     if (paymentMethod === "vnpay") {
       try {
         const res = await api.post("/payment", {
+          userId,
           bankCode: "",
           total,
           movieId: movie.MovieID,

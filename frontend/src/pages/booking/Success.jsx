@@ -16,7 +16,7 @@ const PaymentSuccess = () => {
       }
     };
     fetchData();
-  });
+  }, []);
   return <>{code === "00" ? <SuccessCpn /> : <FailedCpn />}</>;
 };
 

@@ -1,10 +1,16 @@
 const SuccessResponse = require("../common/Response/Success");
 const ErrorResponse = require("../common/Response/Error");
-const db = require("../config/dbconfig");
 const config = require("../config/vnpay.json");
 const sortObject = require("../common/fn/sortObject");
 const moment = require("moment");
-const { PaymentIntoBooking } = require("../common/fn/PaymentFn");
+const {
+  PaymentIntoBooking,
+  PaymentSuccess,
+} = require("../common/fn/PaymentFn");
+const {
+  generateBookingId,
+  generateTicketCode,
+} = require("../common/fn/GenerateNumber");
 const infoBooking = [];
 const createPaymentRequest = async (req, res, next) => {
   process.env.TZ = "Asia/Ho_Chi_Minh";
@@ -56,7 +62,7 @@ const createPaymentRequest = async (req, res, next) => {
   vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
   SuccessResponse(res, 200, "Success", { code: "00", data: vnpUrl });
 };
-const getRequestReturn = (req, res) => {
+const getRequestReturn = async (req, res) => {
   let vnp_Params = req.query;
   let secureHash = vnp_Params["vnp_SecureHash"];
   delete vnp_Params["vnp_SecureHash"];
@@ -70,14 +76,18 @@ const getRequestReturn = (req, res) => {
   let crypto = require("crypto");
   let hmac = crypto.createHmac("sha512", secretKey);
   let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
-
+  const bookingID = generateBookingId(8);
+  const ticketCode = generateTicketCode(8);
   if (secureHash === signed) {
-    PaymentIntoBooking(infoBooking[0]);
+    await PaymentSuccess(infoBooking[0], bookingID, ticketCode);
+    await PaymentIntoBooking(infoBooking[0], bookingID);
     SuccessResponse(res, 200, "Success", {
       code: vnp_Params["vnp_ResponseCode"],
     });
+    infoBooking.slice(0, 1);
   } else {
     ErrorResponse(res, 400, "Fail", { code: "97" });
   }
+  infoBooking.slice(0, infoBooking.length);
 };
 module.exports = { createPaymentRequest, getRequestReturn };

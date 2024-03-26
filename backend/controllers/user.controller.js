@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const { genAccessToken } = require("../utils/genToken");
 const SuccessResponse = require("../common/Response/Success");
 const ErrorResponse = require("../common/Response/Error");
+const { generateBookingId } = require("../common/fn/GenerateNumber");
 const register = async (req, res) => {
   try {
     const q = "SELECT * FROM `user` WHERE email = ? OR username = ?";
@@ -20,11 +21,11 @@ const register = async (req, res) => {
 
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
-
+    const UserID = generateBookingId(10);
     const insertQuery =
-      "INSERT INTO `user` (username, password, email, role) VALUES ?";
+      "INSERT INTO `user` (userid, username, password, email, role) VALUES ?";
     const values = [
-      [req.body.username, hashedPassword, req.body.email, "customer"],
+      [UserID, req.body.username, hashedPassword, req.body.email, "customer"],
     ];
 
     await new Promise((resolve, reject) => {
@@ -33,7 +34,9 @@ const register = async (req, res) => {
         resolve();
       });
     });
+
     const user = {
+      userId: UserID,
       username: req.body.username,
       email: req.body.email,
       role: "customer",

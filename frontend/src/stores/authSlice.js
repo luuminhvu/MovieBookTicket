@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { setLocalStorage, removeLocalStorage } from "../services/datastore";
 const initialState = {
   token: localStorage.getItem("token") || null,
+  userId: "",
   username: "",
   email: "",
   role: "",
@@ -48,6 +49,7 @@ const authSlice = createSlice({
         const user = jwtDecode(token);
         return {
           ...state,
+          userId: user.userId,
           username: user.username,
           email: user.email,
           role: user.role,
@@ -60,6 +62,7 @@ const authSlice = createSlice({
       return {
         ...state,
         token: null,
+        userId: "",
         username: "",
         email: "",
         role: "",
@@ -77,6 +80,7 @@ const authSlice = createSlice({
         return {
           ...state,
           token: action.payload,
+          userId: user.userId,
           username: user.username,
           email: user.email,
           role: user.role,
@@ -96,7 +100,9 @@ const authSlice = createSlice({
       if (action.payload) {
         return {
           ...state,
+
           token: action.payload,
+          userId: user.userId,
           username: user.username,
           email: user.email,
           role: user.role,

@@ -6,6 +6,7 @@ const moment = require("moment");
 const {
   PaymentIntoBooking,
   PaymentSuccess,
+  PaymentInfo,
 } = require("../common/fn/PaymentFn");
 const {
   generateBookingId,
@@ -57,7 +58,7 @@ const createPaymentRequest = async (req, res, next) => {
   let signData = querystring.stringify(vnp_Params, { encode: false });
   let crypto = require("crypto");
   let hmac = crypto.createHmac("sha512", secretKey);
-  let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
+  let signed = hmac.update(Buffer.from(signData, "utf-8")).digest("hex");
   vnp_Params["vnp_SecureHash"] = signed;
   vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
   SuccessResponse(res, 200, "Success", { code: "00", data: vnpUrl });
@@ -70,23 +71,29 @@ const getRequestReturn = async (req, res) => {
   vnp_Params = sortObject(vnp_Params);
   let tmnCode = config.vnp_TmnCode;
   let secretKey = config.vnp_HashSecret;
-
   let querystring = require("qs");
   let signData = querystring.stringify(vnp_Params, { encode: false });
   let crypto = require("crypto");
   let hmac = crypto.createHmac("sha512", secretKey);
-  let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
+  let signed = hmac.update(Buffer.from(signData, "utf-8")).digest("hex");
   const bookingID = generateBookingId(8);
   const ticketCode = generateTicketCode(8);
   if (secureHash === signed) {
-    await PaymentSuccess(infoBooking[0], bookingID, ticketCode);
-    await PaymentIntoBooking(infoBooking[0], bookingID);
-    SuccessResponse(res, 200, "Success", {
-      code: vnp_Params["vnp_ResponseCode"],
-    });
-    infoBooking.slice(0, 1);
+    if (vnp_Params["vnp_ResponseCode"] === "00") {
+      await PaymentSuccess(infoBooking[0], bookingID, ticketCode);
+      await PaymentIntoBooking(infoBooking[0], bookingID);
+      await PaymentInfo(vnp_Params, bookingID);
+      SuccessResponse(res, 200, "Success", {
+        code: vnp_Params["vnp_ResponseCode"],
+      });
+      infoBooking.slice(0, 1);
+    } else {
+      ErrorResponse(res, 400, "Fail", { code: vnp_Params["vnp_ResponseCode"] });
+      infoBooking.slice(0, 1);
+    }
   } else {
     ErrorResponse(res, 400, "Fail", { code: "97" });
+    infoBooking.slice(0, infoBooking.length);
   }
   infoBooking.slice(0, infoBooking.length);
 };

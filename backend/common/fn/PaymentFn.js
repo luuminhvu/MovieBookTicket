@@ -28,5 +28,43 @@ const PaymentSuccess = async (inf, bookingID, ticketCode) => {
     throw new Error(error.message);
   }
 };
+const PaymentInfo = async (inf, bookingID) => {
+  try {
+    console.log(inf);
+    // {
+    //   vnp_Amount: '5000000',
+    //   vnp_BankCode: 'NCB',
+    //   vnp_BankTranNo: 'VNP14359132',
+    //   vnp_CardType: 'ATM',
+    //   vnp_OrderInfo: 'Thanh+toan+cho+ma+GD%3A28212624',
+    //   vnp_PayDate: '20240328212637',
+    //   vnp_ResponseCode: '00',
+    //   vnp_TmnCode: '655QCR74',
+    //   vnp_TransactionNo: '14359132',
+    //   vnp_TransactionStatus: '00',
+    //   vnp_TxnRef: '28212624'
+    // }
+    const {
+      vnp_Amount,
+      vnp_BankCode,
+      vnp_BankTranNo,
+      vnp_CardType,
+      vnp_OrderInfo,
+      vnp_PayDate,
+      vnp_ResponseCode,
+      vnp_TmnCode,
+      vnp_TransactionNo,
+      vnp_TransactionStatus,
+      vnp_TxnRef,
+    } = inf;
+    const date = dayjs().format("YYYY-MM-DD HH:mm:ss");
+    const q = `INSERT INTO Payments (BookingID,PaymentDate,Amount,PaymentStatus,PaymentMethod,PaymentInfo,TransactionID,TransactionNo,BankCode,CardType)
+                VALUES (${bookingID},'${date}',${vnp_Amount},'${vnp_ResponseCode}','VNPAY','${vnp_OrderInfo}','${vnp_TxnRef}','${vnp_TransactionNo}','${vnp_BankCode}','${vnp_CardType}')`;
+    const data = await db.query(q);
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
 
-module.exports = { PaymentIntoBooking, PaymentSuccess };
+module.exports = { PaymentIntoBooking, PaymentSuccess, PaymentInfo };

@@ -11,6 +11,7 @@ import authSlice, { loadingUserLogin } from "./stores/authSlice";
 import movieSlice, { fetchMovies } from "./stores/movieSlice";
 import seatSlice from "./stores/seatSlice";
 import showTimeSlice from "./stores/showTimeSlice";
+import orderSlice from "./stores/orderSlice";
 const store = configureStore({
   reducer: {
     loading: loadingSlice,
@@ -18,6 +19,7 @@ const store = configureStore({
     movie: movieSlice,
     seat: seatSlice,
     show: showTimeSlice,
+    order: orderSlice,
   },
 });
 store.dispatch(loadingUserLogin());

@@ -5,8 +5,8 @@ const db = require("../config/dbconfig");
 
 const getOrderByUser = async (req, res, next) => {
   try {
-    const { userID } = req.body;
-    console.log(userID);
+    console.log(req.body);
+    const { UserID } = req.body;
     const q = `SELECT
         bk.BookingID,
         bk.ShowtimeID,
@@ -23,7 +23,8 @@ const getOrderByUser = async (req, res, next) => {
         mv.Poster,
         mv.Age,
         tf.StartTime,
-        tf.EndTime
+        tf.EndTime,
+        st.Date
     FROM
         Bookings AS bk
         JOIN Showseats AS ss ON bk.BookingID = ss.BookingID
@@ -34,7 +35,7 @@ const getOrderByUser = async (req, res, next) => {
         JOIN Movies AS mv ON st.MovieID = mv.MovieID
         JOIN Timeframes AS tf ON st.TimeFrameID = tf.TimeFrameID
     WHERE
-        bk.CustomerID = ${userID}
+        bk.CustomerID = ${UserID}
     GROUP BY
         bk.BookingID, bk.ShowtimeID, bk.BookingDate, bk.NumberOfTickets, bk.TotalPrice,
         ch.Name, c.Name, mv.Name, mv.Duration, mv.MovieID, mv.Poster, mv.Age, tf.StartTime, tf.EndTime

@@ -7,6 +7,7 @@ import BookDate from "../pages/booking/BookDate.jsx";
 import BookSeat from "../pages/booking/BookSeat.jsx";
 import Checkout from "../pages/booking/Checkout.jsx";
 import PaymentSuccess from "../pages/booking/Success.jsx";
+import Order from "../pages/order/Order.jsx";
 
 const routers = [
   {
@@ -40,6 +41,10 @@ const routers = [
   {
     path: "payment/result",
     component: PaymentSuccess,
+  },
+  {
+    path: "/orders",
+    component: Order,
   },
   {
     path: "*",

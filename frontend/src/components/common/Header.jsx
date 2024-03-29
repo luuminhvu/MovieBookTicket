@@ -16,7 +16,8 @@ const Header = () => {
   const auth = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [hiddenMenu, setHiddenMenu] = useState(false);
+  console.log(hiddenMenu);
   const { t } = useTranslation();
   const navLinks = generateNavLinks(t);
   const { currentLanguage } = useLanguageState();
@@ -68,7 +69,10 @@ const Header = () => {
           <div className="flex items-center lg:order-2">
             {auth.username ? (
               <>
-                <div className="text-gray-800 dark:text-white flex">
+                <div
+                  onClick={() => setHiddenMenu(!hiddenMenu)}
+                  className="text-gray-800 dark:text-white flex relative"
+                >
                   <img
                     src="https://picsum.photos/200"
                     className="w-8 h-8 rounded-full mr-2"
@@ -77,7 +81,32 @@ const Header = () => {
                   <span className="items-center justify-center hidden lg:flex">
                     {auth.username}
                   </span>
+                  <div
+                    className={`absolute top-11 z-50 ${
+                      hiddenMenu ? "block" : "hidden"
+                    }`}
+                  >
+                    <ul className="text-black dark:bg-white border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg py-1.5 w-48">
+                      <li>
+                        <Link
+                          to="/profile"
+                          className="block px-4 py-2 text-sm border-b border-gray-200 dark:border-gray-700 hover:bg-gray-100"
+                        >
+                          Thông tin cá nhân
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="/orders"
+                          className="block px-4 py-2 text-sm hover:bg-gray-100"
+                        >
+                          Vé đã đặt
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
+
                 <button
                   className="mx-2 text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
                   onClick={handleLogout}

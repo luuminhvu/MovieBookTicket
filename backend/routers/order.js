@@ -3,6 +3,6 @@ const router = express.Router();
 
 const { getOrderByUser } = require("../controllers/order.controller");
 
-router.get("/", getOrderByUser);
+router.post("/", getOrderByUser);
 
 module.exports = router;

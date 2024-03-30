@@ -8,6 +8,7 @@ import BookSeat from "../pages/booking/BookSeat.jsx";
 import Checkout from "../pages/booking/Checkout.jsx";
 import PaymentSuccess from "../pages/booking/Success.jsx";
 import Order from "../pages/order/Order.jsx";
+import Profile from "../pages/profile/Profile.jsx";
 
 const routers = [
   {
@@ -45,6 +46,10 @@ const routers = [
   {
     path: "/orders",
     component: Order,
+  },
+  {
+    path: "/profile",
+    component: Profile,
   },
   {
     path: "*",

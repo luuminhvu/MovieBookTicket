@@ -12,6 +12,14 @@ export const getDetailMovie = async (id) => {
 export const getShowTimeMovie = async (id, date) => {
   try {
     const response = await api.post(`/ticket`, { MovieID: id, date: date });
+    return response.data.data;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+export const getUserInfo = async (UserID) => {
+  try {
+    const response = await api.post(`/user/profile`, { UserID });
     console.log(response.data.data);
     return response.data.data;
   } catch (error) {

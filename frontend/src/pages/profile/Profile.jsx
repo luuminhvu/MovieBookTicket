@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getUserInfo } from "../../services/function";
+import { getUserInfo, updateAvatar } from "../../services/function";
 import linhchi from "../../assets/images/chinam.jpg";
 import Modal from "../../components/common/Modal";
+import { useRef } from "react";
+
+import dayjs from "dayjs";
+import api from "../../utils/api";
+import axios from "axios";
+import { toast } from "react-toastify";
+import ModalPassword from "../../components/common/ModalChangePassword";
 const Profile = () => {
   const UserID = useSelector((state) => state.auth.userId);
   const [showModal, setShowModal] = useState(false);
+  const [showModalPassword, setShowModalPassword] = useState(false);
+  const [avatar, setAvatar] = useState("");
   const [user, setUser] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -18,6 +27,30 @@ const Profile = () => {
     };
     fetchData();
   }, []);
+  const handleAvatarUpload = (e) => {
+    const file = e.target.files[0];
+    transformFile(file);
+  };
+  const transformFile = (file) => {
+    const reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setAvatar(reader.result);
+      };
+    } else {
+      setAvatar("");
+    }
+  };
+  const handleChangeAvatar = async (avatar, UserID) => {
+    try {
+      const res = await updateAvatar(avatar, UserID);
+      toast.success(res.data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className="">
@@ -34,18 +67,15 @@ const Profile = () => {
               <div className="bg-white p-3 border-t-4 border-green-400">
                 <div className="image overflow-hidden">
                   <img
-                    className="h-auto w-full mx-auto rounded-full"
-                    src={linhchi}
+                    className="mx-auto rounded-full w-56 h-56"
+                    src={avatar ? avatar : user.Avatar}
                     alt=""
                   />
                 </div>
-                <h1 className="text-gray-900 font-bold text-xl leading-8 my-1">
-                  {user.Username}
+                <h1 className="text-gray-900 text-center font-bold text-xl leading-8 my-1">
+                  {user.FullName}
                 </h1>
-                <h3 className="text-gray-600 font-lg text-semibold leading-6">
-                  Owner at Her Company Inc.
-                </h3>
-                <p className="text-sm text-gray-500 hover:text-gray-600 leading-6">
+                <p className="text-sm text-center text-gray-500 hover:text-gray-600 leading-6">
                   {user?.Description}
                 </p>
                 <ul className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
@@ -59,7 +89,9 @@ const Profile = () => {
                   </li>
                   <li className="flex items-center py-3">
                     <span>Member since</span>
-                    <span className="ml-auto">{user.DateRegister}</span>
+                    <span className="ml-auto">
+                      {dayjs(user.DateRegister).format("DD/MM/YYYY")}
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -94,15 +126,15 @@ const Profile = () => {
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Fullname</div>
-                      <div className="px-4 py-2">Linh Chi</div>
+                      <div className="px-4 py-2">{user.FullName}</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Gender</div>
-                      <div className="px-4 py-2">Female</div>
+                      <div className="px-4 py-2">Male</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Contact No.</div>
-                      <div className="px-4 py-2">{user.Phone}</div>
+                      <div className="px-4 py-2">0{user.Phone}</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">
@@ -127,7 +159,9 @@ const Profile = () => {
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Birthday</div>
-                      <div className="px-4 py-2">{user?.Birthday}</div>
+                      <div className="px-4 py-2">
+                        {dayjs(user.Birthday).format("DD/MM/YYYY")}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -138,8 +172,23 @@ const Profile = () => {
                   >
                     Edit
                   </button>
-                  <button className="bg-red-500 hover:bg-red-700 text-white py-1 px-1 rounded">
+                  <button
+                    onClick={() => setShowModalPassword(true)}
+                    className="bg-red-500 hover:bg-red-700 text-white py-1 px-1 rounded"
+                  >
                     Change Password
+                  </button>
+                  <input
+                    type="file"
+                    placeholder="Hình ảnh sản phẩm"
+                    accept="image/*"
+                    onChange={handleAvatarUpload}
+                  />
+                  <button
+                    onClick={() => handleChangeAvatar(avatar, UserID)}
+                    className="bg-green-500 hover:bg-green-700 text-white py-1 px-1 rounded"
+                  >
+                    Change Avatar
                   </button>
                 </div>
               </div>
@@ -147,7 +196,10 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      {showModal && <Modal setOpenModal={setShowModal} />}
+      {showModal && <Modal id={UserID} setOpenModal={setShowModal} />}
+      {showModalPassword && (
+        <ModalPassword id={UserID} setOpenModal={setShowModalPassword} />
+      )}
     </>
   );
 };

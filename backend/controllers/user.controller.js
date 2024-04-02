@@ -4,13 +4,17 @@ const { genAccessToken } = require("../utils/genToken");
 const SuccessResponse = require("../common/Response/Success");
 const ErrorResponse = require("../common/Response/Error");
 const { generateBookingId } = require("../common/fn/GenerateNumber");
+const dayjs = require("dayjs");
+const cloudinary = require("../utils/cloudinary");
 const register = async (req, res) => {
   try {
     const q = "SELECT * FROM `user` WHERE email = ? OR username = ?";
     const data = await new Promise((resolve, reject) => {
       db.query(q, [req.body.email, req.body.username], (err, data) => {
-        if (err) return ErrorResponse(res, 500, "Internal Server Error");
-        console.log(data);
+        if (err) {
+          console.log(err);
+          return ErrorResponse(res, 500, "Internal Server Error");
+        }
         resolve(data);
       });
     });
@@ -21,16 +25,27 @@ const register = async (req, res) => {
 
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
-    const UserID = generateBookingId(10);
+    const UserID = generateBookingId(8);
+    const date = dayjs().format("YYYY-MM-DD");
     const insertQuery =
-      "INSERT INTO `user` (userid, username, password, email, role) VALUES ?";
+      "INSERT INTO `user` (userid, username, password, email, role, dateregister) VALUES ?";
     const values = [
-      [UserID, req.body.username, hashedPassword, req.body.email, "customer"],
+      [
+        UserID,
+        req.body.username,
+        hashedPassword,
+        req.body.email,
+        "customer",
+        date,
+      ],
     ];
 
     await new Promise((resolve, reject) => {
       db.query(insertQuery, [values], (err, data) => {
-        if (err) return ErrorResponse(res, 500, "Internal Server Error");
+        if (err) {
+          console.log(err);
+          return ErrorResponse(res, 500, "Internal Server Error");
+        }
         resolve();
       });
     });
@@ -96,5 +111,85 @@ const getUserInfo = async (req, res, next) => {
     ErrorResponse(res, 500, "Internal Server Error");
   }
 };
+const updateUserInfo = async (req, res) => {
+  try {
+    const UserID = req.body.id;
+    const { name, phone, address, dob, description } = req.body.user;
+    const q = `UPDATE user SET FullName = '${name}', Phone = '${phone}', Address = '${address}', Birthday = '${dob}', Description = '${description}' WHERE UserID = ${UserID}`;
+    await new Promise((resolve, reject) => {
+      db.query(q, (err, data) => {
+        if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+        resolve(data);
+      });
+    });
+    SuccessResponse(res, 200, "User info updated successfully");
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error");
+  }
+};
+const updateAvatarUser = async (req, res) => {
+  const { id: UserID, avatar } = req.body;
+  try {
+    const uploadRes = await cloudinary.uploader.upload(avatar, {
+      upload_preset: "MovieBookTicket",
+    });
 
-module.exports = { register, login, getUserInfo };
+    if (uploadRes) {
+      const q = `UPDATE USER SET Avatar = ? WHERE UserID = ?`;
+      db.query(q, [uploadRes.secure_url, UserID], (err, data) => {
+        if (err) {
+          return ErrorResponse(res, 500, "Internal Server Error", err);
+        }
+        SuccessResponse(res, 200, "User avatar updated successfully");
+      });
+    } else {
+      ErrorResponse(res, 500, "Internal Server Error");
+    }
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error");
+  }
+};
+const updateUserPassword = async (req, res) => {
+  const { id: UserID, user } = req.body;
+  const currentPassword = user.currentPassword;
+  const newPassword = user.newPassword;
+  try {
+    const q = `SELECT * FROM User WHERE UserID = ?`;
+    const user = await new Promise((resolve, reject) => {
+      db.query(q, [UserID], (err, data) => {
+        if (err) {
+          return ErrorResponse(res, 500, "Internal Server Error", err);
+        }
+        resolve(data[0]);
+      });
+    });
+    if (!user) {
+      return ErrorResponse(res, 400, "User not found");
+    }
+    const validPassword = bcrypt.compareSync(currentPassword, user.Password);
+    if (!validPassword) {
+      return ErrorResponse(res, 400, "Invalid password");
+    }
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(newPassword, salt);
+    const qUpdate = `UPDATE User SET Password = ? WHERE UserID = ?`;
+    db.query(qUpdate, [hashedPassword, UserID], (err, data) => {
+      if (err) {
+        return ErrorResponse(res, 500, "Internal Server Error", err);
+      }
+      return SuccessResponse(res, 200, "Password updated successfully");
+    });
+  } catch (error) {
+    console.error(error);
+    ErrorResponse(res, 500, "Internal Server Error");
+  }
+};
+
+module.exports = {
+  register,
+  login,
+  getUserInfo,
+  updateUserInfo,
+  updateAvatarUser,
+  updateUserPassword,
+};

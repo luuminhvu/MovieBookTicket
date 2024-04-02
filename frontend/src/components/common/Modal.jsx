@@ -1,6 +1,54 @@
 import React from "react";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { useTranslation } from "react-i18next";
+import { updateUser } from "../../services/function";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../../stores/loadingSlice";
+import { toast } from "react-toastify";
+export default function Modal({ setOpenModal, id }) {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      phone: "",
+      address: "",
+      dob: "",
+      description: "",
+    },
+    validationSchema: Yup.object({
+      name: Yup.string()
+        .min(6, t("tooShort"))
+        .max(50, t("tooLong"))
+        .required("Họ tên không được để trống"),
+      phone: Yup.string()
+        .required("Số điện thoại không được để trống")
+        .matches(
+          /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/,
+          "Số điện thoại không hợp lệ"
+        ),
+      address: Yup.string()
+        .min(6, t("tooShort"))
+        .required("Địa chỉ không được để trống"),
+      description: Yup.string()
+        .min(6, t("tooShort"))
+        .required("Mô tả không được để trống"),
+      dob: Yup.date().required("Ngày sinh không được để trống"),
+    }),
+    onSubmit: async (values) => {
+      try {
+        dispatch(setLoading(true));
+        await updateUser(values, id);
+        dispatch(setLoading(false));
 
-export default function Modal({ setOpenModal }) {
+        setOpenModal(false);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  });
+
   return (
     <>
       <div className="fixed inset-0 z-10 overflow-y-auto">
@@ -29,82 +77,112 @@ export default function Modal({ setOpenModal }) {
                 <h4 className="text-lg font-medium text-gray-800 text-center">
                   Xác nhận thông tin
                 </h4>
-                <div className="mt-3 text-sm text-gray-600">
-                  <label
-                    className="block text-left"
-                    htmlFor="name
-                  "
-                  >
-                    Họ Tên
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                  />
-                </div>
-                <div className="mt-3 text-sm text-gray-600">
-                  <label
-                    className="block text-left"
-                    htmlFor="name
-                  "
-                  >
-                    Số điện thoại
-                  </label>
-                  <input
-                    type="number"
-                    className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                  />
-                </div>
-                <div className="mt-3 text-sm text-gray-600">
-                  <label
-                    className="block text-left"
-                    htmlFor="name
-                  "
-                  >
-                    Địa chỉ
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                  />
-                </div>
-                <div className="mt-3 text-sm text-gray-600">
-                  <label
-                    className="block text-left"
-                    htmlFor="name
-                  "
-                  >
-                    Ngày sinh
-                  </label>
-                  <input
-                    type="date"
-                    className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                  />
-                </div>
-                <div className="mt-3 text-sm text-gray-600">
-                  <label
-                    className="block text-left"
-                    htmlFor="name
-                  "
-                  >
-                    Mô tả
-                  </label>
-                  <textarea className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-600"></textarea>
-                </div>
-                <div className="items-center gap-2 mt-3 sm:flex">
-                  <button
-                    className="w-full mt-2 p-2.5 flex-1 text-white bg-red-600 rounded-md outline-none ring-offset-2 ring-red-600 focus:ring-2"
-                    onClick={() => setOpenModal(false)}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    className="w-full mt-2 p-2.5 flex-1 text-gray-800 rounded-md outline-none border ring-offset-2 ring-indigo-600 focus:ring-2"
-                    onClick={() => setOpenModal(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
+                <form onSubmit={formik.handleSubmit}>
+                  <div className="mt-3 text-sm text-gray-600">
+                    <label className="block text-left" htmlFor="name">
+                      Họ Tên
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formik.values.name}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
+                    />
+                    {formik.touched.name && formik.errors.name ? (
+                      <div className="text-red-500">{formik.errors.name}</div>
+                    ) : null}
+                  </div>
+                  <div className="mt-3 text-sm text-gray-600">
+                    <label className="block text-left" htmlFor="phone">
+                      Số điện thoại
+                    </label>
+                    <input
+                      type="text"
+                      id="phone"
+                      name="phone"
+                      value={formik.values.phone}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
+                    />
+                    {formik.touched.phone && formik.errors.phone ? (
+                      <div className="text-red-500">{formik.errors.phone}</div>
+                    ) : null}
+                  </div>
+                  <div className="mt-3 text-sm text-gray-600">
+                    <label className="block text-left" htmlFor="address">
+                      Địa chỉ
+                    </label>
+                    <input
+                      type="text"
+                      id="address"
+                      name="address"
+                      value={formik.values.address}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
+                    />
+                    {formik.touched.address && formik.errors.address ? (
+                      <div className="text-red-500">
+                        {formik.errors.address}
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="mt-3 text-sm text-gray-600">
+                    <label className="block text-left" htmlFor="dob">
+                      Ngày sinh
+                    </label>
+                    <input
+                      type="date"
+                      id="dob"
+                      name="dob"
+                      value={formik.values.dob}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
+                    />
+                    {formik.touched.dob && formik.errors.dob ? (
+                      <div className="text-red-500">{formik.errors.dob}</div>
+                    ) : null}
+                  </div>
+                  <div className="mt-3 text-sm text-gray-600">
+                    <label className="block text-left" htmlFor="description">
+                      Mô tả
+                    </label>
+                    <textarea
+                      id="description"
+                      name="description"
+                      value={formik.values.description}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
+                    ></textarea>
+                    {formik.touched.description && formik.errors.description ? (
+                      <div className="text-red-500">
+                        {formik.errors.description}
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="items-center gap-2 mt-3 sm:flex">
+                    <button
+                      type="submit"
+                      className="w-full mt-2 p-2.5 flex-1 text-white bg-red-600 rounded-md outline-none ring-offset-2 ring-red-600 focus:ring-2"
+                      // onClick={() => setOpenModal(false)}
+                    >
+                      Xác nhận
+                    </button>
+                    <button
+                      type="button"
+                      className="w-full mt-2 p-2.5 flex-1 text-gray-800 rounded-md outline-none border ring-offset-2 ring-indigo-600 focus:ring-2"
+                      onClick={() => setOpenModal(false)}
+                    >
+                      Hủy
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>

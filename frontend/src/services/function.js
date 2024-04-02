@@ -20,8 +20,36 @@ export const getShowTimeMovie = async (id, date) => {
 export const getUserInfo = async (UserID) => {
   try {
     const response = await api.post(`/user/profile`, { UserID });
-    console.log(response.data.data);
     return response.data.data;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+export const updateUser = async (user, id) => {
+  try {
+    return await api.put(`/user/profile`, { id, user });
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+export const updateUserPassword = async (user, id) => {
+  try {
+    const res = await api.post(`/user/profile/updatepassword`, { id, user });
+    return res;
+  } catch (error) {
+    if (error.response) {
+      const errorMessage = error.response.data.message;
+      toast.error(errorMessage);
+    } else {
+      console.error(error);
+    }
+  }
+};
+
+export const updateAvatar = async (avatar, id) => {
+  try {
+    const res = await api.put(`/user/profile/updateavatar`, { id, avatar });
+    return res;
   } catch (error) {
     toast.error(error.message);
   }

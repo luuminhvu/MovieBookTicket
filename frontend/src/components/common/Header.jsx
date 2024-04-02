@@ -17,7 +17,6 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [hiddenMenu, setHiddenMenu] = useState(false);
-  console.log(hiddenMenu);
   const { t } = useTranslation();
   const navLinks = generateNavLinks(t);
   const { currentLanguage } = useLanguageState();

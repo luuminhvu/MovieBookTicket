@@ -57,4 +57,4 @@ const routers = [
   },
 ];
 
-export default routers;
+export { routers };

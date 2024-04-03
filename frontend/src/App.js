@@ -1,12 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
-import routers from "./routers";
+import { routers, routerAdmin } from "./routers";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import LoadingLayout from "./components/common/Loading";
 import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
+import Sidebar from "./pages/admin/Dashboard/Dashboard";
+import ShowTime from "./pages/admin/Showtime/Showtime";
 
 function App() {
   const isLoading = useSelector((state) => state.loading.loading);
@@ -31,6 +33,9 @@ function App() {
         {routers.map((route, index) => (
           <Route key={index} path={route.path} element={<route.component />} />
         ))}
+        <Route path="/admin" element={<Sidebar />}>
+          <Route path="movie-ticket" element={<ShowTime />} />
+        </Route>
       </Routes>
       <Footer />
     </Router>

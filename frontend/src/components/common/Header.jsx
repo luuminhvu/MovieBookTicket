@@ -14,6 +14,7 @@ import Quit from "../icons/Quit";
 import { logout } from "../../stores/authSlice";
 const Header = () => {
   const auth = useSelector((state) => state.auth);
+  const role = useSelector((state) => state.auth.role);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [hiddenMenu, setHiddenMenu] = useState(false);
@@ -102,6 +103,16 @@ const Header = () => {
                           Vé đã đặt
                         </Link>
                       </li>
+                      {role === "admin" && (
+                        <li>
+                          <Link
+                            to="/admin"
+                            className="block text-red-500 px-4 py-2 text-sm hover:bg-gray-100"
+                          >
+                            Quản trị hệ thống
+                          </Link>
+                        </li>
+                      )}
                     </ul>
                   </div>
                 </div>

@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import Sidebar from "./pages/admin/Dashboard/Dashboard";
 import ShowTime from "./pages/admin/Showtime/Showtime";
+import TimeFrame from "./pages/admin/TimeFrame/TimeFrame";
 
 function App() {
   const isLoading = useSelector((state) => state.loading.loading);
@@ -34,7 +35,8 @@ function App() {
           <Route key={index} path={route.path} element={<route.component />} />
         ))}
         <Route path="/admin" element={<Sidebar />}>
-          <Route path="movie-ticket" element={<ShowTime />} />
+          <Route path="show" element={<ShowTime />} />
+          <Route path="time-frame" element={<TimeFrame />} />
         </Route>
       </Routes>
       <Footer />

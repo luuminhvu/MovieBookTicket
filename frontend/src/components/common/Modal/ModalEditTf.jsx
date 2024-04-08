@@ -4,16 +4,16 @@ import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../../stores/loadingSlice";
-import { addTimeframe } from "../../../stores/timeFrameSlice";
+import { editTimeFrame } from "../../../stores/timeFrameSlice";
 
-export default function ModalCreateTf({ setOpenModal }) {
+export default function ModalEditTf({ setOpenModal, row }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
-      startTime: "",
-      endTime: "",
+      startTime: row.StartTime,
+      endTime: row.EndTime,
     },
     validationSchema: Yup.object({
       startTime: Yup.string().required(t("required")),
@@ -22,7 +22,9 @@ export default function ModalCreateTf({ setOpenModal }) {
     onSubmit: async (values) => {
       try {
         dispatch(setLoading(true));
-        await dispatch(addTimeframe(values));
+        await dispatch(
+          editTimeFrame({ ...values, TimeFrameID: row.TimeFrameID })
+        );
         dispatch(setLoading(false));
         setOpenModal(false);
       } catch (error) {
@@ -57,7 +59,7 @@ export default function ModalCreateTf({ setOpenModal }) {
               </div>
               <div className="mt-2 text-center sm:ml-4 sm:text-left">
                 <h4 className="text-lg font-medium text-gray-800 text-center">
-                  Thêm mới giờ chiếu
+                  Chỉnh sửa thời gian chiếu
                 </h4>
                 <form onSubmit={formik.handleSubmit}>
                   <div className="mt-3 text-sm text-gray-600">

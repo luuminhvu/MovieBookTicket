@@ -29,6 +29,18 @@ export const addTimeframe = createAsyncThunk(
     }
   }
 );
+export const editTimeFrame = createAsyncThunk(
+  "timeframes/editTimeFrame",
+  async (timeframe) => {
+    try {
+      const response = await api.put("/timeframe/edit", timeframe);
+      toast.success(response.data.message);
+      return response.data.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
 
 const timeframeSlice = createSlice({
   name: "timeframes",
@@ -54,6 +66,19 @@ const timeframeSlice = createSlice({
       state.timeframes.push(action.payload);
     });
     builder.addCase(addTimeframe.rejected, (state) => {
+      state.status = "failed";
+    });
+    builder.addCase(editTimeFrame.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(editTimeFrame.fulfilled, (state, action) => {
+      state.status = "success";
+      const index = state.timeframes.findIndex(
+        (timeframe) => timeframe.TimeFrameID === action.payload.TimeFrameID
+      );
+      state.timeframes[index] = action.payload;
+    });
+    builder.addCase(editTimeFrame.rejected, (state) => {
       state.status = "failed";
     });
   },

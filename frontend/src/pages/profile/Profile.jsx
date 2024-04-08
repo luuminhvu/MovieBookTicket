@@ -90,7 +90,9 @@ const Profile = () => {
                   <li className="flex items-center py-3">
                     <span>Member since</span>
                     <span className="ml-auto">
-                      {dayjs(user.DateRegister).format("DD/MM/YYYY")}
+                      {user?.DateRegister
+                        ? dayjs(user.DateRegister).format("DD/MM/YYYY")
+                        : ""}
                     </span>
                   </li>
                 </ul>
@@ -160,7 +162,9 @@ const Profile = () => {
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Birthday</div>
                       <div className="px-4 py-2">
-                        {dayjs(user.Birthday).format("DD/MM/YYYY")}
+                        {user?.Birthday
+                          ? dayjs(user.Birthday).format("DD/MM/YYYY")
+                          : ""}
                       </div>
                     </div>
                   </div>

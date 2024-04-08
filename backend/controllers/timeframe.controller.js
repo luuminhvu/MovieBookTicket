@@ -36,5 +36,25 @@ const addTimeframe = async (req, res) => {
     ErrorResponse(res, 500, "Internal Server Error", error);
   }
 };
-
-module.exports = { getAllTimeFrame, addTimeframe };
+const editTimeFrame = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    const { TimeFrameID, startTime, endTime } = req.body;
+    const q = `UPDATE timeframes SET StartTime = '${startTime}', EndTime = '${endTime}' WHERE TimeFrameID = ${TimeFrameID}`;
+    db.query(q, async (err, result) => {
+      if (err) {
+        return ErrorResponse(res, 500, "Internal Server Error", err);
+      }
+      const selectQuery = `SELECT * FROM timeframes WHERE TimeFrameID = ?`;
+      db.query(selectQuery, [TimeFrameID], (err, data) => {
+        if (err) {
+          return ErrorResponse(res, 500, "Internal Server Error", err);
+        }
+        SuccessResponse(res, 200, "Timeframe updated successfully", data[0]);
+      });
+    });
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error", error);
+  }
+};
+module.exports = { getAllTimeFrame, addTimeframe, editTimeFrame };

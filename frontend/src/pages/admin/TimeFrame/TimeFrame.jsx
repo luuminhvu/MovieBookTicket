@@ -5,9 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../../stores/loadingSlice";
 import { fetchTimeframes } from "../../../stores/timeFrameSlice";
 import ModalCreateTf from "../../../components/common/Modal/ModalCreateTf";
+import ModalEditTf from "../../../components/common/Modal/ModalEditTf";
 const TimeFrame = () => {
   const timeFrame = useSelector((state) => state.timeFrame.timeframes);
   const [showModal, setShowModal] = useState(false);
+  const [showModalEdit, setShowModalEdit] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     document.title = "Quản lí khung giờ chiếu";
@@ -50,6 +52,7 @@ const TimeFrame = () => {
         </div>
       </div>
       {showModal && <ModalCreateTf setOpenModal={setShowModal} />}
+      {showModalEdit && <ModalEditTf setOpenModal={setShowModalEdit} />}
     </>
   );
 };

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import HomeIcon from "../../../components/icons/Home";
@@ -348,7 +349,7 @@ export default function Sidebar() {
             </li>
           </ol>
         </nav> */}
-        <div class="flex flex-wrap my-5 -mx-2">
+        <div className="flex flex-wrap my-5 -mx-2">
           <Outlet />
         </div>
       </div>

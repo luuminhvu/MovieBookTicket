@@ -1,3 +1,5 @@
+import ActionCell from "./component/ActionCell";
+
 const column = [
   {
     name: "ID",
@@ -15,19 +17,14 @@ const column = [
   },
   {
     name: "Action",
-    cell: (row) => (
-      <div className="flex justify-center">
-        <button
-          className="bg-blue-500 mr-2 p-2 text-white rounded-md hover:bg-blue-700
-        "
-        >
-          Edit
-        </button>
-        <button className="bg-red-500 p-2 text-white rounded-md hover:bg-red-700">
-          Delete
-        </button>
-      </div>
-    ),
+    cell: (row) => {
+      return (
+        <>
+          <ActionCell row={row} />
+        </>
+      );
+    },
   },
 ];
+
 export default column;

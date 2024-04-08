@@ -1,13 +1,13 @@
 const LoadingIcon = () => {
   return (
-    <div class="flex items-center justify-center">
+    <div className="flex items-center justify-center">
       <div>
-        <h1 class="text-xl md:text-2xl font-bold flex items-center">
+        <h1 className="text-xl md:text-2xl font-bold flex items-center">
           L
           <svg
             stroke="currentColor"
             fill="currentColor"
-            stroke-width="0"
+            strokeWidth="0"
             viewBox="0 0 24 24"
             className="animate-spin-slow"
             height="1em"

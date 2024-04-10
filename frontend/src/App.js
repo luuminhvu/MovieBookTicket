@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import Sidebar from "./pages/admin/Dashboard/Dashboard";
 import ShowTime from "./pages/admin/Showtime/Showtime";
 import TimeFrame from "./pages/admin/TimeFrame/TimeFrame";
+import Movie from "./pages/admin/Movie/Movie";
 
 function App() {
   const isLoading = useSelector((state) => state.loading.loading);
@@ -37,6 +38,7 @@ function App() {
         <Route path="/admin" element={<Sidebar />}>
           <Route path="show" element={<ShowTime />} />
           <Route path="time-frame" element={<TimeFrame />} />
+          <Route path="movie" element={<Movie />} />
         </Route>
       </Routes>
       <Footer />

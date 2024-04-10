@@ -1,3 +1,4 @@
+import ModalEditTf from "../../components/common/Modal/ModalEditTf";
 import ActionCell from "./component/ActionCell";
 
 const column = [
@@ -20,7 +21,7 @@ const column = [
     cell: (row) => {
       return (
         <>
-          <ActionCell row={row} />
+          <ActionCell row={row} Children={ModalEditTf} />
         </>
       );
     },

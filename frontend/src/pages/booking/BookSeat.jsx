@@ -73,7 +73,7 @@ const BookSeat = () => {
             <div
               key={row}
               className="flex flex-wrap"
-              style={{ margin: "0 auto" }}
+              style={{ marginLeft: "70px" }}
             >
               {rowSeats.map((seat) => (
                 <div key={seat.CinemaSeatID} className="m-2">

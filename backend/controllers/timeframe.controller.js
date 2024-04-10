@@ -38,7 +38,6 @@ const addTimeframe = async (req, res) => {
 };
 const editTimeFrame = async (req, res, next) => {
   try {
-    console.log(req.body);
     const { TimeFrameID, startTime, endTime } = req.body;
     const q = `UPDATE timeframes SET StartTime = '${startTime}', EndTime = '${endTime}' WHERE TimeFrameID = ${TimeFrameID}`;
     db.query(q, async (err, result) => {

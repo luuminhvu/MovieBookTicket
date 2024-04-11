@@ -37,14 +37,14 @@ const BookSeat = () => {
       try {
         const response = await getDetailMovie(id);
         setMovie(response[0]);
-        dispatch(fetchSeats([id, cinemaHallID]));
+        dispatch(fetchSeats([showTimeID, cinemaHallID]));
         setLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, [id, dispatch, cinemaHallID]);
+  }, [id, showTimeID, dispatch, cinemaHallID]);
   const seatsByRow = {};
 
   seat.forEach((seat) => {

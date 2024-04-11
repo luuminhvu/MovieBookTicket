@@ -14,6 +14,7 @@ import showTimeSlice from "./stores/showTimeSlice";
 import orderSlice from "./stores/orderSlice";
 import showSlice from "./stores/showSlice";
 import timeFrameSlice from "./stores/timeFrameSlice";
+import cinemaSlice from "./stores/cinemaSlice";
 const store = configureStore({
   reducer: {
     loading: loadingSlice,
@@ -24,6 +25,7 @@ const store = configureStore({
     order: orderSlice,
     showTime: showSlice,
     timeFrame: timeFrameSlice,
+    cinema: cinemaSlice,
   },
 });
 store.dispatch(loadingUserLogin());

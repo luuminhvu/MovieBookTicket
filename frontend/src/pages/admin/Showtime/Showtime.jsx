@@ -4,6 +4,7 @@ import { setLoading } from "../../../stores/loadingSlice";
 import { fetchShow } from "../../../stores/showSlice";
 import DataTable from "react-data-table-component";
 import column from "../../../services/table/columnShowtime";
+import ModalCreateSt from "../../../components/common/Modal/ModalCreateSt";
 
 const ShowTime = () => {
   const dispatch = useDispatch();
@@ -48,6 +49,7 @@ const ShowTime = () => {
           />
         </div>
       </div>
+      {showModal && <ModalCreateSt setOpenModal={setShowModal} />}
     </>
   );
 };

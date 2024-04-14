@@ -198,6 +198,21 @@ const getUser = async (req, res) => {
     ErrorResponse(res, 500, "Internal Server Error");
   }
 };
+const updateUserForAdmin = async (req, res) => {
+  try {
+    const { FullName, Phone, Birthday, Active, UserID, Address } = req.body;
+    const q = `UPDATE user SET FullName = '${FullName}', Phone = '${Phone}', Birthday = '${Birthday}', Active = '${Active}' , Address = '${Address}' WHERE UserID = ${UserID}`;
+    await new Promise((resolve, reject) => {
+      db.query(q, (err, data) => {
+        if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+        resolve(data);
+      });
+    });
+    SuccessResponse(res, 200, "User info updated successfully");
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error");
+  }
+};
 module.exports = {
   register,
   login,
@@ -205,4 +220,6 @@ module.exports = {
   updateUserInfo,
   updateAvatarUser,
   updateUserPassword,
+  getUser,
+  updateUserForAdmin,
 };

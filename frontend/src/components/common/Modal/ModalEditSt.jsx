@@ -12,14 +12,12 @@ import { editShow } from "../../../stores/showSlice";
 import dayjs from "dayjs";
 
 export default function ModalEditSt({ setOpenModal, row }) {
-  console.log(row);
   const dispatch = useDispatch();
   const cinema = useSelector((state) => state.cinema.Cinema);
   const movie = useSelector((state) => state.movie.movies);
   const cinemaHall = useSelector((state) => state.cinema.CinemaHallByCinemaId);
   const timeFrame = useSelector((state) => state.timeFrame.timeframes);
   const [selectedCinemaId, setSelectedCinemaId] = useState("");
-  console.log(row);
 
   useEffect(() => {
     document.title = "Quản lí suất chiếu";

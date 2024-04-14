@@ -11,6 +11,7 @@ import Sidebar from "./pages/admin/Dashboard/Dashboard";
 import ShowTime from "./pages/admin/Showtime/Showtime";
 import TimeFrame from "./pages/admin/TimeFrame/TimeFrame";
 import Movie from "./pages/admin/Movie/Movie";
+import User from "./pages/admin/User/User";
 
 function App() {
   const isLoading = useSelector((state) => state.loading.loading);
@@ -39,6 +40,7 @@ function App() {
           <Route path="show" element={<ShowTime />} />
           <Route path="time-frame" element={<TimeFrame />} />
           <Route path="movie" element={<Movie />} />
+          <Route path="user" element={<User />} />
         </Route>
       </Routes>
       <Footer />

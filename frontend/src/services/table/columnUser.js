@@ -1,0 +1,109 @@
+import ModalEditUser from "../../components/common/Modal/ModalEditUser";
+import ActionCell from "./component/ActionCell";
+import dayjs from "dayjs";
+const column = [
+  {
+    name: "ID",
+    selector: (row) => row.UserID,
+    sortable: true,
+    width: "100px",
+  },
+  {
+    name: "Avatar",
+    selector: (row) => {
+      return (
+        <>
+          {row.Avatar ? (
+            <img
+              className="object-cover"
+              src={row.Avatar}
+              alt={row.Username}
+              style={{ width: "100px", height: "100px" }}
+            />
+          ) : (
+            "Chưa cập nhật"
+          )}
+        </>
+      );
+    },
+    sortable: true,
+    width: "100px",
+  },
+  {
+    name: "Tên người dùng",
+    selector: (row) => row.Username,
+    sortable: true,
+    width: "150px",
+  },
+  {
+    name: "Họ và tên",
+    selector: (row) => <>{row.FullName ? row.FullName : "Chưa cập nhật"}</>,
+    width: "150px",
+  },
+  {
+    name: "Email",
+    selector: (row) => row.Email,
+    width: "170px",
+  },
+  {
+    name: "Số điện thoại",
+    selector: (row) => <>{row.Phone ? "0" + row.Phone : "Chưa cập nhật"}</>,
+
+    width: "150px",
+  },
+  {
+    name: "Địa chỉ",
+    selector: (row) => <>{row.Address ? row.Address : "Chưa cập nhật"}</>,
+
+    width: "150px",
+  },
+  {
+    name: "Ngày sinh",
+    selector: (row) => (
+      <>
+        {row.Birthday
+          ? dayjs(row.Birthday).format("DD/MM/YYYY")
+          : "Chưa cập nhật"}
+      </>
+    ),
+    width: "150px",
+  },
+  {
+    name: "Ngày đăng kí",
+    selector: (row) => (
+      <>
+        {row.DateRegister ? dayjs(row.DateRegister).format("DD/MM/YYYY") : ""}
+      </>
+    ),
+    width: "150px",
+  },
+  {
+    name: "Role",
+    selector: (row) => row.Role,
+    width: "100px",
+  },
+  {
+    name: "Trạng thái",
+    selector: (row) =>
+      row.Active === 1 ? (
+        <span className="text-green-500">Active</span>
+      ) : (
+        <span className="text-red-500">Inactive</span>
+      ),
+
+    width: "100px",
+  },
+  {
+    name: "Action",
+    cell: (row) => {
+      return (
+        <>
+          <ActionCell row={row} Children={ModalEditUser} />
+        </>
+      );
+    },
+    width: "200px",
+  },
+];
+
+export default column;

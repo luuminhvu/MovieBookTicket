@@ -100,7 +100,6 @@ const authSlice = createSlice({
       if (action.payload) {
         return {
           ...state,
-
           token: action.payload,
           userId: user.userId,
           username: user.username,

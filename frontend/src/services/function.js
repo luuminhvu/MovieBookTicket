@@ -54,3 +54,20 @@ export const updateAvatar = async (avatar, id) => {
     toast.error(error.message);
   }
 };
+export const getUser = async () => {
+  try {
+    const res = await api.get(`/user`);
+    return res.data.data;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+export const updateUserForAdmin = async (values) => {
+  try {
+    const res = await api.put(`/user`, values);
+    toast.success("Cập nhật thành công");
+    return res.data.data;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};

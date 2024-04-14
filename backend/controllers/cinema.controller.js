@@ -31,4 +31,23 @@ const getCinemaHallByCinemaID = async (req, res, next) => {
     ErrorResponse(res, 500, "Internal Server Error", error);
   }
 };
-module.exports = { getCinemas, getCinemaHallByCinemaID };
+const addCinema = async (req, res) => {
+  try {
+    console.log(req.body);
+    const { Name, Location } = req.body;
+    const insertQuery = `INSERT INTO cinemas (Name, Location, ProvinceID) VALUES ('${Name}', '${Location}', 1)`;
+    db.query(insertQuery, (err, data) => {
+      if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+      const cinemaID = data.insertId;
+      const selectQuery = `SELECT * FROM cinemas WHERE CinemaID = ${cinemaID}`;
+      db.query(selectQuery, (err, data) => {
+        if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+        SuccessResponse(res, 200, "Cinema added successfully", data);
+      });
+    });
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error", error);
+  }
+};
+
+module.exports = { getCinemas, getCinemaHallByCinemaID, addCinema };

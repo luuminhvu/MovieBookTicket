@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
+import { toast } from "react-toastify";
 
 const initialState = {
   Cinema: [],
@@ -37,6 +38,19 @@ export const fetchCinemaHallByCinemaId = createAsyncThunk(
     }
   }
 );
+export const addCinema = createAsyncThunk(
+  "Cinema/addCinema",
+  async (values) => {
+    try {
+      const response = await api.post("/cinema/add", values);
+      toast.success(response.data.message);
+      return response.data.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
 const cinemaSlice = createSlice({
   name: "Cinema",
   initialState,
@@ -70,6 +84,16 @@ const cinemaSlice = createSlice({
       state.CinemaHallByCinemaId = action.payload;
     });
     builder.addCase(fetchCinemaHallByCinemaId.rejected, (state) => {
+      state.status = "failed";
+    });
+    builder.addCase(addCinema.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(addCinema.fulfilled, (state, action) => {
+      state.status = "success";
+      state.Cinema.push(action.payload);
+    });
+    builder.addCase(addCinema.rejected, (state) => {
       state.status = "failed";
     });
   },

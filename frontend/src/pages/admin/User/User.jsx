@@ -42,7 +42,7 @@ const User = () => {
           Quản lí thành viên trong hệ thống
         </h1>
         <div className="mt-4">
-          <div className="flex justify-start">
+          {/* <div className="flex justify-start">
             <button
               onClick={() => setShowModal(true)}
               className="bg-green-500 p-2 text-white rounded-md hover:bg-blue-700
@@ -50,7 +50,7 @@ const User = () => {
             >
               Thêm mới thành viên
             </button>
-          </div>
+          </div> */}
           <div class="flex justify-end">
             <input
               onChange={(e) => handleFilter(e.target.value)}

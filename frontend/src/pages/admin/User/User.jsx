@@ -5,8 +5,8 @@ import { setLoading } from "../../../stores/loadingSlice";
 import { getUser } from "../../../services/function";
 import column from "../../../services/table/columnUser";
 const User = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [showModalEdit, setShowModalEdit] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
+  // const [showModalEdit, setShowModalEdit] = useState(false);
   const [originalData, setOriginalData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   console.log(filteredData);

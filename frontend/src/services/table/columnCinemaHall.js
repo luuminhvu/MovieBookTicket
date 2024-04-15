@@ -1,27 +1,30 @@
-import ModalEditCinema from "../../components/common/Modal/ModalEditCinema";
 import ActionCell from "./component/ActionCell";
 
 const column = [
   {
     name: "ID",
-    selector: (row) => row.CinemaID,
+    selector: (row) => row.CinemaHallID,
     sortable: true,
   },
   {
     name: "Tên rạp",
-    selector: (row) => row.Name,
+    selector: (row) => row.CinemaName,
     sortable: true,
   },
   {
-    name: "Địa điểm",
-    selector: (row) => row.Location,
+    name: "Tên phòng chiếu",
+    selector: (row) => row.Name,
+  },
+  {
+    name: "Số ghế",
+    selector: (row) => row.Capacity,
   },
   {
     name: "Action",
     cell: (row) => {
       return (
         <>
-          <ActionCell row={row} Children={ModalEditCinema} />
+          <ActionCell row={row} />
         </>
       );
     },

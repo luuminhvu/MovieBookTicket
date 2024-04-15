@@ -5,10 +5,14 @@ const {
   getCinemas,
   getCinemaHallByCinemaID,
   addCinema,
+  editCinema,
+  getCinemaHall,
 } = require("../controllers/cinema.controller");
 
 router.get("/", getCinemas);
+router.get("/cinemahall", getCinemaHall);
 router.post("/cinemahall", getCinemaHallByCinemaID);
 router.post("/add", addCinema);
+router.put("/edit", editCinema);
 
 module.exports = router;

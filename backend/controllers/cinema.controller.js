@@ -16,6 +16,21 @@ const getCinemas = async (req, res) => {
     ErrorResponse(res, 500, "Internal Server Error", error);
   }
 };
+const getCinemaHall = async (req, res) => {
+  try {
+    const q =
+      "SELECT cinemas.CinemaID, cinemas.Name AS CinemaName, cinemahalls.* FROM cinemahalls INNER JOIN cinemas ON cinemahalls.CinemaID = cinemas.CinemaID";
+    const data = await new Promise((resolve, reject) => {
+      db.query(q, (err, data) => {
+        if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+        resolve(data);
+      });
+    });
+    SuccessResponse(res, 200, "Cinema halls fetched successfully", data);
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error", error);
+  }
+};
 const getCinemaHallByCinemaID = async (req, res, next) => {
   try {
     const { CinemaID } = req.body;
@@ -49,5 +64,28 @@ const addCinema = async (req, res) => {
     ErrorResponse(res, 500, "Internal Server Error", error);
   }
 };
+const editCinema = async (req, res) => {
+  try {
+    const { CinemaID, Name, Location } = req.body;
+    const updateQuery = `UPDATE cinemas SET Name = '${Name}', Location = '${Location}' WHERE CinemaID = ${CinemaID}`;
+    db.query(updateQuery, (err, data) => {
+      if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+      const selectQuery = `SELECT * FROM cinemas WHERE CinemaID = ${CinemaID}`;
+      db.query(selectQuery, (err, data) => {
+        if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+        console.log(data);
+        SuccessResponse(res, 200, "Cinema updated successfully", data[0]);
+      });
+    });
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error", error);
+  }
+};
 
-module.exports = { getCinemas, getCinemaHallByCinemaID, addCinema };
+module.exports = {
+  getCinemas,
+  getCinemaHall,
+  getCinemaHallByCinemaID,
+  addCinema,
+  editCinema,
+};

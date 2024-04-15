@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { routers, routerAdmin } from "./routers";
+import { routers } from "./routers";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import LoadingLayout from "./components/common/Loading";
@@ -13,6 +13,7 @@ import TimeFrame from "./pages/admin/TimeFrame/TimeFrame";
 import Movie from "./pages/admin/Movie/Movie";
 import User from "./pages/admin/User/User";
 import Cinema from "./pages/admin/Cinema/Cinema";
+import CinemaHall from "./pages/admin/Cinema/CinemaHall";
 
 function App() {
   const isLoading = useSelector((state) => state.loading.loading);
@@ -43,6 +44,7 @@ function App() {
           <Route path="movie" element={<Movie />} />
           <Route path="user" element={<User />} />
           <Route path="cinema" element={<Cinema />} />
+          <Route path="cinemahall" element={<CinemaHall />} />
         </Route>
       </Routes>
       <Footer />

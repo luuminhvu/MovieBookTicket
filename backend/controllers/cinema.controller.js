@@ -81,6 +81,39 @@ const editCinema = async (req, res) => {
     ErrorResponse(res, 500, "Internal Server Error", error);
   }
 };
+const addCinemaHall = async (req, res) => {
+  try {
+    const { CinemaID, Name, Capacity } = req.body;
+    const insertQuery = `INSERT INTO cinemahalls (CinemaID, Name, Capacity) VALUES (${CinemaID}, '${Name}', ${Capacity})`;
+    db.query(insertQuery, (err, data) => {
+      if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+      const cinemaHallID = data.insertId;
+      const selectQuery = `SELECT cinemas.CinemaID, cinemas.Name AS CinemaName, cinemahalls.* FROM cinemahalls INNER JOIN cinemas ON cinemahalls.CinemaID = cinemas.CinemaID WHERE cinemahalls.CinemaHallID = ${cinemaHallID}`;
+      db.query(selectQuery, (err, data) => {
+        if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+        SuccessResponse(res, 200, "Cinema hall added successfully", data[0]);
+      });
+    });
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error", error);
+  }
+};
+const editCinemaHall = async (req, res) => {
+  try {
+    const { CinemaHallID, CinemaID, Name, Capacity } = req.body;
+    const updateQuery = `UPDATE cinemahalls SET CinemaID = ${CinemaID}, Name = '${Name}', Capacity = ${Capacity} WHERE CinemaHallID = ${CinemaHallID}`;
+    db.query(updateQuery, (err, data) => {
+      if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+      const selectQuery = `SELECT cinemas.CinemaID, cinemas.Name AS CinemaName, cinemahalls.* FROM cinemahalls INNER JOIN cinemas ON cinemahalls.CinemaID = cinemas.CinemaID WHERE cinemahalls.CinemaHallID = ${CinemaHallID}`;
+      db.query(selectQuery, (err, data) => {
+        if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+        SuccessResponse(res, 200, "Cinema hall updated successfully", data[0]);
+      });
+    });
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error", error);
+  }
+};
 
 module.exports = {
   getCinemas,
@@ -88,4 +121,6 @@ module.exports = {
   getCinemaHallByCinemaID,
   addCinema,
   editCinema,
+  addCinemaHall,
+  editCinemaHall,
 };

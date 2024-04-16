@@ -10,6 +10,7 @@ const orderRouter = require("./routers/order");
 const showtimeRouter = require("./routers/showtime");
 const timeframeRouter = require("./routers/timeframe");
 const cinemaRouter = require("./routers/cinema");
+const seatRouter = require("./routers/seat");
 const dotenv = require("dotenv");
 require("dotenv").config();
 const app = express();
@@ -30,6 +31,7 @@ app.use("/api/v1/order", orderRouter);
 app.use("/api/v1/showtime", showtimeRouter);
 app.use("/api/v1/timeframe", timeframeRouter);
 app.use("/api/v1/cinema", cinemaRouter);
+app.use("/api/v1/seat", seatRouter);
 
 db.connect((err) => {
   if (err) {

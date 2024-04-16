@@ -14,10 +14,6 @@ export default function Sidebar() {
   const [moon, setMoon] = useState(null);
   const [sun, setSun] = useState(null);
   const navigate = useNavigate();
-  useEffect(() => {
-    navigate("/admin/show");
-  }, []);
-
   const setDark = (val) => {
     if (val === "dark") {
       document.documentElement.classList.add("dark");
@@ -68,7 +64,7 @@ export default function Sidebar() {
 
   return (
     <div className="body bg-white">
-      <div className="fixed w-full z-30 flex bg-white dark:bg-[#0F172A] p-2 items-center justify-center h-16 px-10">
+      <div className="fixed w-full z-1 flex bg-white dark:bg-[#0F172A] p-2 items-center justify-center h-16 px-10">
         <div className="logo ml-12 dark:text-white transform ease-in-out duration-500 flex-none h-full flex items-center justify-center">
           Cinema Management
         </div>
@@ -194,6 +190,7 @@ export default function Sidebar() {
             icon={HomeIcon}
             path={"time-frame"}
           />
+          <MenuItem text={"Quản lý ghế"} icon={HomeIcon} path={"seat"} />
         </div>
         <div className="mini mt-20 flex flex-col space-y-2 w-full h-[calc(100vh)]">
           <div className="hover:ml-4 justify-end pr-5 text-white hover:text-purple-500 dark:hover:text-blue-500 w-full bg-[#1E293B] p-3 rounded-full transform ease-in-out duration-300 flex">

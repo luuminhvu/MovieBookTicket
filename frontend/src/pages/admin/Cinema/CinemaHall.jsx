@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../../stores/loadingSlice";
 import { fetchCinema, fetchCinemaHall } from "../../../stores/cinemaSlice";
 import column from "../../../services/table/columnCinemaHall";
+import ModalCreateCinemaHall from "../../../components/common/Modal/ModalCreateCinemaHall";
 const CinemaHall = () => {
   const cinemaHall = useSelector((state) => state.cinema.CinemaHall);
   const cinema = useSelector((state) => state.cinema.Cinema);
@@ -56,7 +57,7 @@ const CinemaHall = () => {
           >
             <option value="all">Tất cả rạp</option>
             {cinema.map((item) => (
-              <option className="p-2" value={item.CinemaID}>
+              <option className="p-2" key={item.CinemaID} value={item.CinemaID}>
                 {item.Name}
               </option>
             ))}
@@ -68,11 +69,12 @@ const CinemaHall = () => {
         columns={column}
         data={filterCinemaHall}
         pagination
-        paginationPerPage={5}
+        paginationPerPage={6}
         highlightOnHover
         pointerOnHover
         dense
       />
+      {showModal && <ModalCreateCinemaHall setOpenModal={setShowModal} />}
     </div>
   );
 };

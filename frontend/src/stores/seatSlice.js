@@ -3,6 +3,7 @@ import api from "../utils/api";
 const initialState = {
   seats: [],
   status: null,
+  seatOfCinemaHall: [],
 };
 export const fetchSeats = createAsyncThunk(
   "seats/fetchSeats",
@@ -12,6 +13,17 @@ export const fetchSeats = createAsyncThunk(
         ShowtimeID,
         CinemaHallID,
       });
+      return response.data.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+export const getSeatOfCinemaHall = createAsyncThunk(
+  "seats/getSeatOfCinemaHall",
+  async () => {
+    try {
+      const response = await api.get("/seat");
       return response.data.data;
     } catch (error) {
       return error.response.data;
@@ -32,6 +44,16 @@ const seatSlice = createSlice({
       state.seats = action.payload;
     });
     builder.addCase(fetchSeats.rejected, (state) => {
+      state.status = "failed";
+    });
+    builder.addCase(getSeatOfCinemaHall.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(getSeatOfCinemaHall.fulfilled, (state, action) => {
+      state.status = "success";
+      state.seatOfCinemaHall = action.payload;
+    });
+    builder.addCase(getSeatOfCinemaHall.rejected, (state) => {
       state.status = "failed";
     });
   },

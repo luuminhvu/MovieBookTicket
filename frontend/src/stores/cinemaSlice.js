@@ -62,6 +62,30 @@ export const editCinema = createAsyncThunk(
     }
   }
 );
+export const addCinemaHall = createAsyncThunk(
+  "Cinema/addCinemaHall",
+  async (values) => {
+    try {
+      const response = await api.post("/cinema/cinemahall/add", values);
+      toast.success(response.data.message);
+      return response.data.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+export const editCinemaHall = createAsyncThunk(
+  "Cinema/editCinemaHall",
+  async (values) => {
+    try {
+      const response = await api.put("/cinema/cinemahall/edit", values);
+      toast.success(response.data.message);
+      return response.data.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
 
 const cinemaSlice = createSlice({
   name: "Cinema",
@@ -119,6 +143,30 @@ const cinemaSlice = createSlice({
       );
     });
     builder.addCase(editCinema.rejected, (state) => {
+      state.status = "failed";
+    });
+    builder.addCase(addCinemaHall.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(addCinemaHall.fulfilled, (state, action) => {
+      state.status = "success";
+      state.CinemaHall.push(action.payload);
+    });
+    builder.addCase(addCinemaHall.rejected, (state) => {
+      state.status = "failed";
+    });
+    builder.addCase(editCinemaHall.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(editCinemaHall.fulfilled, (state, action) => {
+      state.status = "success";
+      state.CinemaHall = state.CinemaHall.map((cinemaHall) =>
+        cinemaHall.CinemaHallID === action.payload.CinemaHallID
+          ? action.payload
+          : cinemaHall
+      );
+    });
+    builder.addCase(editCinemaHall.rejected, (state) => {
       state.status = "failed";
     });
   },

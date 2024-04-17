@@ -9,7 +9,8 @@ const getSeatOfCinemaHall = async (req, res) => {
                                       'SeatName', IFNULL(cs.SeatName, ''), 
                                       'SeatType', IFNULL(cs.SeatType, ''))), ']'), '[]') AS Seats, 
                         c.Name AS CinemaName, 
-                        ch.Name AS CinemaHallName
+                        ch.Name AS CinemaHallName,
+                        ch.Capacity AS Capacity
                   FROM cinemahalls ch
                   JOIN cinemas c ON ch.CinemaID = c.CinemaID
                   LEFT JOIN cinemaseats cs ON ch.CinemaHallID = cs.CinemaHallID

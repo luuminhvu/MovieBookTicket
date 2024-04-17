@@ -14,6 +14,7 @@ import Movie from "./pages/admin/Movie/Movie";
 import User from "./pages/admin/User/User";
 import Cinema from "./pages/admin/Cinema/Cinema";
 import CinemaHall from "./pages/admin/Cinema/CinemaHall";
+import Seat from "./pages/admin/Cinema/Seat";
 
 function App() {
   const isLoading = useSelector((state) => state.loading.loading);
@@ -45,6 +46,7 @@ function App() {
           <Route path="user" element={<User />} />
           <Route path="cinema" element={<Cinema />} />
           <Route path="cinemahall" element={<CinemaHall />} />
+          <Route path="seat" element={<Seat />} />
         </Route>
       </Routes>
       <Footer />

@@ -12,10 +12,10 @@ const {
   generateBookingId,
   generateTicketCode,
 } = require("../common/fn/GenerateNumber");
-const infoBooking = [];
+let infoBooking = [];
 const createPaymentRequest = async (req, res, next) => {
   process.env.TZ = "Asia/Ho_Chi_Minh";
-  infoBooking.push(req.body);
+  infoBooking = [req.body];
   let date = new Date();
   let createDate = moment(date).format("YYYYMMDDHHmmss");
 
@@ -86,15 +86,15 @@ const getRequestReturn = async (req, res) => {
       SuccessResponse(res, 200, "Success", {
         code: vnp_Params["vnp_ResponseCode"],
       });
-      infoBooking.slice(0, 1);
+      infoBooking = [];
     } else {
       ErrorResponse(res, 400, "Fail", { code: vnp_Params["vnp_ResponseCode"] });
-      infoBooking.slice(0, 1);
+      infoBooking = [];
     }
   } else {
     ErrorResponse(res, 400, "Fail", { code: "97" });
-    infoBooking.slice(0, infoBooking.length);
+    infoBooking = [];
   }
-  infoBooking.slice(0, infoBooking.length);
+  infoBooking = [];
 };
 module.exports = { createPaymentRequest, getRequestReturn };

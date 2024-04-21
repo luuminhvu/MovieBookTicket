@@ -71,3 +71,11 @@ export const updateUserForAdmin = async (values) => {
     toast.error(error.message);
   }
 };
+export const getAllOrderForAdmin = async () => {
+  try {
+    const res = await api.get(`/order/all`);
+    return res.data.data;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};

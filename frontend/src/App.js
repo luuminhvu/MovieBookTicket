@@ -7,7 +7,7 @@ import Footer from "./components/common/Footer";
 import LoadingLayout from "./components/common/Loading";
 import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import Sidebar from "./pages/admin/Dashboard/Dashboard";
+import Sidebar from "./pages/admin/Dashboard/Layout";
 import ShowTime from "./pages/admin/Showtime/Showtime";
 import TimeFrame from "./pages/admin/TimeFrame/TimeFrame";
 import Movie from "./pages/admin/Movie/Movie";
@@ -16,6 +16,7 @@ import Cinema from "./pages/admin/Cinema/Cinema";
 import CinemaHall from "./pages/admin/Cinema/CinemaHall";
 import Seat from "./pages/admin/Cinema/Seat";
 import Order from "./pages/admin/Order/Order";
+import Dashboard from "./pages/admin/Dashboard/Dashboard";
 
 function App() {
   const isLoading = useSelector((state) => state.loading.loading);
@@ -42,6 +43,7 @@ function App() {
         ))}
         <Route path="/admin" element={<Sidebar />}>
           <Route path="show" element={<ShowTime />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="time-frame" element={<TimeFrame />} />
           <Route path="movie" element={<Movie />} />
           <Route path="user" element={<User />} />

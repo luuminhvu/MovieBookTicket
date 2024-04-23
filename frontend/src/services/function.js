@@ -79,3 +79,30 @@ export const getAllOrderForAdmin = async () => {
     toast.error(error.message);
   }
 };
+export const getRevenueAndTicketsByDay = async () => {
+  try {
+    const res = await api.get(`/statistical/revenue-by-day`);
+    return res.data.data;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+export const getRevenueByDayOfMonth = async (year, month) => {
+  try {
+    const res = await api.post(`/statistical/revenue-by-month`, {
+      year,
+      month,
+    });
+    return res.data.data;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+export const getTopMoviesByRevenue = async () => {
+  try {
+    const res = await api.get(`/statistical/top-movies-by-revenue`);
+    return res.data.data;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};

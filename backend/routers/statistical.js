@@ -1,8 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const { getRevenueByDay } = require("../controllers/statistical.controller");
+const {
+  getRevenueAndTicketsByDay,
+  getRevenueByDayOfMonth,
+  getTopMoviesByRevenue,
+} = require("../controllers/statistical.controller");
 
-router.get("/revenue-by-day", getRevenueByDay);
+router.get("/revenue-by-day", getRevenueAndTicketsByDay);
+router.post("/revenue-by-month", getRevenueByDayOfMonth);
+router.get("/top-movies-by-revenue", getTopMoviesByRevenue);
 
 module.exports = router;

@@ -106,7 +106,7 @@ const Header = () => {
                       {role === "admin" && (
                         <li>
                           <Link
-                            to="/admin/show"
+                            to="/admin/dashboard"
                             className="block text-red-500 px-4 py-2 text-sm hover:bg-gray-100"
                           >
                             Quản trị hệ thống

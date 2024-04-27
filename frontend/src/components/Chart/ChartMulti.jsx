@@ -58,8 +58,6 @@ const ChartMulti = () => {
   const currentMonth = currentDate.getMonth() + 1;
   const [month, setMonth] = useState(currentMonth);
   const [year, setYear] = useState(currentYear);
-  console.log(month, year);
-
   const handleChangeMonth = (e) => {
     setMonth(e.target.value);
   };

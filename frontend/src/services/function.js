@@ -106,3 +106,11 @@ export const getTopMoviesByRevenue = async () => {
     toast.error(error.message);
   }
 };
+export const getTopGenresByRevenue = async () => {
+  try {
+    const res = await api.get(`/statistical/top-genres-by-revenue`);
+    return res.data.data;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};

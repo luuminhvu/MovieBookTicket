@@ -1,3 +1,4 @@
+import ChartDoughnut from "../../../components/Chart/ChartDoughnut";
 import ChartMulti from "../../../components/Chart/ChartMulti";
 import ChartVertical from "../../../components/Chart/ChartVertical";
 
@@ -20,6 +21,11 @@ const Dashboard = () => {
         <div className="mt-10">
           <div className="mt-4 border border-red-500">
             <ChartVertical />
+          </div>
+        </div>
+        <div className="mt-10">
+          <div className="mt-4 border border-red-500">
+            <ChartDoughnut />
           </div>
         </div>
       </div>

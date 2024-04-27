@@ -163,9 +163,79 @@ const getTopMoviesByRevenue = async (req, res, next) => {
     ErrorResponse(res, 500, "Internal Server Error", error);
   }
 };
+const getTopGenresByRevenue = async (req, res, next) => {
+  try {
+    const q = `
+    SELECT 
+    Movies.Genres,
+    SUM(Bookings.NumberOfTickets) AS TotalTicketsSold
+    FROM
+        Movies
+        INNER JOIN Showtimes ON Movies.MovieID = Showtimes.MovieID
+        INNER JOIN Bookings ON Showtimes.ShowtimeID = Bookings.ShowtimeID
+    GROUP BY
+        Movies.Genres
+    ORDER BY
+        TotalTicketsSold DESC
+    LIMIT 5;`;
+
+    const data = await new Promise((resolve, reject) => {
+      db.query(q, (err, data) => {
+        if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+        resolve(data);
+      });
+    });
+
+    SuccessResponse(
+      res,
+      200,
+      "Top 5 genres by revenue fetched successfully",
+      data
+    );
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error", error);
+  }
+};
+const getTopTimeFramesByRevenue = async (req, res, next) => {
+  try {
+    const q = `
+    SELECT
+    Timeframes.TimeFrameID,
+    Timeframes.StartTime,
+    COUNT(Bookings.BookingID) AS TotalBookings
+    FROM
+        Timeframes
+    INNER JOIN Showtimes ON Timeframes.TimeFrameID = Showtimes.TimeFrameID
+    INNER JOIN Bookings ON Showtimes.ShowtimeID = Bookings.ShowtimeID
+    GROUP BY
+        Timeframes.TimeFrameID,
+        Timeframes.StartTime
+    ORDER BY
+        TotalBookings DESC
+    LIMIT 5;
+    `;
+    const data = await new Promise((resolve, reject) => {
+      db.query(q, (err, data) => {
+        if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+        resolve(data);
+      });
+    });
+
+    SuccessResponse(
+      res,
+      200,
+      "Top 5 time frames by revenue fetched successfully",
+      data
+    );
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error", error);
+  }
+};
 
 module.exports = {
   getRevenueAndTicketsByDay,
   getRevenueByDayOfMonth,
   getTopMoviesByRevenue,
+  getTopGenresByRevenue,
+  getTopTimeFramesByRevenue,
 };

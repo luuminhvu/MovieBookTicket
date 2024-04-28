@@ -1,5 +1,6 @@
 import ChartDoughnut from "../../../components/Chart/ChartDoughnut";
 import ChartMulti from "../../../components/Chart/ChartMulti";
+import ChartPolarArea from "../../../components/Chart/ChartPolarArea";
 import ChartVertical from "../../../components/Chart/ChartVertical";
 
 const Dashboard = () => {
@@ -26,6 +27,11 @@ const Dashboard = () => {
         <div className="mt-10">
           <div className="mt-4 border border-red-500">
             <ChartDoughnut />
+          </div>
+        </div>
+        <div className="mt-10">
+          <div className="mt-4 border border-red-500">
+            <ChartPolarArea />
           </div>
         </div>
       </div>

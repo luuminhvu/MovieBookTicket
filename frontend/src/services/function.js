@@ -114,3 +114,11 @@ export const getTopGenresByRevenue = async () => {
     toast.error(error.message);
   }
 };
+export const getTopTimeFramesByRevenue = async () => {
+  try {
+    const res = await api.get(`/statistical/top-timeframes-by-revenue`);
+    return res.data.data;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};

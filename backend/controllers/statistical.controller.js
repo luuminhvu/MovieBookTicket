@@ -166,19 +166,20 @@ const getTopMoviesByRevenue = async (req, res, next) => {
 const getTopGenresByRevenue = async (req, res, next) => {
   try {
     const q = `
-    SELECT 
+    SELECT
     Movies.Genres,
-    SUM(Bookings.NumberOfTickets) AS TotalTicketsSold
+    COUNT(Bookings.BookingID) AS TotalTicketsSold
     FROM
         Movies
-        INNER JOIN Showtimes ON Movies.MovieID = Showtimes.MovieID
-        INNER JOIN Bookings ON Showtimes.ShowtimeID = Bookings.ShowtimeID
+    INNER JOIN Showtimes ON Movies.MovieID = Showtimes.MovieID
+    INNER JOIN Bookings ON Showtimes.ShowtimeID = Bookings.ShowtimeID
     GROUP BY
         Movies.Genres
     ORDER BY
         TotalTicketsSold DESC
-    LIMIT 5;`;
+    LIMIT 5;
 
+    `;
     const data = await new Promise((resolve, reject) => {
       db.query(q, (err, data) => {
         if (err) return ErrorResponse(res, 500, "Internal Server Error", err);

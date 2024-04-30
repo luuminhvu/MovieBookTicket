@@ -14,10 +14,10 @@ const {
 
 router.post("/register", register);
 router.post("/login", login);
+router.post("/profile/updatepassword", updateUserPassword);
 router.post("/profile", getUserInfo);
 router.put("/profile/updateavatar", updateAvatarUser);
 router.put("/profile", updateUserInfo);
-router.post("/profile/updatepassword", updateUserPassword);
 router.get("/", getUser);
 router.put("/", updateUserForAdmin);
 

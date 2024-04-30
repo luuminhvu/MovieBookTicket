@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import OptionIcon from "../icons/Options";
 import VietnamIcon from "../icons/Vietnam";
 import UnitedKingDomIcon from "../icons/UnitedKingdom";
-import { generateNavLinks } from "../../constants/define";
+import { AVATAR_DEFAULT, generateNavLinks } from "../../constants/define";
 import i18n from "i18next";
 import useLanguageState from "../../stores/languageState";
 import { useTranslation } from "react-i18next";
@@ -12,7 +12,10 @@ import { useNavigate } from "react-router-dom";
 
 import Quit from "../icons/Quit";
 import { logout } from "../../stores/authSlice";
+import { getUserInfo } from "../../services/function";
 const Header = () => {
+  const UserID = useSelector((state) => state.auth.userId);
+  const [user, setUser] = useState([]);
   const auth = useSelector((state) => state.auth);
   const role = useSelector((state) => state.auth.role);
   const navigate = useNavigate();
@@ -29,6 +32,18 @@ const Header = () => {
     dispatch(logout());
     navigate("/");
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!UserID) return;
+        const user = await getUserInfo(UserID);
+        setUser(user);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [UserID]);
 
   const [isVietnamese, setIsVietnamese] = useState(currentLanguage === "vie");
   const handleClickLanguage = () => {
@@ -74,7 +89,7 @@ const Header = () => {
                   className="text-gray-800 dark:text-white flex relative"
                 >
                   <img
-                    src="https://picsum.photos/200"
+                    src={user?.Avatar ? user?.Avatar : AVATAR_DEFAULT}
                     className="w-8 h-8 rounded-full mr-2"
                     alt="avatar"
                   />

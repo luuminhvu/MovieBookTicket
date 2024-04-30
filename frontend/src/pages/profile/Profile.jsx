@@ -10,6 +10,7 @@ import api from "../../utils/api";
 import axios from "axios";
 import { toast } from "react-toastify";
 import ModalPassword from "../../components/common/ModalChangePassword";
+import { AVATAR_DEFAULT } from "../../constants/define";
 const Profile = () => {
   const UserID = useSelector((state) => state.auth.userId);
   const [showModal, setShowModal] = useState(false);
@@ -68,12 +69,18 @@ const Profile = () => {
                 <div className="image overflow-hidden">
                   <img
                     className="mx-auto rounded-full w-56 h-56"
-                    src={avatar ? avatar : user.Avatar}
+                    src={
+                      avatar
+                        ? avatar
+                        : user?.Avatar
+                        ? user.Avatar
+                        : AVATAR_DEFAULT
+                    }
                     alt=""
                   />
                 </div>
                 <h1 className="text-gray-900 text-center font-bold text-xl leading-8 my-1">
-                  {user.FullName}
+                  {user?.FullName}
                 </h1>
                 <p className="text-sm text-center text-gray-500 hover:text-gray-600 leading-6">
                   {user?.Description}
@@ -124,11 +131,11 @@ const Profile = () => {
                   <div className="grid md:grid-cols-2 text-sm">
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Username</div>
-                      <div className="px-4 py-2">{user.Username}</div>
+                      <div className="px-4 py-2">{user?.Username}</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Fullname</div>
-                      <div className="px-4 py-2">{user.FullName}</div>
+                      <div className="px-4 py-2">{user?.FullName}</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Gender</div>
@@ -136,17 +143,17 @@ const Profile = () => {
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Contact No.</div>
-                      <div className="px-4 py-2">0{user.Phone}</div>
+                      <div className="px-4 py-2">0{user?.Phone}</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">
                         Current Address
                       </div>
-                      <div className="px-4 py-2">{user.Address}</div>
+                      <div className="px-4 py-2">{user?.Address}</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Role</div>
-                      <div className="px-4 py-2">{user.Role}</div>
+                      <div className="px-4 py-2">{user?.Role}</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Email.</div>
@@ -155,7 +162,7 @@ const Profile = () => {
                           className="text-blue-800"
                           href="mailto:jane@example.com"
                         >
-                          {user.Email}
+                          {user?.Email}
                         </a>
                       </div>
                     </div>

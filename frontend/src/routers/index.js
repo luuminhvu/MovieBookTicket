@@ -9,6 +9,7 @@ import Checkout from "../pages/booking/Checkout.jsx";
 import PaymentSuccess from "../pages/booking/Success.jsx";
 import Order from "../pages/order/Order.jsx";
 import Profile from "../pages/profile/Profile.jsx";
+import Cinema from "../pages/cinema/CInema.jsx";
 
 const routers = [
   {
@@ -50,6 +51,10 @@ const routers = [
   {
     path: "/profile",
     component: Profile,
+  },
+  {
+    path: "/cinema",
+    component: Cinema,
   },
   {
     path: "*",

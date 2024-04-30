@@ -26,3 +26,5 @@ export const generateNavLinks = (t) => {
     },
   ];
 };
+export const AVATAR_DEFAULT =
+  "https://cdn.sforum.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg";

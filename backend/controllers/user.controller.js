@@ -100,13 +100,12 @@ const getUserInfo = async (req, res, next) => {
   try {
     const UserID = req.body.UserID;
     const q = `SELECT * FROM user WHERE UserID = ${UserID}`;
-    const data = await new Promise((resolve, reject) => {
-      db.query(q, (err, data) => {
-        if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
-        resolve(data);
-      });
+    db.query(q, (err, data) => {
+      if (err) {
+        return ErrorResponse(res, 500, "Internal Server Error", err);
+      }
+      SuccessResponse(res, 200, "User info fetched successfully", data[0]);
     });
-    SuccessResponse(res, 200, "User info fetched successfully", data[0]);
   } catch (error) {
     ErrorResponse(res, 500, "Internal Server Error");
   }

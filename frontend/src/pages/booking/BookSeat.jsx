@@ -9,6 +9,7 @@ import bgScreen from "../../assets/images/bg-screen.png";
 import Notice from "../../components/common/Notice";
 import { useNavigate } from "react-router-dom";
 const BookSeat = () => {
+  const auth = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const id = useParams().id;
   const date = useParams().date;
@@ -31,6 +32,11 @@ const BookSeat = () => {
       ]);
     }
   };
+  useEffect(() => {
+    if (!auth.username) {
+      navigate("/login");
+    }
+  }, [auth, navigate]);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);

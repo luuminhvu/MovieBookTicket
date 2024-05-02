@@ -55,20 +55,24 @@ const ModalEditMv = ({ setOpenModal, row }) => {
       ReleaseDate: row.ReleaseDate,
       Subtitle: row.Subtitle,
       Trailer: row.Trailer,
+      Active: row.Active,
+      Upcoming: row.Upcoming,
     },
     validationSchema: Yup.object({
-      Name: Yup.string(),
-      ReleaseDate: Yup.string(),
-      Description: Yup.string(),
-      Genres: Yup.string(),
-      Directors: Yup.string(),
-      Actors: Yup.string(),
-      Duration: Yup.string(),
-      Language: Yup.string(),
-      Country: Yup.string(),
-      Poster: Yup.string(),
-      Trailer: Yup.string(),
-      Subtitle: Yup.string(),
+      Name: Yup.string().required("Tên phim không được để trống"),
+      ReleaseDate: Yup.string().required("Ngày phát hành không được để trống"),
+      Description: Yup.string().required("Mô tả không được để trống"),
+      Genres: Yup.string().required("Thể loại không được để trống"),
+      Directors: Yup.string().required("Đạo diễn không được để trống"),
+      Actors: Yup.string().required("Diễn viên không được để trống"),
+      Duration: Yup.string().required("Thời lượng không được để trống"),
+      Language: Yup.string().required("Ngôn ngữ không được để trống"),
+      Country: Yup.string().required("Quốc gia không được để trống"),
+      Poster: Yup.string().required("Poster không được để trống"),
+      Trailer: Yup.string().required("Trailer không được để trống"),
+      Subtitle: Yup.string().required("Phụ đề không được để trống"),
+      Active: Yup.string().required("Trạng thái không được để trống"),
+      Upcoming: Yup.string().required("Trạng thái không được để trống"),
     }),
     onSubmit: async (values) => {
       try {
@@ -451,6 +455,47 @@ const ModalEditMv = ({ setOpenModal, row }) => {
                       <div className="text-red-500">{formik.errors.Age}</div>
                     )}
                   </div>
+                  <div className="mt-3 text-sm text-gray-600">
+                    <label htmlFor="Active" className="block text-left">
+                      Đang chiếu
+                    </label>
+                    <select
+                      value={formik.values.Active}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      id="Active"
+                      name="Active"
+                      className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
+                    >
+                      <option value={1}>Đang chiếu</option>
+                      <option value={0}>Không chiếu</option>
+                    </select>
+                    {formik.touched.Active && formik.errors.Active && (
+                      <div className="text-red-500">{formik.errors.Active}</div>
+                    )}
+                  </div>
+                  <div className="mt-3 text-sm text-gray-600">
+                    <label htmlFor="Upcoming" className="block text-left">
+                      Sắp chiếu
+                    </label>
+                    <select
+                      value={formik.values.Upcoming}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      id="Upcoming"
+                      name="Upcoming"
+                      className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
+                    >
+                      <option value={1}>Sắp chiếu</option>
+                      <option value={0}>Không sắp chiếu</option>
+                    </select>
+                    {formik.touched.Upcoming && formik.errors.Upcoming && (
+                      <div className="text-red-500">
+                        {formik.errors.Upcoming}
+                      </div>
+                    )}
+                  </div>
+
                   <div className="items-center gap-2 mt-3 sm:flex">
                     <button
                       type="submit"

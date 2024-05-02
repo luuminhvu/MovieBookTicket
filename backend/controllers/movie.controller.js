@@ -33,7 +33,6 @@ const getMovieDetail = async (req, res) => {
 };
 const addMovie = async (req, res, next) => {
   try {
-    console.log(req.body);
     const {
       Actors,
       Age,
@@ -49,14 +48,14 @@ const addMovie = async (req, res, next) => {
       ReleaseDate,
       Subtitle,
       Trailer,
+      Active,
+      Upcoming,
     } = req.body;
     const uploadRes = await cloudinary.uploader.upload(Poster, {
       upload_preset: "MovieBookTicket",
     });
     if (uploadRes) {
-      const q = `INSERT INTO movies(Name, Poster, Trailer, Description, Duration, ReleaseDate, Rating, Language, Country, Age, Subtitle, Genres, Actors, Directors) VALUES(
-        '${Name}', '${uploadRes.secure_url}', '${Trailer}', '${Description}', '${Duration}', '${ReleaseDate}', '${Rating}', '${Language}', '${Country}', '${Age}', '${Subtitle}', '${Genres}', '${Actors}', '${Directors}'
-      )`;
+      const q = `INSERT INTO movies (Name, Poster, Trailer, Description, Duration, ReleaseDate, Rating, Language, Country, Age, Subtitle, Genres, Actors, Directors, Active, Upcoming) VALUES ('${Name}', '${uploadRes.secure_url}', '${Trailer}', '${Description}', '${Duration}', '${ReleaseDate}', '${Rating}', '${Language}', '${Country}', '${Age}', '${Subtitle}', '${Genres}', '${Actors}', '${Directors}', '${Active}', '${Upcoming}')`;
       db.query(q, async (err, result) => {
         if (err) {
           return ErrorResponse(res, 500, "Internal Server Error", err);
@@ -92,15 +91,16 @@ const editMovie = async (req, res, next) => {
       ReleaseDate,
       Subtitle,
       Trailer,
+      Active,
+      Upcoming,
     } = req.body;
-    //kiem tra anh co phai là file anh khong
     if (Poster && Poster.includes("data:image")) {
       const uploadRes = await cloudinary.uploader.upload(Poster, {
         upload_preset: "MovieBookTicket",
       });
       if (uploadRes) {
-        const q = `UPDATE movies SET Name = '${Name}', Poster = '${uploadRes.secure_url}', Trailer = '${Trailer}', Description = '${Description}', Duration = '${Duration}', ReleaseDate = '${ReleaseDate}', Rating = '${Rating}', Language = '${Language}', Country = '${Country}', Age = '${Age}', Subtitle = '${Subtitle}', Genres = '${Genres}', Actors = '${Actors}', Directors = '${Directors}' WHERE MovieID = ${MovieID}`;
-        db.query(q, async (err, result) => {
+        const q = `UPDATE movies SET Name = '${Name}', Poster = '${uploadRes.secure_url}', Trailer = '${Trailer}', Description = '${Description}', Duration = '${Duration}', ReleaseDate = '${ReleaseDate}', Rating = '${Rating}', Language = '${Language}', Country = '${Country}', Age = '${Age}', Subtitle = '${Subtitle}', Genres = '${Genres}', Actors = '${Actors}', Directors = '${Directors}', Active = '${Active}', Upcoming = '${Upcoming}' WHERE MovieID = ${MovieID}`;
+        await db.query(q, async (err, result) => {
           if (err) {
             return ErrorResponse(res, 500, "Internal Server Error", err);
           }
@@ -114,7 +114,7 @@ const editMovie = async (req, res, next) => {
         });
       }
     } else {
-      const q = `UPDATE movies SET Name = '${Name}', Trailer = '${Trailer}', Description = '${Description}', Duration = '${Duration}', ReleaseDate = '${ReleaseDate}', Rating = '${Rating}', Language = '${Language}', Country = '${Country}', Age = '${Age}', Subtitle = '${Subtitle}', Genres = '${Genres}', Actors = '${Actors}', Directors = '${Directors}' WHERE MovieID = ${MovieID}`;
+      const q = `UPDATE movies SET Name = '${Name}', Trailer = '${Trailer}', Description = '${Description}', Duration = '${Duration}', ReleaseDate = '${ReleaseDate}', Rating = '${Rating}', Language = '${Language}', Country = '${Country}', Age = '${Age}', Subtitle = '${Subtitle}', Genres = '${Genres}', Actors = '${Actors}', Directors = '${Directors}', Active = '${Active}', Upcoming = '${Upcoming}' WHERE MovieID = ${MovieID}`;
       db.query(q, async (err, result) => {
         if (err) {
           return ErrorResponse(res, 500, "Internal Server Error", err);

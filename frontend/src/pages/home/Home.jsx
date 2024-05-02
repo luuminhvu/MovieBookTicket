@@ -37,51 +37,56 @@ const Home = () => {
             ) : null}
             <div className="mx-auto sm:w-full md:w-3/4 p-4 sm:p-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mt-5">
               {movies.length > 0 &&
-                movies.map((movie, index) => (
-                  <div key={index} className="flex flex-col relative">
-                    <div className="relative">
-                      <img
-                        src={movie.Poster}
-                        alt="phim"
-                        className="rounded-3xl sm:w-full sm:max-w-sm md:max-w-none"
-                      />
-                      <div
-                        className="absolute
-                       inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor:pointer"
-                        onClick={() => handlePlay(movie.Trailer)}
-                      >
-                        <Play />
+                movies
+                  .filter((movie) => movie.Active == 1)
+                  .map((movie, index) => (
+                    <div key={index} className="flex flex-col relative">
+                      <div className="relative">
+                        <img
+                          src={movie.Poster}
+                          alt="phim"
+                          className="rounded-3xl sm:w-full sm:max-w-sm md:max-w-none"
+                        />
+                        <div
+                          className="absolute
+                     inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor:pointer"
+                          onClick={() => handlePlay(movie.Trailer)}
+                        >
+                          <Play />
+                        </div>
                       </div>
-                    </div>
 
-                    <Link
-                      to={`/movie/${movie.MovieID}`}
-                      className="text-base mt-2 text-[#337ab7] font-bold cursor-pointer hover:underline"
-                    >
-                      {movie.Name}
-                    </Link>
-                    <h2 className="text-sm mt-2 font-bold">
-                      Thể loại:
-                      <span className="text-sm font-thin"> {movie.Genres}</span>
-                    </h2>
-                    <h2 className="text-sm mt-2 font-bold">
-                      Thời lượng:
-                      <span className="text-sm font-thin">
-                        {" "}
-                        {movie.Duration}
-                      </span>
-                      <span className="text-sm font-thin"> phút</span>
-                    </h2>
-                    <button className="btn btn-primary mt-5 text-white text-tranform: uppercase bg-sky-600 hover:bg-sky-700 p-2 rounded-3xl">
-                      Mua vé
-                    </button>
-                    {movie.Age == 18
-                      ? Age({ Age: 18 })
-                      : movie.Age == 16
-                      ? Age({ Age: 16 })
-                      : Age({ Age: 13 })}
-                  </div>
-                ))}
+                      <Link
+                        to={`/movie/${movie.MovieID}`}
+                        className="text-sm mt-2 text-[#337ab7] font-bold cursor-pointer hover:underline"
+                      >
+                        {movie.Name}
+                      </Link>
+                      <h2 className="text-sm mt-2 font-bold">
+                        Thể loại:
+                        <span className="text-xs font-thin">
+                          {" "}
+                          {movie.Genres}
+                        </span>
+                      </h2>
+                      <h2 className="text-sm mt-2 font-bold">
+                        Thời lượng:
+                        <span className="text-sm font-thin">
+                          {" "}
+                          {movie.Duration}
+                        </span>
+                        <span className="text-sm font-thin"> phút</span>
+                      </h2>
+                      <button className="btn btn-primary mt-5 text-white text-tranform: uppercase bg-sky-600 hover:bg-sky-700 p-2 rounded-3xl">
+                        Mua vé
+                      </button>
+                      {movie.Age == 18
+                        ? Age({ Age: 18 })
+                        : movie.Age == 16
+                        ? Age({ Age: 16 })
+                        : Age({ Age: 13 })}
+                    </div>
+                  ))}
             </div>
           </div>
         </>

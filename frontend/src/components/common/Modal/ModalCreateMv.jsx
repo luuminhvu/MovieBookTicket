@@ -56,6 +56,8 @@ export default function ModalCreateMv({ setOpenModal }) {
       ReleaseDate: "",
       Subtitle: "",
       Trailer: "",
+      Active: "",
+      Upcoming: "",
     },
     validationSchema: Yup.object({
       Name: Yup.string().required(t("required")),
@@ -70,6 +72,8 @@ export default function ModalCreateMv({ setOpenModal }) {
       Poster: Yup.string().required(t("required")),
       Trailer: Yup.string().required(t("required")),
       Subtitle: Yup.string().required(t("required")),
+      Active: Yup.string().required(t("required")),
+      Upcoming: Yup.string().required(t("required")),
     }),
     onSubmit: async (values) => {
       try {
@@ -442,6 +446,48 @@ export default function ModalCreateMv({ setOpenModal }) {
                     {formik.touched.Age && formik.errors.Age && (
                       <div className="text-red-500">{formik.errors.Age}</div>
                     )}
+                    <div className="mt-3 text-sm text-gray-600">
+                      <label htmlFor="Active" className="block text-left">
+                        Đang chiếu
+                      </label>
+                      <select
+                        value={formik.values.Active}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        id="Active"
+                        name="Active"
+                        className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
+                      >
+                        <option value={1}>Đang chiếu</option>
+                        <option value={0}>Không chiếu</option>
+                      </select>
+                      {formik.touched.Active && formik.errors.Active && (
+                        <div className="text-red-500">
+                          {formik.errors.Active}
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-3 text-sm text-gray-600">
+                      <label htmlFor="Upcoming" className="block text-left">
+                        Sắp chiếu
+                      </label>
+                      <select
+                        value={formik.values.Upcoming}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        id="Upcoming"
+                        name="Upcoming"
+                        className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
+                      >
+                        <option value={1}>Sắp chiếu</option>
+                        <option value={0}>Không sắp chiếu</option>
+                      </select>
+                      {formik.touched.Upcoming && formik.errors.Upcoming && (
+                        <div className="text-red-500">
+                          {formik.errors.Upcoming}
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div className="items-center gap-2 mt-3 sm:flex">
                     <button

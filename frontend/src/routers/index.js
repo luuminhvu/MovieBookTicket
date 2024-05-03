@@ -11,6 +11,7 @@ import Order from "../pages/order/Order.jsx";
 import Profile from "../pages/profile/Profile.jsx";
 import Cinema from "../pages/cinema/CInema.jsx";
 import Movie from "../pages/movie/Movie.jsx";
+import About from "../pages/about/About.jsx";
 
 const routers = [
   {
@@ -60,6 +61,10 @@ const routers = [
   {
     path: "/film",
     component: Movie,
+  },
+  {
+    path: "/about",
+    component: About,
   },
   {
     path: "*",

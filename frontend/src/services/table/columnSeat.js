@@ -18,9 +18,13 @@ const column = [
     selector: (row) => row.CinemaName,
   },
   {
-    name: "Số ghế",
-    selector: (row) => <>{row.Seats.length === 1 ? "0" : row.Seats.length}</>,
+    name: "Sức chứa",
+    selector: (row) => row.Capacity,
   },
+  // {
+  //   name: "Số ghế",
+  //   selector: (row) => <>{row.Seats.length === 1 ? "0" : row.Seats.length}</>,
+  // },
   {
     name: "Action",
     cell: (row) => {

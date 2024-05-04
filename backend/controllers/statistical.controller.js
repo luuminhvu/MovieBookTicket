@@ -92,7 +92,7 @@ const getRevenueByDayOfMonth = async (req, res, next) => {
             COALESCE(SUM(TotalPrice), 0) AS Revenue,
             COALESCE(COUNT(NumberOfTickets), 0) AS NumberOfTickets
           FROM
-            Bookings
+            bookings
           WHERE
             DATE(BookingDate) = ?`;
 
@@ -129,19 +129,19 @@ const getTopMoviesByRevenue = async (req, res, next) => {
   try {
     const q = `
     SELECT 
-      Movies.MovieID,
-      Movies.Name,
-      Movies.Duration,
-      Movies.ReleaseDate,
-      Movies.Poster,
-      COALESCE(SUM(Bookings.TotalPrice), 0) AS Revenue,
-      COALESCE(COUNT(Bookings.BookingID), 0) AS NumberOfTicketsSold
+      movies.MovieID,
+      movies.Name,
+      movies.Duration,
+      movies.ReleaseDate,
+      movies.Poster,
+      COALESCE(SUM(bookings.TotalPrice), 0) AS Revenue,
+      COALESCE(COUNT(bookings.BookingID), 0) AS NumberOfTicketsSold
     FROM
-      Movies
-      LEFT JOIN Showtimes ON Movies.MovieID = Showtimes.MovieID
-      LEFT JOIN Bookings ON Showtimes.ShowtimeID = Bookings.ShowtimeID
+      movies
+      LEFT JOIN showtimes ON movies.MovieID = showtimes.MovieID
+      LEFT JOIN bookings ON showtimes.ShowtimeID = bookings.ShowtimeID
     GROUP BY
-      Movies.MovieID
+      movies.MovieID
     ORDER BY
       Revenue DESC
     LIMIT 3`;
@@ -167,14 +167,14 @@ const getTopGenresByRevenue = async (req, res, next) => {
   try {
     const q = `
     SELECT
-    Movies.Genres,
-    COUNT(Bookings.BookingID) AS TotalTicketsSold
+    movies.Genres,
+    COUNT(bookings.BookingID) AS TotalTicketsSold
     FROM
-        Movies
-    INNER JOIN Showtimes ON Movies.MovieID = Showtimes.MovieID
-    INNER JOIN Bookings ON Showtimes.ShowtimeID = Bookings.ShowtimeID
+        movies
+    INNER JOIN showtimes ON movies.MovieID = showtimes.MovieID
+    INNER JOIN bookings ON showtimes.ShowtimeID = bookings.ShowtimeID
     GROUP BY
-        Movies.Genres
+        movies.Genres
     ORDER BY
         TotalTicketsSold DESC
     LIMIT 5;
@@ -201,16 +201,16 @@ const getTopTimeFramesByRevenue = async (req, res, next) => {
   try {
     const q = `
     SELECT
-    Timeframes.TimeFrameID,
-    Timeframes.StartTime,
-    COUNT(Bookings.BookingID) AS TotalBookings
+    timeframes.TimeFrameID,
+    timeframes.StartTime,
+    COUNT(bookings.BookingID) AS TotalBookings
     FROM
-        Timeframes
-    INNER JOIN Showtimes ON Timeframes.TimeFrameID = Showtimes.TimeFrameID
-    INNER JOIN Bookings ON Showtimes.ShowtimeID = Bookings.ShowtimeID
+        timeframes
+    INNER JOIN showtimes ON timeframes.TimeFrameID = showtimes.TimeFrameID
+    INNER JOIN bookings ON showtimes.ShowtimeID = bookings.ShowtimeID
     GROUP BY
-        Timeframes.TimeFrameID,
-        Timeframes.StartTime
+        timeframes.TimeFrameID,
+        timeframes.StartTime
     ORDER BY
         TotalBookings DESC
     LIMIT 5;

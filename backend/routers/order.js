@@ -6,7 +6,7 @@ const {
   getOrders,
 } = require("../controllers/order.controller");
 
-router.post("/", getOrderByUser);
 router.get("/all", getOrders);
+router.post("/", getOrderByUser);
 
 module.exports = router;

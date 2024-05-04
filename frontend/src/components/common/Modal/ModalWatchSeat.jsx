@@ -1,10 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Notice from "../Notice";
 import ProjectorIcon from "../../icons/Projector";
+import { setLoading } from "../../../stores/loadingSlice";
+import { useDispatch } from "react-redux";
+import { getSeatsByCinemaHallID } from "../../../services/function";
 
 export default function ModalWatchSeat({ setOpenModal, row }) {
+  const dispatch = useDispatch();
+  const [seat, setSeat] = React.useState([]);
+  useEffect(() => {
+    const fetchSeat = async () => {
+      dispatch(setLoading(true));
+      try {
+        const seat = await getSeatsByCinemaHallID(row.CinemaHallID);
+        setSeat(seat);
+        dispatch(setLoading(false));
+      } catch (error) {
+        dispatch(setLoading(false));
+        console.log(error);
+      }
+    };
+    fetchSeat();
+  }, [row.CinemaHallID, dispatch]);
   const seatsByRow = {};
-  row.Seats.forEach((seat) => {
+  seat.forEach((seat) => {
     const rowName = seat.SeatName.charAt(0);
     if (!seatsByRow[rowName]) {
       seatsByRow[rowName] = [];

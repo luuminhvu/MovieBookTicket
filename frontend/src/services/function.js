@@ -122,3 +122,11 @@ export const getTopTimeFramesByRevenue = async () => {
     toast.error(error.message);
   }
 };
+export const getSeatsByCinemaHallID = async (CinemaHallID) => {
+  try {
+    const res = await api.post(`/seat/cinemahallid`, { CinemaHallID });
+    return res.data.data;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};

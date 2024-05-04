@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+// const pg = require("pg");
 const db = require("./config/dbconfig");
 const userRouter = require("./routers/user");
 const movieRouter = require("./routers/movie");
@@ -41,6 +42,18 @@ db.connect((err) => {
   }
   console.log("Connected to database");
 });
+// const client = new pg.Client(db);
+// client.connect(function (err) {
+//   if (err) throw err;
+//   client.query("SELECT VERSION()", [], function (err, result) {
+//     if (err) throw err;
+
+//     console.log(result.rows[0]);
+//     client.end(function (err) {
+//       if (err) throw err;
+//     });
+//   });
+// });
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

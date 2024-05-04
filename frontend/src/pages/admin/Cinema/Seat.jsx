@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "../../../stores/loadingSlice";
 import { getSeatOfCinemaHall } from "../../../stores/seatSlice";
@@ -7,9 +7,7 @@ import DataTable from "react-data-table-component";
 import column from "../../../services/table/columnSeat";
 const Seat = () => {
   const dispatch = useDispatch();
-  const [showModal, setShowModal] = useState(false);
   const seats = useSelector((state) => state.seat.seatOfCinemaHall);
-  console.log(seats);
   useEffect(() => {
     document.title = "Quản lí ghế";
     const fetchData = async () => {
@@ -31,16 +29,6 @@ const Seat = () => {
             Quản lí ghế trong các phòng chiếu
           </h1>
           <div className="mt-4">
-            <div className="flex justify-start">
-              <button
-                onClick={() => setShowModal(true)}
-                className="bg-green-500 p-2 text-white rounded-md hover:bg-blue-700
-            "
-              >
-                Thêm mới rạp
-              </button>
-            </div>
-
             <DataTable
               title="Danh sách ghế"
               columns={column}
@@ -53,7 +41,6 @@ const Seat = () => {
             />
           </div>
         </div>
-        {/* {showModal && <ModalCreateCinema setOpenModal={setShowModal} />} */}
       </>
     </>
   );

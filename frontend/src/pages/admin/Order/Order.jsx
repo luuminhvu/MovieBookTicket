@@ -28,7 +28,7 @@ const Order = () => {
     fetchOrder();
   }, [dispatch]);
 
-  const filteredOrder = order.filter((row) => {
+  const filteredOrder = order?.filter((row) => {
     if (!searchTerm) {
       return true;
     }

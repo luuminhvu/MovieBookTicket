@@ -5,7 +5,6 @@ const db = require("../config/dbconfig");
 
 const getOrderByUser = async (req, res, next) => {
   try {
-    console.log(req.body);
     const { UserID } = req.body;
     const q = `SELECT
         bk.BookingID,
@@ -26,14 +25,14 @@ const getOrderByUser = async (req, res, next) => {
         tf.EndTime,
         st.Date
     FROM
-        Bookings AS bk
-        JOIN Showseats AS ss ON bk.BookingID = ss.BookingID
-        JOIN Cinemaseats AS cs ON ss.CinemaSeatID = cs.CinemaSeatID
-        JOIN Cinemahalls AS ch ON cs.CinemaHallID = ch.CinemaHallID
-        JOIN Cinemas AS c ON ch.CinemaID = c.CinemaID
-        JOIN Showtimes AS st ON bk.ShowtimeID = st.ShowtimeID
-        JOIN Movies AS mv ON st.MovieID = mv.MovieID
-        JOIN Timeframes AS tf ON st.TimeFrameID = tf.TimeFrameID
+        bookings AS bk
+        JOIN showseats AS ss ON bk.BookingID = ss.BookingID
+        JOIN cinemaseats AS cs ON ss.CinemaSeatID = cs.CinemaSeatID
+        JOIN cinemahalls AS ch ON cs.CinemaHallID = ch.CinemaHallID
+        JOIN cinemas AS c ON ch.CinemaID = c.CinemaID
+        JOIN showtimes AS st ON bk.ShowtimeID = st.ShowtimeID
+        JOIN movies AS mv ON st.MovieID = mv.MovieID
+        JOIN timeframes AS tf ON st.TimeFrameID = tf.TimeFrameID
     WHERE
         bk.CustomerID = ${UserID}
     GROUP BY
@@ -78,17 +77,19 @@ const getOrders = async (req, res, next) => {
           u.Email,
           u.Phone
       FROM
-          Bookings AS bk
-          JOIN Showseats AS ss ON bk.BookingID = ss.BookingID
-          JOIN Cinemaseats AS cs ON ss.CinemaSeatID = cs.CinemaSeatID
-          JOIN Cinemahalls AS ch ON cs.CinemaHallID = ch.CinemaHallID
-          JOIN Cinemas AS c ON ch.CinemaID = c.CinemaID
-          JOIN Showtimes AS st ON bk.ShowtimeID = st.ShowtimeID
-          JOIN Movies AS mv ON st.MovieID = mv.MovieID
-          JOIN Timeframes AS tf ON st.TimeFrameID = tf.TimeFrameID
-          JOIN User AS u ON bk.CustomerID = u.UserID
+          bookings AS bk
+          JOIN showseats AS ss ON bk.BookingID = ss.BookingID
+          JOIN cinemaseats AS cs ON ss.CinemaSeatID = cs.CinemaSeatID
+          JOIN cinemahalls AS ch ON cs.CinemaHallID = ch.CinemaHallID
+          JOIN cinemas AS c ON ch.CinemaID = c.CinemaID
+          JOIN showtimes AS st ON bk.ShowtimeID = st.ShowtimeID
+          JOIN movies AS mv ON st.MovieID = mv.MovieID
+          JOIN timeframes AS tf ON st.TimeFrameID = tf.TimeFrameID
+          JOIN user AS u ON bk.CustomerID = u.UserID
       GROUP BY
-          bk.BookingID
+          bk.BookingID, bk.BookingDate, bk.NumberOfTickets, bk.TotalPrice,
+          ch.Name, c.Name, mv.Name, mv.Duration, mv.MovieID, mv.Poster, mv.Age, tf.StartTime, tf.EndTime,
+          u.UserID, u.Username, u.Email, u.Phone
       ORDER BY
           bk.BookingDate DESC
     `;

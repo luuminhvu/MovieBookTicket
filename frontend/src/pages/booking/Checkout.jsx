@@ -18,7 +18,9 @@ const Checkout = () => {
     date,
     showTimeID,
   } = location.state;
-  const total = bookingSeats.reduce((acc, seat) => acc + seat.Price, 0);
+  const total = bookingSeats
+    .map((booking) => parseFloat(booking.Price))
+    .reduce((a, b) => a + b, 0);
   const [secondsLeft, setSecondsLeft] = useState(300);
   const handleCheckout = async (e) => {
     if (paymentMethod === "vnpay") {

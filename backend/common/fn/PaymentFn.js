@@ -4,12 +4,20 @@ const PaymentIntoBooking = async (inf, bookingID) => {
   try {
     const { seatId, showtimeId } = inf;
     const SeatStatus = "BOOKED";
-    const q = `UPDATE ShowSeats 
+    const q = `UPDATE showseats 
                SET SeatStatus = '${SeatStatus}', BookingID = ${bookingID}
                WHERE ShowtimeID = ${showtimeId} AND CinemaSeatID IN (${seatId.join(
       ","
     )})`;
-    const data = await db.query(q);
+    const data = new Promise((resolve, reject) =>
+      db.query(q, (err, data) => {
+        if (err) {
+          console.log(err);
+          return reject(err);
+        }
+        resolve(data);
+      })
+    );
     return data;
   } catch (error) {
     throw new Error(error.message);
@@ -20,9 +28,17 @@ const PaymentSuccess = async (inf, bookingID, ticketCode) => {
   try {
     const { total, showtimeId, userId } = inf;
     const date = dayjs().format("YYYY-MM-DD HH:mm:ss");
-    const q = `INSERT INTO Bookings (BookingID,CustomerID,ShowtimeID,TotalPrice,BookingDate,NumberOfTickets) 
+    const q = `INSERT INTO bookings (BookingID,CustomerID,ShowtimeID,TotalPrice,BookingDate,NumberOfTickets) 
                VALUES (${bookingID},${userId},${showtimeId},${total},'${date}','${ticketCode}')`;
-    const data = await db.query(q);
+    const data = new Promise((resolve, reject) =>
+      db.query(q, (err, data) => {
+        if (err) {
+          console.log(err);
+          return reject(err);
+        }
+        resolve(data);
+      })
+    );
     return data;
   } catch (error) {
     throw new Error(error.message);
@@ -30,7 +46,6 @@ const PaymentSuccess = async (inf, bookingID, ticketCode) => {
 };
 const PaymentInfo = async (inf, bookingID) => {
   try {
-    console.log(inf);
     // {
     //   vnp_Amount: '5000000',
     //   vnp_BankCode: 'NCB',
@@ -58,9 +73,17 @@ const PaymentInfo = async (inf, bookingID) => {
       vnp_TxnRef,
     } = inf;
     const date = dayjs().format("YYYY-MM-DD HH:mm:ss");
-    const q = `INSERT INTO Payments (BookingID,PaymentDate,Amount,PaymentStatus,PaymentMethod,PaymentInfo,TransactionID,TransactionNo,BankCode,CardType)
+    const q = `INSERT INTO payments (BookingID,PaymentDate,Amount,PaymentStatus,PaymentMethod,PaymentInfo,TransactionID,TransactionNo,BankCode,CardType)
                 VALUES (${bookingID},'${date}',${vnp_Amount},'${vnp_ResponseCode}','VNPAY','${vnp_OrderInfo}','${vnp_TxnRef}','${vnp_TransactionNo}','${vnp_BankCode}','${vnp_CardType}')`;
-    const data = await db.query(q);
+    const data = new Promise((resolve, reject) =>
+      db.query(q, (err, data) => {
+        if (err) {
+          console.log(err);
+          return reject(err);
+        }
+        resolve(data);
+      })
+    );
     return data;
   } catch (error) {
     throw new Error(error.message);

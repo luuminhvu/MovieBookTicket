@@ -6,6 +6,9 @@ const ErrorResponse = require("../common/Response/Error");
 const { generateBookingId } = require("../common/fn/GenerateNumber");
 const dayjs = require("dayjs");
 const cloudinary = require("../utils/cloudinary");
+const sendMail = require("../utils/sendMail");
+const genActivationToken = require("../utils/genActivationToken");
+const { SUBJECT, TEXT } = require("../common/CONSTANST");
 const register = async (req, res) => {
   try {
     const q = "SELECT * FROM `user` WHERE email = ? OR username = ?";
@@ -27,8 +30,9 @@ const register = async (req, res) => {
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
     const UserID = generateBookingId(8);
     const date = dayjs().format("YYYY-MM-DD");
+    const activationToken = genActivationToken();
     const insertQuery =
-      "INSERT INTO `user` (userid, username, password, email, role, dateregister) VALUES ?";
+      "INSERT INTO `user` (userid, username, password, email, role, dateregister, active,activationtoken) VALUES ?";
     const values = [
       [
         UserID,
@@ -37,6 +41,8 @@ const register = async (req, res) => {
         req.body.email,
         "customer",
         date,
+        0,
+        activationToken,
       ],
     ];
 
@@ -57,6 +63,41 @@ const register = async (req, res) => {
       role: "customer",
     };
     const token = genAccessToken(user);
+    const to = user.email;
+    const subject = SUBJECT;
+    const text = TEXT;
+    const activeUrl = `${process.env.HOST}/activate?token=${activationToken}`;
+    const html = `
+    <html>
+    <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        padding: 20px;
+        font-size:18px;
+      }
+      a {
+        color: green;
+        text-decoration: none;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border-radius: 5px;
+      }
+      p{
+        margin-bottom: 20px;
+      }
+    </style>
+    </head>
+    <body>
+      <p>Welcome to MovieBookTicket</p>
+      <p>Click the link below to activate your account</p>
+      <a href="${activeUrl}">Activate</a>
+    </body>
+    </html>
+    `;
+    sendMail(to, subject, text, html);
     SuccessResponse(res, 200, "User registered successfully", token);
   } catch (error) {
     ErrorResponse(res, 500, "Internal Server Error");
@@ -212,6 +253,45 @@ const updateUserForAdmin = async (req, res) => {
     ErrorResponse(res, 500, "Internal Server Error");
   }
 };
+const activeAccount = async (req, res) => {
+  console.log("Active account");
+  try {
+    const { token } = req.params;
+    console.log(token);
+    const user = await new Promise((resolve, reject) => {
+      const checkQuery = `SELECT * FROM user WHERE activationtoken = '${token}'`;
+      db.query(checkQuery, (err, data) => {
+        if (err) return reject(err);
+        resolve(data[0]);
+      });
+    });
+
+    if (!user) {
+      console.log("Invalid activation token");
+      return ErrorResponse(
+        res,
+        400,
+        "Invalid activation token or user has already been activated."
+      );
+    }
+
+    if (user.Active === 1) {
+      return ErrorResponse(res, 400, "User has already been activated.");
+    }
+    const updateQuery = `UPDATE user SET Active = 1, activationtoken = NULL WHERE activationtoken = '${token}'`;
+    await new Promise((resolve, reject) => {
+      db.query(updateQuery, (err, data) => {
+        if (err) return reject(err);
+        resolve(data);
+      });
+    });
+    return SuccessResponse(res, 200, "Account activated successfully.");
+  } catch (error) {
+    console.error(error);
+    return ErrorResponse(res, 500, "Internal Server Error");
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -221,4 +301,5 @@ module.exports = {
   updateUserPassword,
   getUser,
   updateUserForAdmin,
+  activeAccount,
 };

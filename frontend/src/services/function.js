@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import api from "../utils/api";
+import { showToast } from "../components/common/Toast";
 
 export const getDetailMovie = async (id) => {
   try {
@@ -128,5 +129,14 @@ export const getSeatsByCinemaHallID = async (CinemaHallID) => {
     return res.data.data;
   } catch (error) {
     toast.error(error.message);
+  }
+};
+export const activateAccount = async (token) => {
+  try {
+    const res = await api.patch(`/user/active/${token}`);
+    showToast(res.data.message, res.data.status);
+    return res.data.data;
+  } catch (error) {
+    toast.error(error.response.data.message);
   }
 };

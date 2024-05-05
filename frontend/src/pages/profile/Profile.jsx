@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getUserInfo, updateAvatar } from "../../services/function";
-import linhchi from "../../assets/images/chinam.jpg";
 import Modal from "../../components/common/Modal";
-import { useRef } from "react";
 
 import dayjs from "dayjs";
-import api from "../../utils/api";
-import axios from "axios";
 import { toast } from "react-toastify";
 import ModalPassword from "../../components/common/ModalChangePassword";
 import { AVATAR_DEFAULT } from "../../constants/define";
@@ -27,7 +23,7 @@ const Profile = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [UserID]);
   const handleAvatarUpload = (e) => {
     const file = e.target.files[0];
     transformFile(file);
@@ -68,7 +64,7 @@ const Profile = () => {
               <div className="bg-white p-3 border-t-4 border-green-400">
                 <div className="image overflow-hidden">
                   <img
-                    className="mx-auto rounded-full w-56 h-56"
+                    className="mx-auto rounded-full w-56 h-56 object-cover object-center"
                     src={
                       avatar
                         ? avatar

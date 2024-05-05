@@ -90,7 +90,7 @@ const Header = () => {
                 >
                   <img
                     src={user?.Avatar ? user?.Avatar : AVATAR_DEFAULT}
-                    className="w-8 h-8 rounded-full mr-2"
+                    className="w-8 h-8 rounded-full mr-2 object-cover object-center"
                     alt="avatar"
                   />
                   <span className="items-center justify-center hidden lg:flex">

@@ -134,7 +134,7 @@ const updateAvatarUser = async (req, res) => {
     });
 
     if (uploadRes) {
-      const q = `UPDATE USER SET Avatar = ? WHERE UserID = ?`;
+      const q = `UPDATE user SET Avatar = ? WHERE UserID = ?`;
       db.query(q, [uploadRes.secure_url, UserID], (err, data) => {
         if (err) {
           return ErrorResponse(res, 500, "Internal Server Error", err);
@@ -153,7 +153,7 @@ const updateUserPassword = async (req, res) => {
   const currentPassword = user.currentPassword;
   const newPassword = user.newPassword;
   try {
-    const q = `SELECT * FROM User WHERE UserID = ?`;
+    const q = `SELECT * FROM user WHERE UserID = ?`;
     const user = await new Promise((resolve, reject) => {
       db.query(q, [UserID], (err, data) => {
         if (err) {

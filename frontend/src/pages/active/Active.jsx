@@ -7,7 +7,6 @@ import { activateAccount } from "../../services/function";
 const Active = () => {
   const dispatch = useDispatch();
   const token = window.location.href.split("=")[1];
-  const [status, setStatus] = useState(false);
 
   useEffect(() => {
     document.title = "Kích hoạt tài khoản";
@@ -15,8 +14,7 @@ const Active = () => {
     const fetchActivationStatus = async () => {
       dispatch(setLoading(true));
       try {
-        const res = await activateAccount(token);
-        res && setStatus(true);
+        await activateAccount(token);
         dispatch(setLoading(false));
       } catch (error) {
         console.error(error);
@@ -37,14 +35,10 @@ const Active = () => {
         </svg>
         <div class="text-center">
           <h3 class="md:text-2xl text-base text-gray-900 font-semibold text-center">
-            {status
-              ? "Chúc mừng bạn đã kích hoạt tài khoản thành công"
-              : "Kích hoạt tài khoản thất bại"}
+            Tài khoản của bạn đã được kích hoạt
           </h3>
           <p class="text-gray-600 my-2">
-            {status
-              ? "Tài khoản của bạn đã được kích hoạt thành công, bạn có thể đăng nhập và sử dụng dịch vụ của chúng tôi"
-              : "Kích hoạt tài khoản thất bại, vui lòng thử lại sau"}
+            Bạn đã có thể sử dụng tài khoản của mình
           </p>
           <p> Chúc bạn một ngày tốt lành </p>
           <div class="py-10 text-center">

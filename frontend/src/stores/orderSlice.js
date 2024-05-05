@@ -10,7 +10,6 @@ export const fetchOrder = createAsyncThunk(
   "orders/fetchOrder",
   async (UserID) => {
     try {
-      console.log(UserID);
       const response = await api.post("/order", { UserID });
       return response.data.data;
     } catch (error) {

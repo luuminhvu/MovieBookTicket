@@ -7,7 +7,6 @@ import column from "../../../services/table/columnTicket";
 
 const Order = () => {
   const [order, setOrder] = useState([]);
-  console.log(order);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchType, setSearchType] = useState("orderCode");
   const dispatch = useDispatch();

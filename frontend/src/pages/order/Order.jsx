@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+/* eslint-disable jsx-a11y/img-redundant-alt */
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrder } from "../../stores/orderSlice";
 import dayjs from "dayjs";
 const Order = () => {
   const UserID = useSelector((state) => state.auth.userId);
   const orders = useSelector((state) => state.order.orders);
-  console.log(orders);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
@@ -16,7 +16,7 @@ const Order = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [dispatch, UserID]);
   return (
     <>
       <section class="py-12 relative">

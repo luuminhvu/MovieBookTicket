@@ -9,7 +9,6 @@ const User = () => {
   // const [showModalEdit, setShowModalEdit] = useState(false);
   const [originalData, setOriginalData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  console.log(filteredData);
   const dispatch = useDispatch();
 
   useEffect(() => {

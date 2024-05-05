@@ -140,7 +140,10 @@ const BookSeat = () => {
           <div className="flex flex-col items-center w-1/3">
             <h2 className="text-2xl font-bold text-white">Tổng tiền</h2>
             <p className="text-white">
-              {bookingSeats.reduce((acc, event) => acc + event.Price, 0)}đ
+              {bookingSeats
+                .map((seat) => parseFloat(seat.Price))
+                .reduce((a, b) => a + b, 0)}{" "}
+              VNĐ
             </p>
             <button
               onClick={() => {

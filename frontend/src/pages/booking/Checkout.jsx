@@ -162,7 +162,10 @@ const Checkout = () => {
               <li className="flex flex-wrap gap-4 text-sm">
                 Giá vé{" "}
                 <span className="ml-auto font-bold">
-                  {bookingSeats.reduce((acc, event) => acc + event.Price, 0)} đ
+                  {bookingSeats
+                    .map((seat) => parseFloat(seat.Price))
+                    .reduce((a, b) => a + b, 0)}{" "}
+                  đ
                 </span>
               </li>
               <li className="flex flex-wrap gap-4 text-sm">
@@ -174,7 +177,10 @@ const Checkout = () => {
               <li className="flex flex-wrap gap-4 text-base font-bold border-t pt-4">
                 <span className="text-red-600">Tổng cộng</span>
                 <span className="ml-auto">
-                  {bookingSeats.reduce((acc, event) => acc + event.Price, 0)} đ
+                  {bookingSeats
+                    .map((seat) => parseFloat(seat.Price))
+                    .reduce((a, b) => a + b, 0)}{" "}
+                  VNĐ
                 </span>
               </li>
             </ul>

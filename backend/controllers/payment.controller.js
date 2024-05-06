@@ -7,6 +7,7 @@ const {
   PaymentIntoBooking,
   PaymentSuccess,
   PaymentInfo,
+  sendMailOrder,
 } = require("../common/fn/PaymentFn");
 const {
   generateBookingId,
@@ -18,7 +19,6 @@ const createPaymentRequest = async (req, res, next) => {
   infoBooking = [req.body];
   let date = new Date();
   let createDate = moment(date).format("YYYYMMDDHHmmss");
-
   let ipAddr =
     req.headers["x-forwarded-for"] ||
     req.connection.remoteAddress ||
@@ -83,6 +83,7 @@ const getRequestReturn = async (req, res) => {
       await PaymentSuccess(infoBooking[0], bookingID, ticketCode);
       await PaymentIntoBooking(infoBooking[0], bookingID);
       await PaymentInfo(vnp_Params, bookingID);
+      await sendMailOrder(infoBooking[0], ticketCode);
       SuccessResponse(res, 200, "Success", {
         code: vnp_Params["vnp_ResponseCode"],
       });

@@ -5,6 +5,7 @@ import api from "../../utils/api";
 import { useSelector } from "react-redux";
 const Checkout = () => {
   const userId = useSelector((state) => state.auth.userId);
+  const email = useSelector((state) => state.auth.email);
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [agree, setAgree] = useState(false);
   const location = useLocation();
@@ -32,6 +33,11 @@ const Checkout = () => {
           movieId: movie.MovieID,
           seatId: bookingSeats.map((seat) => seat.CinemaSeatID),
           showtimeId: showTimeID,
+          cinemaName,
+          cinemaHallName,
+          startTime,
+          date,
+          email,
         });
         window.location.href = res.data.data.data;
       } catch (error) {

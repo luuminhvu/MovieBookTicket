@@ -212,36 +212,36 @@ const sendMailOrder = async (inf, ticketCode) => {
         </div>
         <div class="info">
           <div class="column">
-            <div class="label">Phòng chiếu</div>
+            <div class="label">Phòng chiếu: </div>
             <div>
               ${cinemaHallName}
             </div>
           </div>
           <div class="column">
-            <div class="label">Ghế</div>
-            <div>Seat ${seatNames}</div>
+            <div class="label">Ghế: </div>
+            <div> ${seatNames}</div>
             </div>
           </div>
           <div class="column">
-            <div class="label">Thời gian thanh toán</div>
+            <div class="label">Thời gian thanh toán: </div>
             <div>
               ${datePayment}
             </div>
           </div>
           <div class="column">
-            <div class="label">Tiền combo bỏng nước</div>
+            <div class="label">Tiền combo bỏng nước: </div>
             <div>0 VND</div>
           </div>
           <div class="column">
-            <div class="label">Tổng tiền</div>
+            <div class="label">Tổng tiền: </div>
             <div>0 VND</div>
           </div>
           <div class="column">
-            <div class="label">Số tiền giảm giá</div>
+            <div class="label">Số tiền giảm giá: </div>
             <div>0 VND</div>
           </div>
           <div class="column">
-            <div class="label">Số tiền thanh toán</div>
+            <div class="label">Số tiền thanh toán: </div>
             <div> ${totalPrice} VND</div>
           </div>
         </div>

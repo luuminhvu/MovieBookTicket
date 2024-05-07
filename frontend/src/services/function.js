@@ -140,3 +140,12 @@ export const activateAccount = async (token) => {
     toast.error(error.response.data.message);
   }
 };
+export const forgotPassword = async (email) => {
+  try {
+    const res = await api.post(`/user/forgotpassword`, { email });
+    showToast(res.data.message, res.data.status);
+    return res.data.data;
+  } catch (error) {
+    toast.error(error.response.data.message);
+  }
+};

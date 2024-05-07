@@ -165,9 +165,9 @@ export default function Register() {
                   </p>
                 )}
             </div>
-            <Link to="" className="text-xs text-blue-500 hover:underline">
+            {/* <Link to="" className="text-xs text-blue-500 hover:underline">
               {t("forgotPassword")}
-            </Link>
+            </Link> */}
             <div className="flex z-1 items-center mt-4">
               <button
                 type="submit"

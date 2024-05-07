@@ -10,8 +10,11 @@ import { login } from "../../stores/authSlice";
 import { useNavigate } from "react-router-dom";
 import { setLoading } from "../../stores/loadingSlice";
 import { showToast } from "../../components/common/Toast";
+import ModalResetPassword from "../../components/common/Modal/ModalResetPassword";
 export default function Login() {
   const auth = useSelector((state) => state.auth);
+  const [openModal, setOpenModal] = useState(false);
+
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [email, setEmail] = useState("");
@@ -78,9 +81,12 @@ export default function Login() {
               </div>
             </div>
           </div>
-          <Link href="#" className="text-xs text-blue-500 hover:underline">
+          <div
+            onClick={() => setOpenModal(true)}
+            className="text-xs text-blue-500 hover:underline"
+          >
             {t("forgotPassword")}
-          </Link>
+          </div>
           <div className="mt-6">
             <button
               onClick={handleSubmitLogin}
@@ -128,6 +134,7 @@ export default function Login() {
           </Link>
         </p>
       </div>
+      {openModal && <ModalResetPassword setOpenModal={setOpenModal} />}
     </div>
   );
 }

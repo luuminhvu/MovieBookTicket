@@ -11,6 +11,7 @@ const {
   getUser,
   updateUserForAdmin,
   activeAccount,
+  forgotPassword,
 } = require("../controllers/user.controller");
 
 router.post("/register", register);
@@ -22,4 +23,5 @@ router.put("/profile", updateUserInfo);
 router.get("/", getUser);
 router.put("/", updateUserForAdmin);
 router.patch("/active/:token", activeAccount);
+router.post("/forgotpassword", forgotPassword);
 module.exports = router;

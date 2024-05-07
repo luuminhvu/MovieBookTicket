@@ -3,7 +3,10 @@ const bcrypt = require("bcrypt");
 const { genAccessToken } = require("../utils/genToken");
 const SuccessResponse = require("../common/Response/Success");
 const ErrorResponse = require("../common/Response/Error");
-const { generateBookingId } = require("../common/fn/GenerateNumber");
+const {
+  generateBookingId,
+  generatePassword,
+} = require("../common/fn/GenerateNumber");
 const dayjs = require("dayjs");
 const cloudinary = require("../utils/cloudinary");
 const sendMail = require("../utils/sendMail");
@@ -291,6 +294,62 @@ const activeAccount = async (req, res) => {
     return ErrorResponse(res, 500, "Internal Server Error");
   }
 };
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await new Promise((resolve, reject) => {
+      const q = `SELECT * FROM user WHERE email = ?`;
+      db.query(q, [email], (err, data) => {
+        if (err) return reject(err);
+        resolve(data[0]);
+      });
+    });
+
+    if (!user) {
+      return ErrorResponse(res, 400, "User not found");
+    }
+    const newPassword = generatePassword(8);
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(newPassword, salt);
+    const updateQuery = `UPDATE user SET Password = ? WHERE email = ?`;
+    await new Promise((resolve, reject) => {
+      db.query(updateQuery, [hashedPassword, email], (err, data) => {
+        if (err) return reject(err);
+        resolve(data);
+      });
+    });
+    const to = email;
+    const subject = "Movie Book Ticket - Forgot Password";
+    const text = "Forgot Password";
+    const html = `
+    <html>
+    <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        padding: 20px;
+        font-size:18px;
+      }
+      p{
+        margin-bottom: 20px;
+      }
+    </style>
+    </head>
+    <body>
+      <p>You have requested to reset your password</p>
+      <p>Your new password is: ${newPassword}</p>
+      <p></p>Please login and change your password</p>
+    </body>
+    </html>
+    `;
+    sendMail(to, subject, text, html);
+    SuccessResponse(res, 200, "New password sent to your email");
+  } catch (error) {
+    console.error(error);
+    ErrorResponse(res, 500, "Internal Server Error");
+  }
+};
 
 module.exports = {
   register,
@@ -302,4 +361,5 @@ module.exports = {
   getUser,
   updateUserForAdmin,
   activeAccount,
+  forgotPassword,
 };

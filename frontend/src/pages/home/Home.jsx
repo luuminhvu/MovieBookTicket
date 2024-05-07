@@ -77,9 +77,12 @@ const Home = () => {
                         </span>
                         <span className="text-sm font-thin"> phút</span>
                       </h2>
-                      <button className="btn btn-primary mt-5 text-white text-tranform: uppercase bg-sky-600 hover:bg-sky-700 p-2 rounded-3xl">
+                      <Link
+                        to={`/movie/bookings/${movie.MovieID}`}
+                        className="btn btn-primary block text-center mt-5 text-white text-tranform: uppercase bg-sky-600 hover:bg-sky-700 p-2 rounded-3xl"
+                      >
                         Mua vé
-                      </button>
+                      </Link>
                       {movie.Age == 18
                         ? Age({ Age: 18 })
                         : movie.Age == 16

@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const session = require("express-session");
 // const pg = require("pg");
 const db = require("./config/dbconfig");
 const userRouter = require("./routers/user");
@@ -21,7 +22,13 @@ dotenv.config();
 app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
-
+app.use(
+  session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });

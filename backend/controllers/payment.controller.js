@@ -13,10 +13,11 @@ const {
   generateBookingId,
   generateTicketCode,
 } = require("../common/fn/GenerateNumber");
-let infoBooking = [];
+const infoBooking = {};
 const createPaymentRequest = async (req, res, next) => {
   process.env.TZ = "Asia/Ho_Chi_Minh";
-  infoBooking = [req.body];
+  const userId = req.body.userId;
+  infoBooking[userId] = req.body;
   let date = new Date();
   let createDate = moment(date).format("YYYYMMDDHHmmss");
   let ipAddr =
@@ -65,6 +66,7 @@ const createPaymentRequest = async (req, res, next) => {
 };
 const getRequestReturn = async (req, res) => {
   let vnp_Params = req.query;
+  const userId = req.body.userId;
   let secureHash = vnp_Params["vnp_SecureHash"];
   delete vnp_Params["vnp_SecureHash"];
   delete vnp_Params["vnp_SecureHashType"];
@@ -78,24 +80,25 @@ const getRequestReturn = async (req, res) => {
   let signed = hmac.update(Buffer.from(signData, "utf-8")).digest("hex");
   const bookingID = generateBookingId(8);
   const ticketCode = generateTicketCode(8);
+  const info = infoBooking[userId];
   if (secureHash === signed) {
     if (vnp_Params["vnp_ResponseCode"] === "00") {
-      await PaymentSuccess(infoBooking[0], bookingID, ticketCode);
-      await PaymentIntoBooking(infoBooking[0], bookingID);
+      await PaymentSuccess(info, bookingID, ticketCode);
+      await PaymentIntoBooking(info, bookingID);
       await PaymentInfo(vnp_Params, bookingID);
-      await sendMailOrder(infoBooking[0], ticketCode);
+      await sendMailOrder(info, ticketCode);
       SuccessResponse(res, 200, "Success", {
         code: vnp_Params["vnp_ResponseCode"],
       });
-      infoBooking = [];
+      infoBooking[userId] = null;
     } else {
       ErrorResponse(res, 400, "Fail", { code: vnp_Params["vnp_ResponseCode"] });
-      infoBooking = [];
+      infoBooking[userId] = null;
     }
   } else {
     ErrorResponse(res, 400, "Fail", { code: "97" });
-    infoBooking = [];
+    infoBooking[userId] = null;
   }
-  infoBooking = [];
+  infoBooking[userId] = null;
 };
 module.exports = { createPaymentRequest, getRequestReturn };

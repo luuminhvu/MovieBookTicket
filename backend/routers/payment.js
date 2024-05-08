@@ -6,6 +6,6 @@ const {
   getRequestReturn,
 } = require("../controllers/payment.controller");
 router.post("/", createPaymentRequest);
-router.get("/return", getRequestReturn);
+router.post("/return", getRequestReturn);
 
 module.exports = router;

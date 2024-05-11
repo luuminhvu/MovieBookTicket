@@ -31,7 +31,7 @@ const store = configureStore({
   },
 });
 const { dispatch } = store;
-getLocalStorage("token", dispatch(logout()));
+// getLocalStorage("token", dispatch(logout()));
 store.dispatch(loadingUserLogin());
 store.dispatch(fetchMovies());
 const root = ReactDOM.createRoot(document.getElementById("root"));

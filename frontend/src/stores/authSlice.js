@@ -48,7 +48,7 @@ export const loginGoogle = createAsyncThunk(
       const res = await api.post("/auth/verify-google", {
         token: values.credential,
       });
-      setLocalStorage("token", res.data.data.token, 7200);
+      setLocalStorage("token", res.data.data.token);
       showToast(res.data.message, res.data.status);
     } catch (error) {
       showToast(error.response.data.message, error.response.data.status);

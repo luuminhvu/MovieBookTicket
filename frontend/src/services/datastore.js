@@ -9,14 +9,14 @@ export const setLocalStorage = (key, value, expirySeconds) => {
 export const removeLocalStorage = (key) => {
   localStorage.removeItem(key);
 };
-export const getLocalStorage = (key, dispatch) => {
+export const getLocalStorage = (key, dispatch = () => {}) => {
   const itemStr = localStorage.getItem(key);
   if (!itemStr) {
     return null;
   }
-  const item = JSON.parse(itemStr);
   const now = new Date();
-  if (item.expiry && now.getTime() > item.expiry) {
+  const item = JSON.parse(itemStr);
+  if (dispatch && item.expiry && now.getTime() > item.expiry) {
     dispatch();
   }
   return item.value;

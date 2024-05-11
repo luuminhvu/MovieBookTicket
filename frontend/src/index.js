@@ -31,11 +31,10 @@ const store = configureStore({
 });
 store.dispatch(loadingUserLogin());
 store.dispatch(fetchMovies());
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <GoogleOAuthProvider clientId="788929503764-tb6i823r4c2lf3m1mtcp419no22gaaaf.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <App />
     </GoogleOAuthProvider>
   </Provider>

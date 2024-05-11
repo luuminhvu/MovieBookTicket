@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../utils/api";
 import { jwtDecode } from "jwt-decode";
 import { setLocalStorage, removeLocalStorage } from "../services/datastore";
+import { showToast } from "../components/common/Toast";
 const initialState = {
   token: localStorage.getItem("token") || null,
   userId: "",
@@ -36,6 +37,20 @@ export const login = createAsyncThunk(
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const loginGoogle = createAsyncThunk(
+  "auth/loginGoogle",
+  async (values, { rejectWithValue }) => {
+    try {
+      const res = await api.post("/auth/verify-google", {
+        token: values.credential,
+      });
+      setLocalStorage("token", res.data.data.token);
+      showToast(res.data.message, res.data.status);
+    } catch (error) {
+      showToast(error.response.data.message, error.response.data.status);
     }
   }
 );
@@ -117,6 +132,28 @@ const authSlice = createSlice({
       state.loginStatus = "failed";
     });
     builder.addCase(login.pending, (state, action) => {
+      state.loginStatus = "loading";
+    });
+    builder.addCase(loginGoogle.fulfilled, (state, action) => {
+      const user = action.payload
+        ? jwtDecode(action.payload)
+        : { userId: "", username: "", email: "", role: "" };
+      return {
+        ...state,
+        token: action.payload,
+        userId: user.userId,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        loginStatus: "success",
+        loginError: "",
+      };
+    });
+    builder.addCase(loginGoogle.rejected, (state, action) => {
+      state.loginError = action.payload;
+      state.loginStatus = "failed";
+    });
+    builder.addCase(loginGoogle.pending, (state, action) => {
       state.loginStatus = "loading";
     });
   },

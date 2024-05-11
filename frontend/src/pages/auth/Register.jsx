@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import FacebookIcon from "../../components/icons/Facebook";
-import GoogleIcon from "../../components/icons/Google";
+// import FacebookIcon from "../../components/icons/Facebook";
+// import GoogleIcon from "../../components/icons/Google";
 import Eye from "../../components/icons/Eye";
 import EyeSlash from "../../components/icons/EyeSlash";
-import { register } from "../../stores/authSlice";
+import { loginGoogle, register } from "../../stores/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { setLoading } from "../../stores/loadingSlice";
 import { showToast } from "../../components/common/Toast";
+import { GoogleLogin } from "@react-oauth/google";
 export default function Register() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -194,18 +195,26 @@ export default function Register() {
             <p className="px-3 ">{t("or")}</p>
             <hr className="w-full" />
           </div>
-          <div className="my-6 space-y-2">
-            <button
+          <div className="my-6 space-y-2 flex justify-center">
+            {/* <button
               type="button"
               className="flex items-center justify-center w-full p-2 space-x-4 border rounded-md focus:ring-2 focus:ring-offset-1 dark:border-gray-400 focus:ring-violet-400"
             >
               <GoogleIcon />
               <p>{t("loginWithGoogle")}</p>
-            </button>
-            <button className="flex items-center justify-center w-full p-2 space-x-4 border rounded-md focus:ring-2 focus:ring-offset-1 dark:border-gray-400 focus:ring-violet-400">
+            </button> */}
+            <GoogleLogin
+              onSuccess={async (response) => {
+                await dispatch(loginGoogle(response));
+                window.location.reload();
+              }}
+              type="button"
+              className="flex items-center justify-center w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-offset-1 focus:ring-violet-600"
+            />
+            {/* <button className="flex items-center justify-center w-full p-2 space-x-4 border rounded-md focus:ring-2 focus:ring-offset-1 dark:border-gray-400 focus:ring-violet-400">
               <FacebookIcon />
               <p>{t("loginWithFacebook")}</p>
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

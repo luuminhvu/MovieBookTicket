@@ -15,6 +15,7 @@ import orderSlice from "./stores/orderSlice";
 import showSlice from "./stores/showSlice";
 import timeFrameSlice from "./stores/timeFrameSlice";
 import cinemaSlice from "./stores/cinemaSlice";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 const store = configureStore({
   reducer: {
     loading: loadingSlice,
@@ -34,7 +35,9 @@ store.dispatch(fetchMovies());
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <App />
+    <GoogleOAuthProvider clientId="788929503764-tb6i823r4c2lf3m1mtcp419no22gaaaf.apps.googleusercontent.com">
+      <App />
+    </GoogleOAuthProvider>
   </Provider>
 );
 

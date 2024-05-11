@@ -7,7 +7,7 @@ import "./plugins/i18n";
 import loadingSlice from "./stores/loadingSlice";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import authSlice, { loadingUserLogin } from "./stores/authSlice";
+import authSlice, { loadingUserLogin, logout } from "./stores/authSlice";
 import movieSlice, { fetchMovies } from "./stores/movieSlice";
 import seatSlice from "./stores/seatSlice";
 import showTimeSlice from "./stores/showTimeSlice";
@@ -16,6 +16,7 @@ import showSlice from "./stores/showSlice";
 import timeFrameSlice from "./stores/timeFrameSlice";
 import cinemaSlice from "./stores/cinemaSlice";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { getLocalStorage } from "./services/datastore";
 const store = configureStore({
   reducer: {
     loading: loadingSlice,
@@ -29,6 +30,8 @@ const store = configureStore({
     cinema: cinemaSlice,
   },
 });
+const { dispatch } = store;
+getLocalStorage("token", dispatch(logout()));
 store.dispatch(loadingUserLogin());
 store.dispatch(fetchMovies());
 const root = ReactDOM.createRoot(document.getElementById("root"));

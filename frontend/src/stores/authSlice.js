@@ -22,7 +22,7 @@ export const register = createAsyncThunk(
     try {
       const response = await api.post("/user/register", values);
       console.log(response);
-      setLocalStorage("token", response.data.data);
+      setLocalStorage("token", response.data.data, 7200);
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -34,7 +34,7 @@ export const login = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       const response = await api.post("/user/login", values);
-      setLocalStorage("token", response.data.data);
+      setLocalStorage("token", response.data.data, 7200);
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -48,7 +48,7 @@ export const loginGoogle = createAsyncThunk(
       const res = await api.post("/auth/verify-google", {
         token: values.credential,
       });
-      setLocalStorage("token", res.data.data.token);
+      setLocalStorage("token", res.data.data.token, 7200);
       showToast(res.data.message, res.data.status);
     } catch (error) {
       showToast(error.response.data.message, error.response.data.status);
@@ -72,6 +72,8 @@ const authSlice = createSlice({
           loginStatus: "success",
           authType: user.authType,
         };
+      } else {
+        return state;
       }
     },
     logout(state) {

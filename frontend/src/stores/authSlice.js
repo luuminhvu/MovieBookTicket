@@ -9,6 +9,7 @@ const initialState = {
   username: "",
   email: "",
   role: "",
+  authType: "",
   registerStatus: "",
   loginStatus: "",
   registerError: "",
@@ -69,6 +70,7 @@ const authSlice = createSlice({
           email: user.email,
           role: user.role,
           loginStatus: "success",
+          authType: user.authType,
         };
       }
     },
@@ -81,6 +83,7 @@ const authSlice = createSlice({
         username: "",
         email: "",
         role: "",
+        authType: "",
         loginError: "",
         loginStatus: "",
         registerError: "",
@@ -99,6 +102,7 @@ const authSlice = createSlice({
           username: user.username,
           email: user.email,
           role: user.role,
+          authType: user.authType,
           registerStatus: "success",
           registerError: "",
         };
@@ -120,6 +124,7 @@ const authSlice = createSlice({
           username: user.username,
           email: user.email,
           role: user.role,
+          authType: user.authType,
           loginStatus: "success",
           loginError: "",
         };
@@ -145,6 +150,7 @@ const authSlice = createSlice({
         username: user.username,
         email: user.email,
         role: user.role,
+        authType: user.authType,
         loginStatus: "success",
         loginError: "",
       };

@@ -42,6 +42,7 @@ const verifyTokenGoogle = async (req, res) => {
           email: existingUser.Email,
           username: existingUser.Username,
           role: existingUser.Role,
+          authType: existingUser.AuthType,
         });
         return SuccessResponse(res, 200, "Login Google Success", {
           token: existingToken,
@@ -49,8 +50,10 @@ const verifyTokenGoogle = async (req, res) => {
       }
 
       const insertQuery =
-        "INSERT INTO `user` (userid, username, email, role, avatar, dateregister, active) VALUES ?";
-      const values = [[sub, name, email, "customer", picture, date, 1]];
+        "INSERT INTO `user` (userid, username, email, role, avatar, dateregister, active,authtype) VALUES ?";
+      const values = [
+        [sub, name, email, "customer", picture, date, 1, "google"],
+      ];
 
       db.query(insertQuery, [values], (err, result) => {
         if (err) {
@@ -63,6 +66,7 @@ const verifyTokenGoogle = async (req, res) => {
           email,
           username: name,
           role: "customer",
+          authType: "google",
         });
         SuccessResponse(res, 200, "Login Google Success", { token: newToken });
       });

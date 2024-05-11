@@ -35,7 +35,7 @@ const register = async (req, res) => {
     const date = dayjs().format("YYYY-MM-DD");
     const activationToken = genActivationToken();
     const insertQuery =
-      "INSERT INTO `user` (userid, username, password, email, role, dateregister, active,activationtoken) VALUES ?";
+      "INSERT INTO `user` (userid, username, password, email, role, dateregister, active,activationtoken,authtype) VALUES ?";
     const values = [
       [
         UserID,
@@ -46,6 +46,7 @@ const register = async (req, res) => {
         date,
         0,
         activationToken,
+        "default",
       ],
     ];
 
@@ -64,6 +65,7 @@ const register = async (req, res) => {
       username: req.body.username,
       email: req.body.email,
       role: "customer",
+      authType: "default",
     };
     const token = genAccessToken(user);
     const to = user.email;
@@ -131,6 +133,7 @@ const login = async (req, res) => {
       username: user.Username,
       email: user.Email,
       role: user.Role,
+      authType: user.AuthType,
     };
 
     const token = genAccessToken(newUser);

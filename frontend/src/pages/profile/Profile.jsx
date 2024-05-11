@@ -9,6 +9,7 @@ import ModalPassword from "../../components/common/ModalChangePassword";
 import { AVATAR_DEFAULT } from "../../constants/define";
 const Profile = () => {
   const UserID = useSelector((state) => state.auth.userId);
+  const authType = useSelector((state) => state.auth.authType);
   const [showModal, setShowModal] = useState(false);
   const [showModalPassword, setShowModalPassword] = useState(false);
   const [avatar, setAvatar] = useState("");
@@ -185,12 +186,14 @@ const Profile = () => {
                   >
                     Edit
                   </button>
-                  <button
-                    onClick={() => setShowModalPassword(true)}
-                    className="bg-red-500 hover:bg-red-700 text-white py-1 px-1 rounded"
-                  >
-                    Change Password
-                  </button>
+                  {authType === "default" && (
+                    <button
+                      onClick={() => setShowModalPassword(true)}
+                      className="bg-red-500 hover:bg-red-700 text-white py-1 px-1 rounded"
+                    >
+                      Change Password
+                    </button>
+                  )}
                   <input
                     type="file"
                     placeholder="Hình ảnh sản phẩm"

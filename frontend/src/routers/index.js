@@ -13,6 +13,7 @@ import Cinema from "../pages/cinema/CInema.jsx";
 import Movie from "../pages/movie/Movie.jsx";
 import About from "../pages/about/About.jsx";
 import Active from "../pages/active/Active.jsx";
+import Show from "../pages/show/Show.jsx";
 
 const routers = [
   {
@@ -70,6 +71,10 @@ const routers = [
   {
     path: "/activate",
     component: Active,
+  },
+  {
+    path: "/show",
+    component: Show,
   },
   {
     path: "*",

@@ -37,6 +37,72 @@ const getCinemaShowMovie = async (req, res, next) => {
     ErrorResponse(res, 500, "Internal Server Error", error);
   }
 };
+const getAllShowMovieByCinema = async (req, res, next) => {
+  try {
+    const cinemaID = req.body.cinemaID;
+    const date = req.body.date;
+
+    const q = `
+      SELECT 
+        c.Name as CinemaName, 
+        ch.CinemaHallID, 
+        ch.Name as CinemaHallName,
+        st.ShowtimeID, 
+        st.MovieID, 
+        tf.StartTime as StartTime,
+        m.Name as MovieName,
+        m.Genres,
+        m.Duration,
+        m.Poster,
+        m.Subtitle
+      FROM 
+        showtimes as st 
+        JOIN cinemahalls as ch ON st.CinemaHallID = ch.CinemaHallID 
+        JOIN cinemas as c ON ch.CinemaID = c.CinemaID 
+        JOIN timeframes as tf ON st.TimeFrameID = tf.TimeFrameID 
+        JOIN movies as m ON st.MovieID = m.MovieID
+      WHERE 
+        ch.CinemaID = ? 
+        AND DATE(st.Date) = ?
+    `;
+
+    const rows = await new Promise((resolve, reject) => {
+      db.query(q, [cinemaID, date], (err, data) => {
+        if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+        resolve(data);
+      });
+    });
+
+    // Tạo một đối tượng Map để nhóm các phim theo ID
+    const movieMap = new Map();
+    rows.forEach((row) => {
+      if (!movieMap.has(row.MovieID)) {
+        movieMap.set(row.MovieID, {
+          MovieID: row.MovieID,
+          MovieName: row.MovieName,
+          Genres: row.Genres,
+          Duration: row.Duration,
+          Poster: row.Poster,
+          Subtitle: row.Subtitle,
+          Showtimes: [],
+        });
+      }
+      const movie = movieMap.get(row.MovieID);
+      movie.Showtimes.push({
+        ShowtimeID: row.ShowtimeID,
+        StartTime: row.StartTime,
+        CinemaHallID: row.CinemaHallID,
+        CinemaHallName: row.CinemaHallName,
+      });
+    });
+    const responseData = [...movieMap.values()];
+
+    SuccessResponse(res, 200, "Showtimes fetched successfully", responseData);
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error", error);
+  }
+};
+
 const getSeatForBooking = async (req, res, next) => {
   try {
     const { ShowtimeID, CinemaHallID } = req.body;
@@ -56,4 +122,8 @@ const getSeatForBooking = async (req, res, next) => {
   }
 };
 
-module.exports = { getCinemaShowMovie, getSeatForBooking };
+module.exports = {
+  getCinemaShowMovie,
+  getSeatForBooking,
+  getAllShowMovieByCinema,
+};

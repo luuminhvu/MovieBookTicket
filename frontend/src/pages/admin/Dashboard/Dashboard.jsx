@@ -31,10 +31,18 @@ const Dashboard = () => {
             value={selectedChart}
             onChange={handleChartChange}
           >
-            <option value="multi">Biểu đồ đa dạng</option>
-            <option value="vertical">Biểu đồ dọc</option>
-            <option value="doughnut">Biểu đồ Doughnut</option>
-            <option value="polar">Biểu đồ Polar Area</option>
+            <option value="multi">
+              Thống kê doanh thu các ngày trong tháng
+            </option>
+            <option value="vertical">
+              Thống kê bộ phim có doanh thu cao nhất
+            </option>
+            <option value="doughnut">
+              Thống kê thể loại phim có số vé bán ra nhiều nhất
+            </option>
+            <option value="polar">
+              Thống kê các khung giờ có số vé bán ra nhiều nhất
+            </option>
           </select>
         </div>
         <div className="mt-4">

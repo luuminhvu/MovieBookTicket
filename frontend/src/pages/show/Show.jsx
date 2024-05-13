@@ -8,12 +8,15 @@ import { useDispatch } from "react-redux";
 import { fetchShowtimesAll } from "../../stores/showTimeSlice";
 import TagIcon from "../../components/icons/Tag";
 import StopWatchIcom from "../../components/icons/StopWatch";
+import { useNavigate } from "react-router-dom";
 const Show = () => {
+  const navigate = useNavigate();
   const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
   const showTimes = useSelector((state) => state.show.allShowtimes);
   const handleDateChange = (selectedDate) => {
     setDate(selectedDate.format("YYYY-MM-DD"));
   };
+  console.log(showTimes);
   const [cinemaID, setCinemaID] = useState(1);
   const dispatch = useDispatch();
   const cinema = useSelector((state) => state.cinema.Cinema);
@@ -35,6 +38,24 @@ const Show = () => {
     };
     fetchData();
   }, [dispatch, date, cinemaID]);
+  const handleButtonClick = (
+    cinemaName,
+    cinemaHallName,
+    startTime,
+    cinemaHallID,
+    showTimeID,
+    MovieID
+  ) => {
+    navigate(`/movie/bookings/${MovieID}/seats/${date}`, {
+      state: {
+        cinemaName,
+        cinemaHallName,
+        startTime,
+        cinemaHallID,
+        showTimeID,
+      },
+    });
+  };
 
   return (
     <>
@@ -72,6 +93,9 @@ const Show = () => {
                 <div className="flex flex-col">
                   <div className="mb-4">
                     <h1
+                      onClick={() => {
+                        navigate(`/movie/${movie.MovieID}`);
+                      }}
                       style={{ color: "#03599d" }}
                       className="text-xl font-bold"
                     >
@@ -100,6 +124,16 @@ const Show = () => {
                         className="text-sm font-semibold text-black w-20 py-2 mr-2"
                         style={{
                           backgroundColor: "#E5E5E5", // Sử dụng màu nền xám
+                        }}
+                        onClick={() => {
+                          handleButtonClick(
+                            movie.CinemaName,
+                            showtime.CinemaHallName,
+                            showtime.StartTime,
+                            showtime.CinemaHallID,
+                            showtime.ShowtimeID,
+                            movie.MovieID
+                          );
                         }}
                       >
                         {showtime.StartTime.slice(0, 5)}

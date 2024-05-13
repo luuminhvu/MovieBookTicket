@@ -84,6 +84,7 @@ const getAllShowMovieByCinema = async (req, res, next) => {
           Duration: row.Duration,
           Poster: row.Poster,
           Subtitle: row.Subtitle,
+          CinemaName: row.CinemaName,
           Showtimes: [],
         });
       }

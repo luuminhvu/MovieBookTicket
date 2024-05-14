@@ -84,7 +84,7 @@ const Profile = () => {
                 </p>
                 <ul className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                   <li className="flex items-center py-3">
-                    <span>Status</span>
+                    <span>Trạng thái tài khoản</span>
                     <span className="ml-auto">
                       <span
                         className={
@@ -98,7 +98,7 @@ const Profile = () => {
                     </span>
                   </li>
                   <li className="flex items-center py-3">
-                    <span>Member since</span>
+                    <span>Ngày đăng ký</span>
                     <span className="ml-auto">
                       {user?.DateRegister
                         ? dayjs(user.DateRegister).format("DD/MM/YYYY")
@@ -128,7 +128,7 @@ const Profile = () => {
                       />
                     </svg>
                   </span>
-                  <span className="tracking-wide">About</span>
+                  <span className="tracking-wide">Thông tin cá nhân</span>
                 </div>
                 <div className="text-gray-700">
                   <div className="grid md:grid-cols-2 text-sm">
@@ -137,25 +137,27 @@ const Profile = () => {
                       <div className="px-4 py-2">{user?.Username}</div>
                     </div>
                     <div className="grid grid-cols-2">
-                      <div className="px-4 py-2 font-semibold">Fullname</div>
+                      <div className="px-4 py-2 font-semibold">Họ và tên</div>
                       <div className="px-4 py-2">{user?.FullName}</div>
                     </div>
                     <div className="grid grid-cols-2">
-                      <div className="px-4 py-2 font-semibold">Gender</div>
+                      <div className="px-4 py-2 font-semibold">Giới tính</div>
                       <div className="px-4 py-2">Male</div>
                     </div>
                     <div className="grid grid-cols-2">
-                      <div className="px-4 py-2 font-semibold">Contact No.</div>
+                      <div className="px-4 py-2 font-semibold">
+                        Số điện thoại
+                      </div>
                       <div className="px-4 py-2">0{user?.Phone}</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">
-                        Current Address
+                        Địa chỉ hiện tại
                       </div>
                       <div className="px-4 py-2">{user?.Address}</div>
                     </div>
                     <div className="grid grid-cols-2">
-                      <div className="px-4 py-2 font-semibold">Role</div>
+                      <div className="px-4 py-2 font-semibold">Quyền</div>
                       <div className="px-4 py-2">{user?.Role}</div>
                     </div>
                     <div className="grid grid-cols-2">
@@ -170,7 +172,7 @@ const Profile = () => {
                       </div>
                     </div>
                     <div className="grid grid-cols-2">
-                      <div className="px-4 py-2 font-semibold">Birthday</div>
+                      <div className="px-4 py-2 font-semibold">Ngày sinh</div>
                       <div className="px-4 py-2">
                         {user?.Birthday
                           ? dayjs(user.Birthday).format("DD/MM/YYYY")
@@ -184,14 +186,14 @@ const Profile = () => {
                     onClick={() => setShowModal(true)}
                     className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-1 rounded"
                   >
-                    Edit
+                    Chỉnh sửa thông tin
                   </button>
                   {authType === "default" && (
                     <button
                       onClick={() => setShowModalPassword(true)}
                       className="bg-red-500 hover:bg-red-700 text-white py-1 px-1 rounded"
                     >
-                      Change Password
+                      Đổi mật khẩu
                     </button>
                   )}
                   <input
@@ -200,12 +202,16 @@ const Profile = () => {
                     accept="image/*"
                     onChange={handleAvatarUpload}
                   />
-                  <button
-                    onClick={() => handleChangeAvatar(avatar, UserID)}
-                    className="bg-green-500 hover:bg-green-700 text-white py-1 px-1 rounded"
-                  >
-                    Change Avatar
-                  </button>
+                  {avatar ? (
+                    <button
+                      onClick={() => handleChangeAvatar(avatar, UserID)}
+                      className="bg-green-500 hover:bg-green-700 text-white py-1 px-1 rounded"
+                    >
+                      Lưu ảnh đại diện
+                    </button>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             </div>

@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import Quit from "../icons/Quit";
 import { logout } from "../../stores/authSlice";
 import { getUserInfo } from "../../services/function";
+import Logo from "../icons/Logo";
 const Header = () => {
   const UserID = useSelector((state) => state.auth.userId);
   const [user, setUser] = useState([]);
@@ -72,13 +73,9 @@ const Header = () => {
             to="/"
             className="flex items-center"
           >
-            <img
-              src="https://flowbite.com/docs/images/logo.svg"
-              className="mr-3 h-6 sm:h-9"
-              alt="Flowbite Logo"
-            />
+            <Logo />
             <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-              Cinema
+              Beta Cinemars
             </span>
           </Link>
           <div className="flex items-center lg:order-2">

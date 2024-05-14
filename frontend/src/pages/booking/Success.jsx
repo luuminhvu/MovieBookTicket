@@ -5,11 +5,13 @@ import SuccessCpn from "../../components/common/Success";
 import FailedCpn from "../../components/common/Failed";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../stores/loadingSlice";
+
 const PaymentSuccess = () => {
   const query = useLocation().search;
   const userId = useSelector((state) => state.auth.userId);
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState(null);
   const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchData = async () => {
       dispatch(setLoading(true));
@@ -18,15 +20,30 @@ const PaymentSuccess = () => {
           userId: userId,
         });
         setCode(res.data.data.code);
-        dispatch(setLoading(false));
       } catch (error) {
-        dispatch(setLoading(false));
         console.log(error);
+        setCode("error"); // set a specific error code or handle it differently if needed
+      } finally {
+        dispatch(setLoading(false));
       }
     };
     fetchData();
   }, [query, userId, dispatch]);
-  return <>{code === "00" ? <SuccessCpn /> : <FailedCpn />}</>;
+
+  if (code === null) {
+    return (
+      <div className="relative flex m-auto justify-center items-center h-screen">
+        <div className="absolute animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-purple-500"></div>
+        <img
+          src="https://www.svgrepo.com/show/509001/avatar-thinking-9.svg"
+          className="rounded-full h-28 w-28"
+          alt="Loading"
+        />
+      </div>
+    );
+  } else {
+    return <>{code === "00" ? <SuccessCpn /> : <FailedCpn />}</>;
+  }
 };
 
 export default PaymentSuccess;

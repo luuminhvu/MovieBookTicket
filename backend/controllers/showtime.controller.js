@@ -45,17 +45,17 @@ const addShow = async (req, res) => {
 
     const result1 = await new Promise((resolve, reject) => {
       db.query(q1, (err, result) => {
-        if (err) reject(err);
+        if (err) console.log(err);
         else resolve(result);
       });
     });
 
     const showtimeId = result1.insertId;
-
-    const q2 = `SELECT CinemaSeatID, SeatType FROM CinemaSeats WHERE CinemaHallID = ${CinemaHallID}`;
+    console.log("Oke result1: " + result1.insertId);
+    const q2 = `SELECT CinemaSeatID, SeatType FROM cinemaseats WHERE CinemaHallID = ${CinemaHallID}`;
     const seatResult = await new Promise((resolve, reject) => {
       db.query(q2, (err, result) => {
-        if (err) reject(err);
+        if (err) console.log(err);
         else resolve(result);
       });
     });
@@ -72,11 +72,11 @@ const addShow = async (req, res) => {
       })
       .join(",");
 
-    const q3 = `INSERT INTO ShowSeats (ShowtimeID, CinemaSeatID, BookingID, SeatStatus, Price) VALUES ${values}`;
+    const q3 = `INSERT INTO showseats (ShowtimeID, CinemaSeatID, BookingID, SeatStatus, Price) VALUES ${values}`;
 
     const result3 = await new Promise((resolve, reject) => {
       db.query(q3, (err, result) => {
-        if (err) reject(err);
+        if (err) console.log(err);
         else resolve(result);
       });
     });

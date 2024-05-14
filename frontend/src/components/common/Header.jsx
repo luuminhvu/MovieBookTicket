@@ -74,7 +74,7 @@ const Header = () => {
             className="flex items-center"
           >
             <Logo />
-            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+            <span className="self-center text-lg whitespace-nowrap dark:text-white">
               Beta Cinemars
             </span>
           </Link>

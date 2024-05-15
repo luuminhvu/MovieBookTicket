@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 const initialState = {
   movies: [],
   status: null,
+  poster: [],
   createStatus: null,
   editStatus: null,
   deleteStatus: null,
@@ -14,6 +15,18 @@ export const fetchMovies = createAsyncThunk("movies/fetchMovies", async () => {
     setTimeout(async () => {
       try {
         const response = await api.get("/movie");
+        resolve(response.data.data);
+      } catch (error) {
+        reject(error);
+      }
+    }, 2000); // Giả sử bạn muốn lấy dữ liệu sau 2 giây
+  });
+});
+export const fetchPoster = createAsyncThunk("movies/fetchPoster", async () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      try {
+        const response = await api.get("/poster");
         resolve(response.data.data);
       } catch (error) {
         reject(error);
@@ -76,6 +89,16 @@ const movieSlice = createSlice({
     });
     builder.addCase(editMovie.rejected, (state) => {
       state.editStatus = "failed";
+    });
+    builder.addCase(fetchPoster.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(fetchPoster.fulfilled, (state, action) => {
+      state.status = "success";
+      state.poster = action.payload;
+    });
+    builder.addCase(fetchPoster.rejected, (state) => {
+      state.status = "failed";
     });
   },
 });

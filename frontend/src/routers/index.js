@@ -14,6 +14,7 @@ import Movie from "../pages/movie/Movie.jsx";
 import About from "../pages/about/About.jsx";
 import Active from "../pages/active/Active.jsx";
 import Show from "../pages/show/Show.jsx";
+import News from "../pages/news/News.jsx";
 
 const routers = [
   {
@@ -75,6 +76,10 @@ const routers = [
   {
     path: "/show",
     component: Show,
+  },
+  {
+    path: "/news",
+    component: News,
   },
   {
     path: "*",

@@ -13,6 +13,8 @@ const cinemaRouter = require("./routers/cinema");
 const seatRouter = require("./routers/seat");
 const authRouter = require("./routers/auth");
 const statisticsRouter = require("./routers/statistical");
+const newsRouter = require("./routers/news");
+const posterRouter = require("./routers/poster");
 const dotenv = require("dotenv");
 require("dotenv").config();
 const app = express();
@@ -34,6 +36,8 @@ app.use("/api/v1/timeframe", timeframeRouter);
 app.use("/api/v1/cinema", cinemaRouter);
 app.use("/api/v1/seat", seatRouter);
 app.use("/api/v1/statistical", statisticsRouter);
+app.use("/api/v1/news", newsRouter);
+app.use("/api/v1/poster", posterRouter);
 
 db.connect((err) => {
   if (err) {

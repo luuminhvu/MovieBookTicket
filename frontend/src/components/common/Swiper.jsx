@@ -6,14 +6,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import slider1 from "../../assets/images/slider1.jpg";
-import slider2 from "../../assets/images/slider2.jpg";
-import slider3 from "../../assets/images/slider3.jpg";
 
 // import required modules
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { useSelector } from "react-redux";
 
 export default function SwiperCarousel() {
+  const poster = useSelector((state) => state.movie.poster);
   return (
     <>
       <Swiper
@@ -30,15 +29,12 @@ export default function SwiperCarousel() {
         modules={[Autoplay, Pagination, Navigation]}
         className="mySwiper"
       >
-        <SwiperSlide>
-          <img src={slider1} alt="slider1" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src={slider2} alt="slider2" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src={slider3} alt="slider3" />
-        </SwiperSlide>
+        {poster &&
+          poster.map((item, index) => (
+            <SwiperSlide key={index}>
+              <img src={item.PosterURL} alt="slider" />
+            </SwiperSlide>
+          ))}
       </Swiper>
     </>
   );

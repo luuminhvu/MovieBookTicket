@@ -16,10 +16,10 @@ export const generateNavLinks = (t) => {
       name: t("news"),
       link: "/news",
     },
-    {
-      name: t("price"),
-      link: "/price",
-    },
+    // {
+    //   name: t("price"),
+    //   link: "/price",
+    // },
     {
       name: t("about"),
       link: "/about",

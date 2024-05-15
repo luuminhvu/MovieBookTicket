@@ -8,7 +8,7 @@ import loadingSlice from "./stores/loadingSlice";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice, { loadingUserLogin } from "./stores/authSlice";
-import movieSlice, { fetchMovies } from "./stores/movieSlice";
+import movieSlice, { fetchMovies, fetchPoster } from "./stores/movieSlice";
 import seatSlice from "./stores/seatSlice";
 import showTimeSlice from "./stores/showTimeSlice";
 import orderSlice from "./stores/orderSlice";
@@ -16,6 +16,7 @@ import showSlice from "./stores/showSlice";
 import timeFrameSlice from "./stores/timeFrameSlice";
 import cinemaSlice from "./stores/cinemaSlice";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import newsSlice from "./stores/newsSlice";
 // import { getLocalStorage } from "./services/datastore";
 const store = configureStore({
   reducer: {
@@ -28,12 +29,14 @@ const store = configureStore({
     showTime: showSlice,
     timeFrame: timeFrameSlice,
     cinema: cinemaSlice,
+    news: newsSlice,
   },
 });
 // const { dispatch } = store;
 // getLocalStorage("token", dispatch(logout()));
 store.dispatch(loadingUserLogin());
 store.dispatch(fetchMovies());
+store.dispatch(fetchPoster());
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>

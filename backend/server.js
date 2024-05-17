@@ -19,7 +19,15 @@ const dotenv = require("dotenv");
 require("dotenv").config();
 const app = express();
 dotenv.config();
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://betacinemars.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 app.get("/", (req, res) => {

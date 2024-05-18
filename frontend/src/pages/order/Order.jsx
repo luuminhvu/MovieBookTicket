@@ -9,7 +9,6 @@ const Order = () => {
   const UserID = useSelector((state) => state.auth.userId);
   const orders = useSelector((state) => state.order.orders);
   const qrRef = useRef();
-  console.log(orders);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {

@@ -20,7 +20,7 @@ import Dashboard from "./pages/admin/Dashboard/Dashboard";
 
 function App() {
   const isLoading = useSelector((state) => state.loading.loading);
-
+  const isAdmin = useSelector((state) => state.auth.role);
   return (
     <Router>
       <ToastContainer
@@ -41,17 +41,19 @@ function App() {
         {routers.map((route, index) => (
           <Route key={index} path={route.path} element={<route.component />} />
         ))}
-        <Route path="/admin" element={<Sidebar />}>
-          <Route path="show" element={<ShowTime />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="time-frame" element={<TimeFrame />} />
-          <Route path="movie" element={<Movie />} />
-          <Route path="user" element={<User />} />
-          <Route path="cinema" element={<Cinema />} />
-          <Route path="cinemahall" element={<CinemaHall />} />
-          <Route path="seat" element={<Seat />} />
-          <Route path="ticket" element={<Order />} />
-        </Route>
+        {isAdmin === "admin" && (
+          <Route path="/admin" element={<Sidebar />}>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/showtime" element={<ShowTime />} />
+            <Route path="/timeframe" element={<TimeFrame />} />
+            <Route path="/movie" element={<Movie />} />
+            <Route path="/user" element={<User />} />
+            <Route path="/cinema" element={<Cinema />} />
+            <Route path="/cinemahall" element={<CinemaHall />} />
+            <Route path="/seat" element={<Seat />} />
+            <Route path="/order" element={<Order />} />
+          </Route>
+        )}
       </Routes>
       <Footer />
     </Router>

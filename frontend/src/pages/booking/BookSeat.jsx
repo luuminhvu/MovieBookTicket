@@ -15,7 +15,6 @@ const BookSeat = () => {
   const date = useParams().date;
   const { cinemaName, cinemaHallName, startTime, cinemaHallID, showTimeID } =
     useLocation().state || {};
-  console.log(cinemaName, cinemaHallName, startTime, cinemaHallID, showTimeID);
   const seat = useSelector((state) => state.seat.seats);
   const dispatch = useDispatch();
   const [movie, setMovie] = useState([]);

@@ -1,6 +1,7 @@
 const SuccessResponse = require("../common/Response/Success");
 const ErrorResponse = require("../common/Response/Error");
 const cloudinary = require("../utils/cloudinary");
+const dayjs = require("dayjs");
 const db = require("../config/dbconfig");
 const getMovies = async (req, res) => {
   try {
@@ -54,8 +55,9 @@ const addMovie = async (req, res, next) => {
     const uploadRes = await cloudinary.uploader.upload(Poster, {
       upload_preset: "MovieBookTicket",
     });
+    const formatReleaseDate = dayjs(ReleaseDate).format("YYYY-MM-DD HH:mm:ss");
     if (uploadRes) {
-      const q = `INSERT INTO movies (Name, Poster, Trailer, Description, Duration, ReleaseDate, Rating, Language, Country, Age, Subtitle, Genres, Actors, Directors, Active, Upcoming) VALUES ('${Name}', '${uploadRes.secure_url}', '${Trailer}', '${Description}', '${Duration}', '${ReleaseDate}', '${Rating}', '${Language}', '${Country}', '${Age}', '${Subtitle}', '${Genres}', '${Actors}', '${Directors}', '${Active}', '${Upcoming}')`;
+      const q = `INSERT INTO movies (Name, Poster, Trailer, Description, Duration, ReleaseDate, Rating, Language, Country, Age, Subtitle, Genres, Actors, Directors, Active, Upcoming) VALUES ('${Name}', '${uploadRes.secure_url}', '${Trailer}', '${Description}', '${Duration}', '${formatReleaseDate}', '${Rating}', '${Language}', '${Country}', '${Age}', '${Subtitle}', '${Genres}', '${Actors}', '${Directors}', '${Active}', '${Upcoming}')`;
       db.query(q, async (err, result) => {
         if (err) {
           return ErrorResponse(res, 500, "Internal Server Error", err);
@@ -94,12 +96,14 @@ const editMovie = async (req, res, next) => {
       Active,
       Upcoming,
     } = req.body;
+    const formatReleaseDate = dayjs(ReleaseDate).format("YYYY-MM-DD HH:mm:ss");
+
     if (Poster && Poster.includes("data:image")) {
       const uploadRes = await cloudinary.uploader.upload(Poster, {
         upload_preset: "MovieBookTicket",
       });
       if (uploadRes) {
-        const q = `UPDATE movies SET Name = '${Name}', Poster = '${uploadRes.secure_url}', Trailer = '${Trailer}', Description = '${Description}', Duration = '${Duration}', ReleaseDate = '${ReleaseDate}', Rating = '${Rating}', Language = '${Language}', Country = '${Country}', Age = '${Age}', Subtitle = '${Subtitle}', Genres = '${Genres}', Actors = '${Actors}', Directors = '${Directors}', Active = '${Active}', Upcoming = '${Upcoming}' WHERE MovieID = ${MovieID}`;
+        const q = `UPDATE movies SET Name = '${Name}', Poster = '${uploadRes.secure_url}', Trailer = '${Trailer}', Description = '${Description}', Duration = '${Duration}', ReleaseDate = '${formatReleaseDate}', Rating = '${Rating}', Language = '${Language}', Country = '${Country}', Age = '${Age}', Subtitle = '${Subtitle}', Genres = '${Genres}', Actors = '${Actors}', Directors = '${Directors}', Active = '${Active}', Upcoming = '${Upcoming}' WHERE MovieID = ${MovieID}`;
         await db.query(q, async (err, result) => {
           if (err) {
             return ErrorResponse(res, 500, "Internal Server Error", err);
@@ -114,7 +118,7 @@ const editMovie = async (req, res, next) => {
         });
       }
     } else {
-      const q = `UPDATE movies SET Name = '${Name}', Trailer = '${Trailer}', Description = '${Description}', Duration = '${Duration}', ReleaseDate = '${ReleaseDate}', Rating = '${Rating}', Language = '${Language}', Country = '${Country}', Age = '${Age}', Subtitle = '${Subtitle}', Genres = '${Genres}', Actors = '${Actors}', Directors = '${Directors}', Active = '${Active}', Upcoming = '${Upcoming}' WHERE MovieID = ${MovieID}`;
+      const q = `UPDATE movies SET Name = '${Name}', Trailer = '${Trailer}', Description = '${Description}', Duration = '${Duration}', ReleaseDate = '${formatReleaseDate}', Rating = '${Rating}', Language = '${Language}', Country = '${Country}', Age = '${Age}', Subtitle = '${Subtitle}', Genres = '${Genres}', Actors = '${Actors}', Directors = '${Directors}', Active = '${Active}', Upcoming = '${Upcoming}' WHERE MovieID = ${MovieID}`;
       db.query(q, async (err, result) => {
         if (err) {
           return ErrorResponse(res, 500, "Internal Server Error", err);

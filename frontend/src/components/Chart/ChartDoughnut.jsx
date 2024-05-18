@@ -17,7 +17,6 @@ const ChartDoughnut = () => {
         const res = await getTopGenresByRevenue();
         setGenres(res.map((item) => item.Genres));
         setTickets(res.map((item) => item.TotalTicketsSold));
-        console.log(res);
         dispatch(setLoading(false));
       } catch (error) {
         dispatch(setLoading(false));
@@ -54,7 +53,7 @@ const ChartDoughnut = () => {
     ],
   };
   return (
-    <div className="m-auto w-3/4">
+    <div className="m-auto w-[350px] h-[400px]">
       <div className="text-center text-lg ">
         Top thể loại phim bán chạy nhất
       </div>

@@ -64,7 +64,7 @@ const User = () => {
             columns={column}
             data={filteredData}
             pagination
-            paginationPerPage={3}
+            paginationPerPage={5}
             highlightOnHover
             pointerOnHover
           />

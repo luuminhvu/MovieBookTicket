@@ -21,11 +21,7 @@ export default function Sidebar() {
           </div>
           <nav className="flex flex-col gap-1 min-w-[240px] p-2 font-sans text-base font-normal text-gray-700">
             <MenuItem icon={Statistical} text="Dashboard" path="dashboard" />
-            <MenuItem
-              icon={OrderIcon}
-              text="Quản lý đơn hàng"
-              path={"ticket"}
-            />
+            <MenuItem icon={OrderIcon} text="Quản lý đơn hàng" path={"order"} />
 
             <MenuItem icon={ProfileIcon} text="Quản lý tài khoản" path="user" />
             <MenuItem icon={MovieIcon} text="Quản lý phim" path="movie" />
@@ -38,7 +34,7 @@ export default function Sidebar() {
             <MenuItem
               icon={ShopIcon}
               text={"Quản lý suất chiếu"}
-              path={"show"}
+              path={"showtime"}
             />
             <MenuItem icon={CommandIcon} text={"Quản lý ghế"} path={"seat"} />
             <div

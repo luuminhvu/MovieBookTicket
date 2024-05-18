@@ -46,7 +46,7 @@ const ChartPolarArea = () => {
   };
   return (
     <>
-      <div className="m-auto w-3/4">
+      <div className="m-auto w-[350px] h-[400px]">
         <div className="text-center text-lg ">
           Top khung giờ có doanh thu cao nhất
         </div>

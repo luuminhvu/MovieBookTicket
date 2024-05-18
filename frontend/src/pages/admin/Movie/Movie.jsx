@@ -32,7 +32,7 @@ const Movie = () => {
             columns={column}
             data={movie}
             pagination
-            paginationPerPage={3}
+            paginationPerPage={4}
             highlightOnHover
             pointerOnHover
             dense

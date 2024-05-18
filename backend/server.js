@@ -21,7 +21,7 @@ const app = express();
 dotenv.config();
 app.use(
   cors({
-    origin: "https://betacinemars.vercel.app",
+    origin: process.env.HOST,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,

@@ -16,17 +16,15 @@ const PaymentMomo = () => {
   useEffect(() => {
     const fetchData = async () => {
       dispatch(setLoading(true));
-      if (resultCode === "0") {
-        try {
-          const res = await api.post(`/payment/return/momo${query}`, {
-            userId: userId,
-          });
-          setCode(res.data.data.code);
-        } catch (error) {
-          setCode("error");
-        } finally {
-          dispatch(setLoading(false));
-        }
+      try {
+        const res = await api.post(`/payment/return/momo${query}`, {
+          userId: userId,
+        });
+        setCode(res.data.data.code);
+      } catch (error) {
+        setCode("error");
+      } finally {
+        dispatch(setLoading(false));
       }
     };
     fetchData();

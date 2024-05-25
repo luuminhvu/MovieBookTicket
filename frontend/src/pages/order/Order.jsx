@@ -169,7 +169,7 @@ const Order = () => {
                   <div class="w-full border-t border-gray-200 px-6 flex flex-col lg:flex-row items-center justify-between ">
                     <div class="flex flex-col sm:flex-row items-center max-lg:border-b border-gray-200">
                       <p class="font-medium text-lg text-gray-900 pl-6 py-3 max-lg:text-center">
-                        Thanh toán bằng ví điện tử VNPAY{" "}
+                        Thanh toán bằng ví điện tử {order.PaymentMethod}
                         <span class="text-gray-500"></span>
                       </p>
                     </div>

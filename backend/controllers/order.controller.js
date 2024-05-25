@@ -6,7 +6,8 @@ const db = require("../config/dbconfig");
 const getOrderByUser = async (req, res, next) => {
   try {
     const { UserID } = req.body;
-    const q = `SELECT
+    const q = `
+    SELECT
         bk.BookingID,
         bk.ShowtimeID,
         bk.BookingDate,
@@ -23,9 +24,11 @@ const getOrderByUser = async (req, res, next) => {
         mv.Age,
         tf.StartTime,
         tf.EndTime,
-        st.Date
+        st.Date,
+        pm.PaymentMethod
     FROM
         bookings AS bk
+        JOIN payments AS pm ON bk.BookingID = pm.BookingID
         JOIN showseats AS ss ON bk.BookingID = ss.BookingID
         JOIN cinemaseats AS cs ON ss.CinemaSeatID = cs.CinemaSeatID
         JOIN cinemahalls AS ch ON cs.CinemaHallID = ch.CinemaHallID
@@ -36,14 +39,39 @@ const getOrderByUser = async (req, res, next) => {
     WHERE
         bk.CustomerID = ${UserID}
     GROUP BY
-        bk.BookingID, bk.ShowtimeID, bk.BookingDate, bk.NumberOfTickets, bk.TotalPrice,
-        ch.Name, c.Name, mv.Name, mv.Duration, mv.MovieID, mv.Poster, mv.Age, tf.StartTime, tf.EndTime
+        bk.BookingID,
+        bk.ShowtimeID,
+        bk.BookingDate,
+        bk.NumberOfTickets,
+        bk.TotalPrice,
+        ch.Name,
+        c.Name,
+        mv.Name,
+        mv.Duration,
+        mv.MovieID,
+        mv.Poster,
+        mv.Age,
+        tf.StartTime,
+        tf.EndTime,
+        st.Date,
+        pm.PaymentMethod
     ORDER BY
         bk.BookingDate DESC
-    `;
+  `;
+
+    // Execute the query
+    db.query(q, (err, result) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log(result);
+    });
+
     const rows = await new Promise((resolve, reject) => {
       db.query(q, (err, data) => {
         if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+
         resolve(data);
       });
     });

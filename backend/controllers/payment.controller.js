@@ -3,11 +3,13 @@ const ErrorResponse = require("../common/Response/Error");
 const config = require("../config/vnpay.json");
 const sortObject = require("../common/fn/sortObject");
 const moment = require("moment");
+const axios = require("axios");
 const {
   PaymentIntoBooking,
   PaymentSuccess,
   PaymentInfo,
   sendMailOrder,
+  PaymentInfoMomo,
 } = require("../common/fn/PaymentFn");
 const {
   generateBookingId,
@@ -101,4 +103,123 @@ const getRequestReturn = async (req, res) => {
   }
   infoBooking[userId] = null;
 };
-module.exports = { createPaymentRequest, getRequestReturn };
+const createPaymentRequestMomo = async (req, res, next) => {
+  const userId = req.body.userId;
+  infoBooking[userId] = req.body;
+  let accessKey = "F8BBA842ECF85";
+  let secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
+  let orderInfo = "pay with MoMo";
+  let partnerCode = "MOMO";
+  let redirectUrl = "http://localhost:3000/payment/result/momo";
+  let ipnUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
+  let requestType = "payWithMethod";
+  let amount = req.body.total;
+  let orderId = partnerCode + new Date().getTime();
+  let requestId = orderId;
+  let extraData = "";
+  let orderGroupId = "";
+  let autoCapture = true;
+  let lang = "vi";
+
+  //before sign HMAC SHA256 with format
+  //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
+  let rawSignature =
+    "accessKey=" +
+    accessKey +
+    "&amount=" +
+    amount +
+    "&extraData=" +
+    extraData +
+    "&ipnUrl=" +
+    ipnUrl +
+    "&orderId=" +
+    orderId +
+    "&orderInfo=" +
+    orderInfo +
+    "&partnerCode=" +
+    partnerCode +
+    "&redirectUrl=" +
+    redirectUrl +
+    "&requestId=" +
+    requestId +
+    "&requestType=" +
+    requestType;
+  //puts raw signature
+  // console.log("--------------------RAW SIGNATURE----------------");
+  // console.log(rawSignature);
+  //signature
+  const crypto = require("crypto");
+  let signature = crypto
+    .createHmac("sha256", secretKey)
+    .update(rawSignature)
+    .digest("hex");
+  // console.log("--------------------SIGNATURE----------------");
+  // console.log(signature);
+
+  //json object send to MoMo endpoint
+  const requestBody = JSON.stringify({
+    partnerCode: partnerCode,
+    partnerName: "Test",
+    storeId: "MomoTestStore",
+    requestId: requestId,
+    amount: amount,
+    orderId: orderId,
+    orderInfo: orderInfo,
+    redirectUrl: redirectUrl,
+    ipnUrl: ipnUrl,
+    lang: lang,
+    requestType: requestType,
+    autoCapture: autoCapture,
+    extraData: extraData,
+    orderGroupId: orderGroupId,
+    signature: signature,
+  });
+  //Create the HTTPS objects
+
+  const options = {
+    method: "POST",
+    url: "https://test-payment.momo.vn/v2/gateway/api/create",
+    headers: {
+      "Content-Type": "application/json",
+      "Content-Length": Buffer.byteLength(requestBody),
+    },
+    data: requestBody,
+  };
+  let result;
+  try {
+    result = await axios(options);
+    SuccessResponse(res, 200, "Success", { code: "00", data: result.data });
+  } catch (error) {
+    console.log(error);
+    ErrorResponse(res, 400, "Fail", { code: "97" });
+  }
+};
+const getRequestReturnMomo = async (req, res) => {
+  try {
+    const userId = req.body.userId;
+    const info = infoBooking[userId];
+    const data = req.query;
+    if (data.resultCode === "0") {
+      const bookingID = generateBookingId(8);
+      const ticketCode = generateTicketCode(8);
+      await PaymentSuccess(info, bookingID, ticketCode);
+      await PaymentIntoBooking(info, bookingID);
+      await PaymentInfoMomo(data, bookingID);
+      await sendMailOrder(info, ticketCode);
+      SuccessResponse(res, 200, "Success", { code: data.resultCode });
+      infoBooking[userId] = null;
+    } else {
+      ErrorResponse(res, 400, "Fail", { code: "97" });
+      infoBooking[userId] = null;
+    }
+  } catch (error) {
+    console.log(error);
+    ErrorResponse(res, 400, "Fail", { code: "97" });
+  }
+};
+module.exports = {
+  createPaymentRequest,
+  getRequestReturn,
+  createPaymentRequestMomo,
+  getRequestReturnMomo,
+};

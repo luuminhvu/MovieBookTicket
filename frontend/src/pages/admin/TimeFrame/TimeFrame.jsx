@@ -45,7 +45,7 @@ const TimeFrame = () => {
             columns={column}
             data={timeFrame}
             pagination
-            paginationPerPage={3}
+            paginationPerPage={8}
             highlightOnHover
             pointerOnHover
           />

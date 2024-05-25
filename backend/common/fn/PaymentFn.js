@@ -258,9 +258,46 @@ const sendMailOrder = async (inf, ticketCode) => {
     console.log(error);
   }
 };
+const PaymentInfoMomo = async (inf, bookingID) => {
+  // {
+  //   partnerCode: 'MOMO',
+  //   orderId: 'MOMO1716654083938',
+  //   requestId: 'MOMO1716654083938',
+  //   amount: '50000',
+  //   orderInfo: 'pay with MoMo',
+  //   orderType: 'momo_wallet',
+  //   transId: '4048405660',
+  //   resultCode: '0',
+  //   message: 'Successful.',
+  //   payType: 'napas',
+  //   responseTime: '1716655113850',
+  //   extraData: '',
+  //   signature: '0117b327105b578f93e2f4cd4654c91138a62a14065f79e5521f7625864a0ff8'
+  // }
+  try {
+    const { partnerCode, orderId, requestId, amount, orderInfo, payType } = inf;
+    const date = dayjs().format("YYYY-MM-DD HH:mm:ss");
+    const q = `INSERT INTO payments (BookingID,PaymentDate,Amount,PaymentStatus,PaymentMethod,PaymentInfo,TransactionID,TransactionNo,BankCode,CardType)
+                VALUES (${bookingID},'${date}',${amount},'0','${partnerCode}','${orderInfo}','${requestId}','${orderId}','MOMO','${payType}')`;
+    const data = new Promise((resolve, reject) =>
+      db.query(q, (err, data) => {
+        if (err) {
+          console.log(err);
+          return reject(err);
+        }
+        resolve(data);
+      })
+    );
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 module.exports = {
   PaymentIntoBooking,
   PaymentSuccess,
   PaymentInfo,
   sendMailOrder,
+  PaymentInfoMomo,
 };

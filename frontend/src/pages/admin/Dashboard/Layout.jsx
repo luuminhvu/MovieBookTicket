@@ -9,6 +9,7 @@ import TiviIcon from "../../../components/icons/Tivi";
 import FourKIcon from "../../../components/icons/4K";
 import ShopIcon from "../../../components/icons/Shop";
 import CommandIcon from "../../../components/icons/Command";
+import Clock from "../../../components/icons/Clock";
 export default function Sidebar() {
   return (
     <>
@@ -37,6 +38,11 @@ export default function Sidebar() {
               path={"showtime"}
             />
             <MenuItem icon={CommandIcon} text={"Quản lý ghế"} path={"seat"} />
+            <MenuItem
+              icon={Clock}
+              text={"Quản lý thời gian"}
+              path={"timeframe"}
+            />
             <div
               role="button"
               tabIndex="0"

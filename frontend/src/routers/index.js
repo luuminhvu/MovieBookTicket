@@ -15,6 +15,7 @@ import About from "../pages/about/About.jsx";
 import Active from "../pages/active/Active.jsx";
 import Show from "../pages/show/Show.jsx";
 import News from "../pages/news/News.jsx";
+import PaymentMomo from "../pages/booking/PaymentMomo.jsx";
 
 const routers = [
   {
@@ -48,6 +49,10 @@ const routers = [
   {
     path: "payment/result",
     component: PaymentSuccess,
+  },
+  {
+    path: "payment/result/momo",
+    component: PaymentMomo,
   },
   {
     path: "/orders",

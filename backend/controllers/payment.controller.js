@@ -4,6 +4,8 @@ const config = require("../config/vnpay.json");
 const sortObject = require("../common/fn/sortObject");
 const moment = require("moment");
 const axios = require("axios");
+const dotenv = require("dotenv");
+dotenv.config();
 const {
   PaymentIntoBooking,
   PaymentSuccess,
@@ -110,7 +112,7 @@ const createPaymentRequestMomo = async (req, res, next) => {
   let secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
   let orderInfo = "pay with MoMo";
   let partnerCode = "MOMO";
-  let redirectUrl = "http://localhost:3000/payment/result/momo";
+  let redirectUrl = `${process.env.HOST}/payment/result/momo`;
   let ipnUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
   let requestType = "payWithMethod";
   let amount = req.body.total;
@@ -120,7 +122,6 @@ const createPaymentRequestMomo = async (req, res, next) => {
   let orderGroupId = "";
   let autoCapture = true;
   let lang = "vi";
-
   //before sign HMAC SHA256 with format
   //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
   let rawSignature =

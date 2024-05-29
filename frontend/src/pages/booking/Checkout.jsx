@@ -263,14 +263,15 @@ const Checkout = () => {
                   onChange={(e) => handleSelectVoucher(e.target.value)}
                 >
                   <option value="0">Không dùng mã giảm giá</option>
-                  {voucher.map((voucher) => (
-                    <option
-                      key={voucher.UserVoucherID}
-                      value={voucher.UserVoucherID}
-                    >
-                      {voucher?.VoucherCode}
-                    </option>
-                  ))}
+                  {voucher.lengh > 0 &&
+                    voucher.map((voucher) => (
+                      <option
+                        key={voucher.UserVoucherID}
+                        value={voucher.UserVoucherID}
+                      >
+                        {voucher?.VoucherCode}
+                      </option>
+                    ))}
                 </select>
               </li>
               <li className="flex flex-wrap gap-4 text-sm">

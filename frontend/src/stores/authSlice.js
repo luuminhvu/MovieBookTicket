@@ -21,8 +21,8 @@ export const register = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       const response = await api.post("/user/register", values);
-
       setLocalStorage("token", response.data.data, 7200);
+      showToast(response.data.message, response.data.status);
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -35,6 +35,7 @@ export const login = createAsyncThunk(
     try {
       const response = await api.post("/user/login", values);
       setLocalStorage("token", response.data.data, 7200);
+      showToast(response.data.message, response.data.status);
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

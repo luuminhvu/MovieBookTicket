@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, loginGoogle } from "../../stores/authSlice";
 import { useNavigate } from "react-router-dom";
 import { setLoading } from "../../stores/loadingSlice";
-import { showToast } from "../../components/common/Toast";
 import ModalResetPassword from "../../components/common/Modal/ModalResetPassword";
 import { GoogleLogin } from "@react-oauth/google";
 export default function Login() {
@@ -25,9 +24,8 @@ export default function Login() {
     e.preventDefault();
     dispatch(setLoading(true));
     try {
-      const res = await dispatch(login(values));
+      await dispatch(login(values));
       dispatch(setLoading(false));
-      showToast(res.payload.message, res.payload.status);
     } catch (error) {
       dispatch(setLoading(false));
     }

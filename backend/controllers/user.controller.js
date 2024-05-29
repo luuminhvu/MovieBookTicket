@@ -103,7 +103,7 @@ const register = async (req, res) => {
     </html>
     `;
     sendMail(to, subject, text, html);
-    SuccessResponse(res, 200, "User registered successfully", token);
+    SuccessResponse(res, 200, "Đăng ký thành công", token);
   } catch (error) {
     ErrorResponse(res, 500, "Internal Server Error");
   }
@@ -137,7 +137,7 @@ const login = async (req, res) => {
     };
 
     const token = genAccessToken(newUser);
-    SuccessResponse(res, 200, "User logged in successfully", token);
+    SuccessResponse(res, 200, "Đăng nhập thành công", token);
   } catch (error) {
     ErrorResponse(res, 500, "Internal Server Error");
     console.log(error);

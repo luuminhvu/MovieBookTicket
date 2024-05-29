@@ -11,7 +11,6 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { setLoading } from "../../stores/loadingSlice";
-import { showToast } from "../../components/common/Toast";
 import { GoogleLogin } from "@react-oauth/google";
 export default function Register() {
   const auth = useSelector((state) => state.auth);
@@ -51,9 +50,8 @@ export default function Register() {
     onSubmit: async (values) => {
       dispatch(setLoading(true));
       try {
-        const res = await dispatch(register(values));
+        await dispatch(register(values));
         dispatch(setLoading(false));
-        showToast(res.payload.message, res.payload.status);
       } catch (error) {
         dispatch(setLoading(false));
       }

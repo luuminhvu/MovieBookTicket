@@ -17,6 +17,7 @@ import timeFrameSlice from "./stores/timeFrameSlice";
 import cinemaSlice from "./stores/cinemaSlice";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import newsSlice from "./stores/newsSlice";
+import voucherSlice from "./stores/voucherSlice";
 // import { getLocalStorage } from "./services/datastore";
 const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ const store = configureStore({
     timeFrame: timeFrameSlice,
     cinema: cinemaSlice,
     news: newsSlice,
+    voucher: voucherSlice,
   },
 });
 // const { dispatch } = store;

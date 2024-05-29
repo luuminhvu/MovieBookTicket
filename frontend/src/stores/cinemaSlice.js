@@ -137,7 +137,6 @@ const cinemaSlice = createSlice({
     });
     builder.addCase(editCinema.fulfilled, (state, action) => {
       state.status = "success";
-      console.log(action.payload);
       state.Cinema = state.Cinema.map((cinema) =>
         cinema.CinemaID === action.payload.CinemaID ? action.payload : cinema
       );

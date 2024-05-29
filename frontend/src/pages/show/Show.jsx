@@ -16,7 +16,6 @@ const Show = () => {
   const handleDateChange = (selectedDate) => {
     setDate(selectedDate.format("YYYY-MM-DD"));
   };
-  console.log(showTimes);
   const [cinemaID, setCinemaID] = useState(1);
   const dispatch = useDispatch();
   const cinema = useSelector((state) => state.cinema.Cinema);

@@ -65,7 +65,6 @@ const getOrderByUser = async (req, res, next) => {
         console.error(err);
         return;
       }
-      console.log(result);
     });
 
     const rows = await new Promise((resolve, reject) => {

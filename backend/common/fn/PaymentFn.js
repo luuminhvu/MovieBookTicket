@@ -103,6 +103,7 @@ const PaymentInfo = async (inf, bookingID) => {
 //   startTime: '12:00:00',
 //   date: '2024-05-06',
 //   email: 'axv04707@ilebi.com'
+//   originalTotal,
 // }
 const sendMailOrder = async (inf, ticketCode) => {
   const to = inf.email;
@@ -134,6 +135,8 @@ const sendMailOrder = async (inf, ticketCode) => {
     const date = inf.date;
     const seatNames = data3.map((seat) => seat.SeatName).join(", ");
     const totalPrice = inf.total;
+    const originalTotal = inf.originalTotal;
+    const totalDiscount = parseFloat(originalTotal) - parseFloat(totalPrice);
     const html = `
     <!DOCTYPE html>
     <html lang="en">
@@ -234,11 +237,11 @@ const sendMailOrder = async (inf, ticketCode) => {
           </div>
           <div class="column">
             <div class="label">Tổng tiền: </div>
-            <div>0 VND</div>
+            <div>${originalTotal} VND</div>
           </div>
           <div class="column">
             <div class="label">Số tiền giảm giá: </div>
-            <div>0 VND</div>
+            <div>${totalDiscount} VND</div>
           </div>
           <div class="column">
             <div class="label">Số tiền thanh toán: </div>

@@ -48,7 +48,6 @@ const getCinemaHallByCinemaID = async (req, res, next) => {
 };
 const addCinema = async (req, res) => {
   try {
-    console.log(req.body);
     const { Name, Location } = req.body;
     const insertQuery = `INSERT INTO cinemas (Name, Location, ProvinceID) VALUES ('${Name}', '${Location}', 1)`;
     db.query(insertQuery, (err, data) => {
@@ -73,7 +72,6 @@ const editCinema = async (req, res) => {
       const selectQuery = `SELECT * FROM cinemas WHERE CinemaID = ${CinemaID}`;
       db.query(selectQuery, (err, data) => {
         if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
-        console.log(data);
         SuccessResponse(res, 200, "Cinema updated successfully", data[0]);
       });
     });

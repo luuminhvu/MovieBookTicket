@@ -7,7 +7,10 @@ import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import ModalPassword from "../../components/common/ModalChangePassword";
 import { AVATAR_DEFAULT } from "../../constants/define";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../../stores/loadingSlice";
 const Profile = () => {
+  const dispatch = useDispatch();
   const UserID = useSelector((state) => state.auth.userId);
   const authType = useSelector((state) => state.auth.authType);
   const [showModal, setShowModal] = useState(false);
@@ -41,10 +44,13 @@ const Profile = () => {
     }
   };
   const handleChangeAvatar = async (avatar, UserID) => {
+    dispatch(setLoading(true));
     try {
       const res = await updateAvatar(avatar, UserID);
       toast.success(res.data.message);
+      dispatch(setLoading(false));
     } catch (error) {
+      dispatch(setLoading(false));
       console.log(error);
     }
   };

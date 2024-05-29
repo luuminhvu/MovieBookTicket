@@ -15,6 +15,7 @@ const authRouter = require("./routers/auth");
 const statisticsRouter = require("./routers/statistical");
 const newsRouter = require("./routers/news");
 const posterRouter = require("./routers/poster");
+const voucherRouter = require("./routers/voucher");
 const dotenv = require("dotenv");
 require("dotenv").config();
 const app = express();
@@ -46,6 +47,7 @@ app.use("/api/v1/seat", seatRouter);
 app.use("/api/v1/statistical", statisticsRouter);
 app.use("/api/v1/news", newsRouter);
 app.use("/api/v1/poster", posterRouter);
+app.use("/api/v1/voucher", voucherRouter);
 
 db.connect((err) => {
   if (err) {

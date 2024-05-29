@@ -12,7 +12,6 @@ const auth = async (req, res, next) => {
       const token = data.split(" ")[1];
       const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
       req.user = decoded;
-      console.log(decoded);
       next();
     } catch (e) {
       console.error(e);

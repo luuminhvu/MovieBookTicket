@@ -109,7 +109,7 @@ const BookSeat = () => {
           ))}
         </div>
         <Notice />
-        <div className="flex items-stretch mt-8 bg-slate-950 p-4 rounded-lg">
+        <div className="flex items-stretch mt-8 my-8 bg-slate-950 p-4 rounded-lg">
           <div className="flex flex-col items-center justify-center w-1/3">
             <h2 className="text-2xl font-bold text-white">Thông tin phim</h2>
             <img
@@ -145,24 +145,33 @@ const BookSeat = () => {
                 .reduce((a, b) => a + b, 0)}{" "}
               VNĐ
             </p>
-            <button
-              onClick={() => {
-                navigate("/movie/checkout", {
-                  state: {
-                    bookingSeats,
-                    movie,
-                    cinemaName,
-                    cinemaHallName,
-                    startTime,
-                    date,
-                    showTimeID,
-                  },
-                });
-              }}
-              className="bg-green-500 px-4 py-2 rounded-lg mt-4"
-            >
-              Đặt vé
-            </button>
+            {bookingSeats.length > 0 ? (
+              <button
+                onClick={() => {
+                  navigate("/movie/checkout", {
+                    state: {
+                      bookingSeats,
+                      movie,
+                      cinemaName,
+                      cinemaHallName,
+                      startTime,
+                      date,
+                      showTimeID,
+                    },
+                  });
+                }}
+                className="bg-green-500 px-4 py-2 rounded-lg mt-4"
+              >
+                Đặt vé
+              </button>
+            ) : (
+              <button
+                className="bg-gray-500 text-white rounded-lg p-2 mt-4"
+                disabled
+              >
+                Đặt vé
+              </button>
+            )}
           </div>
         </div>
       </div>

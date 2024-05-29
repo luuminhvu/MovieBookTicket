@@ -62,7 +62,6 @@ const timeframeSlice = createSlice({
     });
     builder.addCase(addTimeframe.fulfilled, (state, action) => {
       state.status = "success";
-      console.log(action.payload);
       state.timeframes.push(action.payload);
     });
     builder.addCase(addTimeframe.rejected, (state) => {

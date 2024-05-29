@@ -260,10 +260,8 @@ const updateUserForAdmin = async (req, res) => {
   }
 };
 const activeAccount = async (req, res) => {
-  console.log("Active account");
   try {
     const { token } = req.params;
-    console.log(token);
     const user = await new Promise((resolve, reject) => {
       const checkQuery = `SELECT * FROM user WHERE activationtoken = '${token}'`;
       db.query(checkQuery, (err, data) => {
@@ -273,7 +271,6 @@ const activeAccount = async (req, res) => {
     });
 
     if (!user) {
-      console.log("Invalid activation token");
       return ErrorResponse(
         res,
         400,

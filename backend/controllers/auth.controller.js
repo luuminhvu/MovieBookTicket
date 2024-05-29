@@ -36,7 +36,6 @@ const verifyTokenGoogle = async (req, res) => {
 
       if (result.length > 0) {
         const existingUser = result[0];
-        console.log(existingUser);
         const existingToken = genAccessToken({
           userId: existingUser.UserID,
           email: existingUser.Email,

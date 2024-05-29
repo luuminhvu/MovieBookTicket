@@ -41,7 +41,6 @@ export default function ModalAddSeat({ row, setOpenModalAdd }) {
       try {
         dispatch(setLoading(true));
         dispatch(setLoading(false));
-        console.log(values);
         setOpenModalAdd(false);
       } catch (error) {
         console.error("Lỗi khi thêm ghế vào phòng:", error);

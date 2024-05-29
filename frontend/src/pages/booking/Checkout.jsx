@@ -1,14 +1,20 @@
+/* eslint-disable eqeqeq */
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../../utils/api";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserVouchers } from "../../stores/voucherSlice";
+import { setLoading } from "../../stores/loadingSlice";
 const Checkout = () => {
   const userId = useSelector((state) => state.auth.userId);
   const email = useSelector((state) => state.auth.email);
+  const voucher = useSelector((state) => state.voucher.userVoucher);
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [agree, setAgree] = useState(false);
+  const [voucherDiscount, setVoucherDiscount] = useState(0);
   const location = useLocation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
     bookingSeats,
@@ -19,10 +25,19 @@ const Checkout = () => {
     date,
     showTimeID,
   } = location.state;
-  const total = bookingSeats
-    .map((booking) => parseFloat(booking.Price))
-    .reduce((a, b) => a + b, 0);
   const [secondsLeft, setSecondsLeft] = useState(300);
+  const total =
+    bookingSeats
+      .map((seat) => parseFloat(seat.Price))
+      .reduce((a, b) => a + b, 0) -
+    (bookingSeats
+      .map((seat) => parseFloat(seat.Price))
+      .reduce((a, b) => a + b, 0) *
+      parseFloat(voucherDiscount)) /
+      100;
+  const originalTotal = bookingSeats
+    .map((seat) => parseFloat(seat.Price))
+    .reduce((a, b) => a + b, 0);
   const handleCheckout = async (e) => {
     if (paymentMethod === "vnpay") {
       try {
@@ -30,6 +45,7 @@ const Checkout = () => {
           userId,
           bankCode: "",
           total,
+          originalTotal,
           movieId: movie.MovieID,
           seatId: bookingSeats.map((seat) => seat.CinemaSeatID),
           showtimeId: showTimeID,
@@ -38,6 +54,7 @@ const Checkout = () => {
           startTime,
           date,
           email,
+          discount: voucherDiscount,
         });
         window.location.href = res.data.data.data;
       } catch (error) {
@@ -48,6 +65,7 @@ const Checkout = () => {
         const res = await api.post("/payment/momo", {
           userId,
           total,
+          originalTotal,
           movieId: movie.MovieID,
           seatId: bookingSeats.map((seat) => seat.CinemaSeatID),
           showtimeId: showTimeID,
@@ -56,6 +74,7 @@ const Checkout = () => {
           startTime,
           date,
           email,
+          discount: voucherDiscount,
         });
         window.location.href = res.data.data.data.payUrl;
       } catch (error) {
@@ -66,7 +85,20 @@ const Checkout = () => {
       alert("Thanh toán bằng thẻ tạm thời không khả dụng");
     }
   };
-
+  const handleSelectVoucher = (userVoucherID) => {
+    if (userVoucherID === "0") {
+      setVoucherDiscount(0);
+      return;
+    }
+    const selectedVoucher = voucher.find(
+      (v) => v.UserVoucherID == userVoucherID
+    );
+    if (selectedVoucher) {
+      setVoucherDiscount(selectedVoucher.Discount);
+    } else {
+      setVoucherDiscount(0);
+    }
+  };
   useEffect(() => {
     const timer = setInterval(() => {
       setSecondsLeft((prevSecondsLeft) => {
@@ -79,6 +111,19 @@ const Checkout = () => {
     }, 1000);
     return () => clearInterval(timer);
   }, [navigate]);
+  useEffect(() => {
+    const getUserVoucher = async () => {
+      dispatch(setLoading(true));
+      try {
+        await dispatch(fetchUserVouchers(userId));
+        dispatch(setLoading(false));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUserVoucher();
+  }, [dispatch, userId]);
+
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = secondsLeft % 60;
   const formattedMinutes = minutes.toString().padStart(2, "0");
@@ -212,7 +257,32 @@ const Checkout = () => {
                 </span>
               </li>
               <li className="flex flex-wrap gap-4 text-sm">
-                Giảm giá <span className="ml-auto font-bold">0 đ</span>
+                Chọn mã giảm giá{" "}
+                <select
+                  className="border rounded-md px-2 py-1 ml-auto bg-white hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ease-in-out leading-6"
+                  onChange={(e) => handleSelectVoucher(e.target.value)}
+                >
+                  <option value="0">Không dùng mã giảm giá</option>
+                  {voucher.map((voucher) => (
+                    <option
+                      key={voucher.UserVoucherID}
+                      value={voucher.UserVoucherID}
+                    >
+                      {voucher?.VoucherCode}
+                    </option>
+                  ))}
+                </select>
+              </li>
+              <li className="flex flex-wrap gap-4 text-sm">
+                Giảm giá{" "}
+                <span className="ml-auto font-bold">
+                  {(bookingSeats
+                    .map((seat) => parseFloat(seat.Price))
+                    .reduce((a, b) => a + b, 0) *
+                    parseFloat(voucherDiscount)) /
+                    100}{" "}
+                  đ{" "}
+                </span>
               </li>
               <li className="flex flex-wrap gap-4 text-sm">
                 Combo <span className="ml-auto font-bold">0 đ</span>
@@ -222,8 +292,13 @@ const Checkout = () => {
                 <span className="ml-auto">
                   {bookingSeats
                     .map((seat) => parseFloat(seat.Price))
-                    .reduce((a, b) => a + b, 0)}{" "}
-                  VNĐ
+                    .reduce((a, b) => a + b, 0) -
+                    (bookingSeats
+                      .map((seat) => parseFloat(seat.Price))
+                      .reduce((a, b) => a + b, 0) *
+                      parseFloat(voucherDiscount)) /
+                      100}{" "}
+                  đ VNĐ
                 </span>
               </li>
             </ul>

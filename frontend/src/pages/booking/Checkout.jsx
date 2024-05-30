@@ -10,6 +10,7 @@ const Checkout = () => {
   const userId = useSelector((state) => state.auth.userId);
   const email = useSelector((state) => state.auth.email);
   const voucher = useSelector((state) => state.voucher.userVoucher);
+  console.log(voucher);
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [agree, setAgree] = useState(false);
   const [voucherDiscount, setVoucherDiscount] = useState(0);
@@ -263,7 +264,7 @@ const Checkout = () => {
                   onChange={(e) => handleSelectVoucher(e.target.value)}
                 >
                   <option value="0">Không dùng mã giảm giá</option>
-                  {voucher.lengh > 0 &&
+                  {voucher.length > 0 &&
                     voucher.map((voucher) => (
                       <option
                         key={voucher.UserVoucherID}

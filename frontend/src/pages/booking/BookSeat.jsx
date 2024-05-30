@@ -39,14 +39,15 @@ const BookSeat = () => {
   }, [auth, navigate]);
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      dispatch(setLoading(true));
       try {
         const response = await getDetailMovie(id);
         setMovie(response[0]);
         dispatch(fetchSeats([showTimeID, cinemaHallID]));
-        setLoading(false);
+        dispatch(setLoading(false));
       } catch (error) {
-        console.log(error);
+        dispatch(setLoading(false));
+        throw error;
       }
     };
     fetchData();

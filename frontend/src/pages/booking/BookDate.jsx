@@ -38,11 +38,13 @@ const BookDate = () => {
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
+      dispatch(setLoading(true));
       try {
         dispatch(fetchShowtimes({ MovieID: id, date: date }));
-        setLoading(false);
+        dispatch(setLoading(false));
       } catch (error) {
-        console.log(error);
+        dispatch(setLoading(false));
+        throw error;
       }
     };
     fetchData();

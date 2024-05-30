@@ -10,7 +10,6 @@ const Checkout = () => {
   const userId = useSelector((state) => state.auth.userId);
   const email = useSelector((state) => state.auth.email);
   const voucher = useSelector((state) => state.voucher.userVoucher);
-  console.log(voucher);
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [agree, setAgree] = useState(false);
   const [voucherDiscount, setVoucherDiscount] = useState(0);

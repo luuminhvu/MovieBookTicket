@@ -30,11 +30,13 @@ export default function SwiperCarousel() {
         className="mySwiper"
       >
         {poster &&
-          poster.map((item, index) => (
-            <SwiperSlide key={index}>
-              <img src={item.PosterURL} alt="slider" />
-            </SwiperSlide>
-          ))}
+          poster
+            .filter((item) => item.ActivePoster === 1)
+            .map((item, index) => (
+              <SwiperSlide key={index}>
+                <img src={item.PosterURL} alt="slider" />
+              </SwiperSlide>
+            ))}
       </Swiper>
     </>
   );

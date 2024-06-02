@@ -52,6 +52,42 @@ export const editMovie = createAsyncThunk("movies/editMovie", async (movie) => {
     return error.response.data;
   }
 });
+export const addPoster = createAsyncThunk(
+  "movies/addPoster",
+  async (poster) => {
+    try {
+      const response = await api.post("/poster/add", poster);
+      toast.success(response.data.message);
+      return response.data.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+export const handleChangeActivePoster = createAsyncThunk(
+  "movies/handleChangeActivePoster",
+  async (poster) => {
+    try {
+      const response = await api.put("/poster/edit", poster);
+      toast.success(response.data.message);
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const deletePoster = createAsyncThunk(
+  "movies/deletePoster",
+  async (poster) => {
+    try {
+      const response = await api.delete(`/poster/delete/${poster.PosterID}`);
+      toast.success(response.data.message);
+      return poster;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
 
 const movieSlice = createSlice({
   name: "movies",
@@ -99,6 +135,41 @@ const movieSlice = createSlice({
     });
     builder.addCase(fetchPoster.rejected, (state) => {
       state.status = "failed";
+    });
+    builder.addCase(deletePoster.pending, (state) => {
+      state.deleteStatus = "loading";
+    });
+    builder.addCase(deletePoster.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.deleteStatus = "success";
+      state.poster = state.poster.filter(
+        (poster) => poster.PosterID !== action.payload.PosterID
+      );
+    });
+    builder.addCase(deletePoster.rejected, (state) => {
+      state.deleteStatus = "failed";
+    });
+    builder.addCase(handleChangeActivePoster.pending, (state) => {
+      state.deleteStatus = "loading";
+    });
+    builder.addCase(handleChangeActivePoster.fulfilled, (state, action) => {
+      state.deleteStatus = "success";
+      state.poster = state.poster.map((poster) =>
+        poster.PosterID === action.payload.PosterID ? action.payload : poster
+      );
+    });
+    builder.addCase(handleChangeActivePoster.rejected, (state) => {
+      state.deleteStatus = "failed";
+    });
+    builder.addCase(addPoster.pending, (state) => {
+      state.createStatus = "loading";
+    });
+    builder.addCase(addPoster.fulfilled, (state, action) => {
+      state.createStatus = "success";
+      state.poster.push(action.payload);
+    });
+    builder.addCase(addPoster.rejected, (state) => {
+      state.createStatus = "failed";
     });
   },
 });

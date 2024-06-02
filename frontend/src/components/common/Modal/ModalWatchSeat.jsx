@@ -62,10 +62,10 @@ export default function ModalWatchSeat({ setOpenModal, row }) {
                     {sortSeats(rowSeats).map((seat) => (
                       <div key={seat.CinemaSeatID} className="m-2">
                         <div
-                          className={`w-8 h-8 border rounded-full flex items-center justify-center ${
-                            seat.SeatType === "Normal" ? "border-green-500" : ""
+                          className={`w-8 h-8 border rounded flex items-center justify-center ${
+                            seat.SeatType === "Normal" ? "border-gray-300" : ""
                           } ${
-                            seat.SeatType === "VIP" ? "border-yellow-500" : ""
+                            seat.SeatType === "VIP" ? "border-blue-500" : ""
                           }`}
                         >
                           <span className="text-xs text-center">

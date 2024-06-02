@@ -17,6 +17,7 @@ import CinemaHall from "./pages/admin/Cinema/CinemaHall";
 import Seat from "./pages/admin/Cinema/Seat";
 import Order from "./pages/admin/Order/Order";
 import Dashboard from "./pages/admin/Dashboard/Dashboard";
+import SliderSetting from "./pages/admin/Slide/Slider";
 
 function App() {
   const isLoading = useSelector((state) => state.loading.loading);
@@ -52,6 +53,7 @@ function App() {
             <Route path="cinemahall" element={<CinemaHall />} />
             <Route path="seat" element={<Seat />} />
             <Route path="order" element={<Order />} />
+            <Route path="slider" element={<SliderSetting />} />
           </Route>
         )}
       </Routes>

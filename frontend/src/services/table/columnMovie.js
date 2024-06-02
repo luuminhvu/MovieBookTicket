@@ -51,12 +51,12 @@ const column = [
   {
     name: "Ngày công chiếu",
     selector: (row) => dayjs(row.ReleaseDate).format("DD/MM/YYYY"),
-    width: "150px",
+    width: "120px",
   },
   {
     name: "Thời lượng",
     selector: (row) => row.Duration,
-    width: "100px",
+    width: "70px",
   },
   {
     name: "Ngôn ngữ",
@@ -66,12 +66,7 @@ const column = [
   {
     name: "Quốc gia",
     selector: (row) => row.Country,
-    width: "150px",
-  },
-  {
-    name: "Nội dung",
-    selector: (row) => row.Description,
-    width: "150px",
+    width: "70px",
   },
   {
     name: "Action",
@@ -82,7 +77,6 @@ const column = [
         </>
       );
     },
-    width: "200px",
   },
 ];
 

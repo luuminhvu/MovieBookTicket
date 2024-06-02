@@ -45,7 +45,7 @@ const Cinema = () => {
             columns={column}
             data={cinema}
             pagination
-            paginationPerPage={3}
+            paginationPerPage={6}
             highlightOnHover
             pointerOnHover
             dense

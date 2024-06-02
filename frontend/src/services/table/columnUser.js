@@ -2,12 +2,12 @@ import ModalEditUser from "../../components/common/Modal/ModalEditUser";
 import ActionCell from "./component/ActionCell";
 import dayjs from "dayjs";
 const column = [
-  {
-    name: "ID",
-    selector: (row) => row.UserID,
-    sortable: true,
-    width: "100px",
-  },
+  // {
+  //   name: "ID",
+  //   selector: (row) => row.UserID,
+  //   sortable: true,
+  //   width: "100px",
+  // },
   {
     name: "Avatar",
     selector: (row) => {
@@ -38,7 +38,7 @@ const column = [
   {
     name: "Họ và tên",
     selector: (row) => <>{row.FullName ? row.FullName : "Chưa cập nhật"}</>,
-    width: "150px",
+    width: "120px",
   },
   {
     name: "Email",
@@ -49,13 +49,13 @@ const column = [
     name: "Số điện thoại",
     selector: (row) => <>{row.Phone ? "0" + row.Phone : "Chưa cập nhật"}</>,
 
-    width: "150px",
+    width: "120px",
   },
   {
     name: "Địa chỉ",
     selector: (row) => <>{row.Address ? row.Address : "Chưa cập nhật"}</>,
 
-    width: "150px",
+    width: "120px",
   },
   {
     name: "Ngày sinh",
@@ -66,7 +66,7 @@ const column = [
           : "Chưa cập nhật"}
       </>
     ),
-    width: "150px",
+    width: "110px",
   },
   {
     name: "Ngày đăng kí",
@@ -75,12 +75,12 @@ const column = [
         {row.DateRegister ? dayjs(row.DateRegister).format("DD/MM/YYYY") : ""}
       </>
     ),
-    width: "150px",
+    width: "110px",
   },
   {
     name: "Role",
     selector: (row) => row.Role,
-    width: "100px",
+    width: "90px",
   },
   {
     name: "Trạng thái",
@@ -91,7 +91,7 @@ const column = [
         <span className="text-red-500">Inactive</span>
       ),
 
-    width: "100px",
+    width: "80px",
   },
   {
     name: "Action",
@@ -102,7 +102,6 @@ const column = [
         </>
       );
     },
-    width: "200px",
   },
 ];
 

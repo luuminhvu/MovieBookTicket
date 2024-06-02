@@ -8,8 +8,11 @@ import { fetchSeats } from "../../stores/seatSlice";
 import bgScreen from "../../assets/images/bg-screen.png";
 import Notice from "../../components/common/Notice";
 import { useNavigate } from "react-router-dom";
+import { checkActive } from "../../stores/authSlice";
 const BookSeat = () => {
   const auth = useSelector((state) => state.auth);
+  const active = useSelector((state) => state.auth.active);
+  const UserID = useSelector((state) => state.auth.userId);
   const navigate = useNavigate();
   const id = useParams().id;
   const date = useParams().date;
@@ -43,6 +46,7 @@ const BookSeat = () => {
       try {
         const response = await getDetailMovie(id);
         setMovie(response[0]);
+        dispatch(checkActive(UserID));
         dispatch(fetchSeats([showTimeID, cinemaHallID]));
         dispatch(setLoading(false));
       } catch (error) {
@@ -51,7 +55,7 @@ const BookSeat = () => {
       }
     };
     fetchData();
-  }, [id, showTimeID, dispatch, cinemaHallID]);
+  }, [id, showTimeID, dispatch, cinemaHallID, UserID]);
   const seatsByRow = {};
 
   seat.forEach((seat) => {
@@ -86,14 +90,18 @@ const BookSeat = () => {
                 <div key={seat.CinemaSeatID} className="m-2">
                   <div
                     onClick={() => putBookingSeats(seat)}
-                    className={`w-8 h-8 border rounded-full flex items-center justify-center hover:cursor-pointer ${
-                      seat.SeatStatus === "EMPTY"
-                        ? "border-gray-500 hover:border-green-500 hover:bg-green-500 hover:text-white"
-                        : "hover:cursor-not-allowed pointer-events-none bg-pink-400"
-                    } ${
+                    className={`w-8 h-8 border rounded flex items-center justify-center cursor-pointer ${
                       seat.SeatType === "VIP"
-                        ? "border-yellow-400"
-                        : "border-green-500"
+                        ? "border-blue-500 text-purple-900 font-bold"
+                        : "border-gray-400"
+                    } ${
+                      seat.SeatStatus === "BOOKED"
+                        ? "bg-red-400 pointer-events-none"
+                        : seat.SeatStatus === "LOCKED"
+                        ? "bg-yellow-400 pointer-events-none"
+                        : seat.SeatStatus === "EMPTY"
+                        ? "bg-gray-200 hover:bg-green-500 hover:text-white hover:border-green-500"
+                        : ""
                     } ${
                       bookingSeats.some(
                         (bookingSeat) => bookingSeat.SeatName === seat.SeatName
@@ -146,7 +154,7 @@ const BookSeat = () => {
                 .reduce((a, b) => a + b, 0)}{" "}
               VNĐ
             </p>
-            {bookingSeats.length > 0 ? (
+            {active === 1 && bookingSeats.length > 0 ? (
               <button
                 onClick={() => {
                   navigate("/movie/checkout", {
@@ -170,7 +178,9 @@ const BookSeat = () => {
                 className="bg-gray-500 text-white rounded-lg p-2 mt-4"
                 disabled
               >
-                Đặt vé
+                {active === 1
+                  ? "Chưa chọn ghế"
+                  : "Vui lòng active tài khoản để sử dụng"}
               </button>
             )}
           </div>

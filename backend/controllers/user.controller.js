@@ -66,6 +66,7 @@ const register = async (req, res) => {
       email: req.body.email,
       role: "customer",
       authType: "default",
+      active: 0,
     };
     const token = genAccessToken(user);
     const to = user.email;
@@ -134,6 +135,7 @@ const login = async (req, res) => {
       email: user.Email,
       role: user.Role,
       authType: user.AuthType,
+      active: user.Active,
     };
 
     const token = genAccessToken(newUser);
@@ -350,7 +352,91 @@ const forgotPassword = async (req, res) => {
     ErrorResponse(res, 500, "Internal Server Error");
   }
 };
+const checkActive = async (req, res, next) => {
+  try {
+    const UserID = req.body.UserID;
+    const q = `SELECT Active FROM user WHERE UserID = ${UserID}`;
+    const result = await new Promise((resolve, reject) => {
+      db.query(q, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
 
+    if (result.length > 0) {
+      const activeStatus = result[0].Active;
+      SuccessResponse(res, 200, "Active status fetched successfully", {
+        activeStatus,
+      });
+    } else {
+      ErrorResponse(res, 404, "User not found");
+    }
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error", error);
+  }
+};
+const requestEmailActive = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await new Promise((resolve, reject) => {
+      const q = `SELECT ActivationToken FROM user WHERE email = ?`;
+      db.query(q, [email], (err, data) => {
+        if (err) return reject(err);
+        resolve(data[0]);
+      });
+    });
+    if (!user) {
+      return ErrorResponse(res, 400, "User not found");
+    }
+    const activationToken = user.ActivationToken;
+    const to = email;
+    const subject = "Movie Book Ticket - Active Account";
+    const text = "Active Account";
+    const activeUrl = `${process.env.HOST}/activate?token=${activationToken}`;
+    const html = `
+    <html>
+    <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        padding: 20px;
+        font-size:18px;
+      }
+      a {
+        color: green;
+        text-decoration: none;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border-radius: 5px;
+      }
+      p{
+        margin-bottom: 20px;
+      }
+    </style>
+    </head>
+    <body>
+      <p>You have requested to active your account</p>
+      <p>Click the link below to active your account</p>
+      <a href="${activeUrl}">Active</a>
+    </body>
+    </html>
+    `;
+    sendMail(to, subject, text, html);
+    SuccessResponse(
+      res,
+      200,
+      "Một email kích hoạt đã được gửi đến hòm thư của bạn"
+    );
+  } catch (error) {
+    console.error(error);
+    ErrorResponse(res, 500, "Internal Server Error");
+  }
+};
 module.exports = {
   register,
   login,
@@ -362,4 +448,6 @@ module.exports = {
   updateUserForAdmin,
   activeAccount,
   forgotPassword,
+  checkActive,
+  requestEmailActive,
 };

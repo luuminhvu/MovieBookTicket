@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getUserInfo, updateAvatar } from "../../services/function";
+import {
+  getUserInfo,
+  requestActiveMail,
+  updateAvatar,
+} from "../../services/function";
 import Modal from "../../components/common/Modal";
 
 import dayjs from "dayjs";
@@ -12,6 +16,7 @@ import { setLoading } from "../../stores/loadingSlice";
 const Profile = () => {
   const dispatch = useDispatch();
   const UserID = useSelector((state) => state.auth.userId);
+  const email = useSelector((state) => state.auth.email);
   const authType = useSelector((state) => state.auth.authType);
   const [showModal, setShowModal] = useState(false);
   const [showModalPassword, setShowModalPassword] = useState(false);
@@ -19,15 +24,18 @@ const Profile = () => {
   const [user, setUser] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
+      dispatch(setLoading(true));
       try {
         const user = await getUserInfo(UserID);
         setUser(user);
+        dispatch(setLoading(false));
       } catch (error) {
         console.log(error);
+        dispatch(setLoading(false));
       }
     };
     fetchData();
-  }, [UserID]);
+  }, [UserID, dispatch]);
   const handleAvatarUpload = (e) => {
     const file = e.target.files[0];
     transformFile(file);
@@ -54,7 +62,16 @@ const Profile = () => {
       console.log(error);
     }
   };
-
+  const handleRequestActive = async () => {
+    dispatch(setLoading(true));
+    try {
+      await requestActiveMail(email);
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setLoading(false));
+      console.log(error);
+    }
+  };
   return (
     <>
       <div className="">
@@ -101,8 +118,17 @@ const Profile = () => {
                       >
                         {user && user.Active === 1 ? "Active" : "Inactive"}
                       </span>
+                      {user && user.Active !== 1 && (
+                        <span
+                          className="bg-orange-500 px-2 py-1 ml-2 rounded text-white text-sm hover:bg-green-700 cursor-pointer"
+                          onClick={handleRequestActive}
+                        >
+                          Kích hoạt
+                        </span>
+                      )}
                     </span>
                   </li>
+
                   <li className="flex items-center py-3">
                     <span>Ngày đăng ký</span>
                     <span className="ml-auto">

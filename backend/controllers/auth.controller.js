@@ -42,6 +42,7 @@ const verifyTokenGoogle = async (req, res) => {
           username: existingUser.Username,
           role: existingUser.Role,
           authType: existingUser.AuthType,
+          active: existingUser.Active,
         });
         return SuccessResponse(res, 200, "Login Google Success", {
           token: existingToken,
@@ -66,6 +67,7 @@ const verifyTokenGoogle = async (req, res) => {
           username: name,
           role: "customer",
           authType: "google",
+          active: 1,
         });
         SuccessResponse(res, 200, "Login Google Success", { token: newToken });
       });

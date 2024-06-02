@@ -18,6 +18,7 @@ const posterRouter = require("./routers/poster");
 const voucherRouter = require("./routers/voucher");
 const dotenv = require("dotenv");
 require("dotenv").config();
+require("./utils/schedule");
 const app = express();
 dotenv.config();
 app.use(

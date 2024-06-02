@@ -6,6 +6,7 @@ import api from "../../utils/api";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserVouchers } from "../../stores/voucherSlice";
 import { setLoading } from "../../stores/loadingSlice";
+import { showToast } from "../../components/common/Toast";
 const Checkout = () => {
   const userId = useSelector((state) => state.auth.userId);
   const email = useSelector((state) => state.auth.email);
@@ -58,7 +59,7 @@ const Checkout = () => {
         });
         window.location.href = res.data.data.data;
       } catch (error) {
-        console.log(error);
+        showToast(error.response.data.message, "error");
       }
     } else if (paymentMethod === "momo") {
       try {
@@ -78,7 +79,7 @@ const Checkout = () => {
         });
         window.location.href = res.data.data.data.payUrl;
       } catch (error) {
-        console.log(error);
+        showToast(error.response.data.message, "error");
       }
     } else {
       e.preventDefault();

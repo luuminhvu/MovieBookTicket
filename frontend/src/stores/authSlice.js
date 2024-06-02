@@ -14,6 +14,7 @@ const initialState = {
   loginStatus: "",
   registerError: "",
   loginError: "",
+  active: "",
 };
 
 export const register = createAsyncThunk(
@@ -56,6 +57,19 @@ export const loginGoogle = createAsyncThunk(
     }
   }
 );
+export const checkActive = createAsyncThunk(
+  "auth/checkActive",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await api.post("/user/checkactive", {
+        UserID: values,
+      });
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -72,6 +86,7 @@ const authSlice = createSlice({
           role: user.role,
           loginStatus: "success",
           authType: user.authType,
+          active: user.active,
         };
       } else {
         return state;
@@ -91,6 +106,7 @@ const authSlice = createSlice({
         loginStatus: "",
         registerError: "",
         registerStatus: "",
+        active: "",
       };
     },
   },
@@ -108,6 +124,7 @@ const authSlice = createSlice({
           authType: user.authType,
           registerStatus: "success",
           registerError: "",
+          active: user.active,
         };
       } else {
         return state;
@@ -130,6 +147,7 @@ const authSlice = createSlice({
           authType: user.authType,
           loginStatus: "success",
           loginError: "",
+          active: user.active,
         };
       } else {
         return state;
@@ -156,6 +174,7 @@ const authSlice = createSlice({
         authType: user.authType,
         loginStatus: "success",
         loginError: "",
+        active: user.active,
       };
     });
     builder.addCase(loginGoogle.rejected, (state, action) => {
@@ -163,6 +182,20 @@ const authSlice = createSlice({
       state.loginStatus = "failed";
     });
     builder.addCase(loginGoogle.pending, (state, action) => {
+      state.loginStatus = "loading";
+    });
+    builder.addCase(checkActive.fulfilled, (state, action) => {
+      console.log(action.payload);
+      return {
+        ...state,
+        active: action.payload.activeStatus,
+      };
+    });
+    builder.addCase(checkActive.rejected, (state, action) => {
+      state.loginError = action.payload;
+      state.loginStatus = "failed";
+    });
+    builder.addCase(checkActive.pending, (state, action) => {
       state.loginStatus = "loading";
     });
   },

@@ -7,9 +7,10 @@ const {
   createPaymentRequestMomo,
   getRequestReturnMomo,
 } = require("../controllers/payment.controller");
-router.post("/", createPaymentRequest);
+const { checkSeats } = require("../middlewares/checkSeat");
+router.post("/", [checkSeats, createPaymentRequest]);
 router.post("/return", getRequestReturn);
-router.post("/momo", createPaymentRequestMomo);
+router.post("/momo", [checkSeats, createPaymentRequestMomo]);
 router.post("/return/momo", getRequestReturnMomo);
 
 module.exports = router;

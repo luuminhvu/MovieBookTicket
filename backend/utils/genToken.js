@@ -11,6 +11,7 @@ const genAccessToken = (user) => {
       email: user.email,
       role: user.role,
       authType: user.authType,
+      active: user.active,
     },
     accessKey,
     { expiresIn: "5d" }

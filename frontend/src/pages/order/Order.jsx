@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchOrder } from "../../stores/orderSlice";
 import dayjs from "dayjs";
 import QRCode from "qrcode.react";
+import { setLoading } from "../../stores/loadingSlice";
 
 const Order = () => {
   const UserID = useSelector((state) => state.auth.userId);
@@ -12,10 +13,13 @@ const Order = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
+      dispatch(setLoading(true));
       try {
         await dispatch(fetchOrder(UserID));
+        dispatch(setLoading(false));
       } catch (error) {
         console.log(error);
+        dispatch(setLoading(false));
       }
     };
     fetchData();

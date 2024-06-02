@@ -14,6 +14,10 @@ import Quit from "../icons/Quit";
 import { logout } from "../../stores/authSlice";
 import { getUserInfo } from "../../services/function";
 import Logo from "../icons/Logo";
+import PersonIcon from "../icons/Person";
+import HangbagIcon from "../icons/HangbagIcon";
+import ArchiveIcon from "../icons/Archive";
+import GearIcon from "../icons/Gear";
 const Header = () => {
   const UserID = useSelector((state) => state.auth.userId);
   const [user, setUser] = useState([]);
@@ -102,26 +106,34 @@ const Header = () => {
                       <li>
                         <Link
                           to="/profile"
-                          className="block px-4 py-2 text-sm border-b border-gray-200 dark:border-gray-700 hover:bg-gray-100"
+                          className="px-4 py-2 text-sm border-b border-gray-200 dark:border-gray-700 hover:bg-gray-100 flex items-center"
                         >
-                          Thông tin cá nhân
+                          <PersonIcon /> Thông tin cá nhân
                         </Link>
                       </li>
                       <li>
                         <Link
                           to="/orders"
-                          className="block px-4 py-2 text-sm hover:bg-gray-100"
+                          className="flex px-4 py-2 text-sm hover:bg-gray-100 items-center"
                         >
-                          Vé đã đặt
+                          <HangbagIcon /> Vé đã đặt
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="/coupons"
+                          className="flex px-4 py-2 text-sm hover:bg-gray-100 items-center"
+                        >
+                          <ArchiveIcon /> Ưu đãi
                         </Link>
                       </li>
                       {role === "admin" && (
                         <li>
                           <Link
                             to="/admin/dashboard"
-                            className="block text-red-500 px-4 py-2 text-sm hover:bg-gray-100"
+                            className="flex text-red-500 px-4 py-2 text-sm hover:bg-gray-100 items-center"
                           >
-                            Quản trị hệ thống
+                            <GearIcon /> Quản trị hệ thống
                           </Link>
                         </li>
                       )}

@@ -16,6 +16,7 @@ import Active from "../pages/active/Active.jsx";
 import Show from "../pages/show/Show.jsx";
 import News from "../pages/news/News.jsx";
 import PaymentMomo from "../pages/booking/PaymentMomo.jsx";
+import Coupon from "../pages/coupon/Coupon.jsx";
 
 const routers = [
   {
@@ -85,6 +86,10 @@ const routers = [
   {
     path: "/news",
     component: News,
+  },
+  {
+    path: "/coupons",
+    component: Coupon,
   },
   {
     path: "*",

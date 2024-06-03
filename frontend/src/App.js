@@ -18,6 +18,9 @@ import Seat from "./pages/admin/Cinema/Seat";
 import Order from "./pages/admin/Order/Order";
 import Dashboard from "./pages/admin/Dashboard/Dashboard";
 import SliderSetting from "./pages/admin/Slide/Slider";
+import News from "./pages/admin/News/News";
+import EditNews from "./pages/admin/News/EditNews";
+import AddNews from "./pages/admin/News/AddNew";
 
 function App() {
   const isLoading = useSelector((state) => state.loading.loading);
@@ -54,6 +57,9 @@ function App() {
             <Route path="seat" element={<Seat />} />
             <Route path="order" element={<Order />} />
             <Route path="slider" element={<SliderSetting />} />
+            <Route path="news/add" element={<AddNews />} />
+            <Route path="news" element={<News />} />
+            <Route path="news/:id" element={<EditNews />} />
           </Route>
         )}
       </Routes>

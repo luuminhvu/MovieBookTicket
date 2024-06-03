@@ -54,12 +54,11 @@ const News = () => {
               </div>
               <div class="px-6 py-4 mb-auto">
                 <Link
-                  href="#"
+                  to={`/news/${item.NewsID}`}
                   class="font-medium text-lg inline-block hover:text-indigo-600 transition duration-500 ease-in-out mb-2"
                 >
                   {item.Title}
                 </Link>
-                <p class="text-gray-500 text-sm">{item.Content}</p>
               </div>
               <div class="px-6 py-3 flex flex-row items-center justify-between bg-gray-100">
                 <span

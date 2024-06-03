@@ -17,6 +17,7 @@ import Show from "../pages/show/Show.jsx";
 import News from "../pages/news/News.jsx";
 import PaymentMomo from "../pages/booking/PaymentMomo.jsx";
 import Coupon from "../pages/coupon/Coupon.jsx";
+import NewsDetails from "../pages/news/NewsDetail.jsx";
 
 const routers = [
   {
@@ -86,6 +87,10 @@ const routers = [
   {
     path: "/news",
     component: News,
+  },
+  {
+    path: "/news/:id",
+    component: NewsDetails,
   },
   {
     path: "/coupons",

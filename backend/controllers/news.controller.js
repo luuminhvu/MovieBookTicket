@@ -122,7 +122,7 @@ const deleteNews = (req, res, next) => {
     const q = `DELETE FROM news WHERE NewsID = '${id}'`;
     db.query(q, (err, data) => {
       if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
-      SuccessResponse(res, 200, "News deleted successfully", data);
+      SuccessResponse(res, 200, `News with id ${id} has been deleted`, `${id}`);
     });
   } catch (error) {
     ErrorResponse(res, 500, "Internal Server Error", error);

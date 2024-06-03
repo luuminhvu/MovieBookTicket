@@ -11,6 +11,7 @@ import ShopIcon from "../../../components/icons/Shop";
 import CommandIcon from "../../../components/icons/Command";
 import Clock from "../../../components/icons/Clock";
 import SettingIcon from "../../../components/icons/Setting";
+import BookIcon from "../../../components/icons/Book";
 export default function Sidebar() {
   return (
     <>
@@ -49,6 +50,7 @@ export default function Sidebar() {
               text={"Setting Slider"}
               path={"slider"}
             />
+            <MenuItem icon={BookIcon} text={"Quản lý tin tức"} path={"news"} />
             <div
               role="button"
               tabIndex="0"
@@ -73,7 +75,7 @@ export default function Sidebar() {
             </div>
           </nav>
         </div>
-        <div className="flex flex-col w-full h-full p-4 bg-gray-100">
+        <div className="flex flex-col w-full h-full p-4 bg-gray-100 overflow-y-auto">
           <Outlet />
         </div>
       </div>

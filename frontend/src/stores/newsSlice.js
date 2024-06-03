@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../utils/api";
+import { showToast } from "../components/common/Toast";
 
 const initialState = {
   news: [],
@@ -34,6 +35,7 @@ export const addNews = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       const response = await api.post("/news", values);
+      showToast(response.data.message, "success");
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -45,6 +47,7 @@ export const updateNews = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       const response = await api.put("/news", values);
+      showToast(response.data.message, "success");
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -115,9 +118,7 @@ const newsSlice = createSlice({
     });
     builder.addCase(deleteNews.fulfilled, (state, action) => {
       state.newsStatus = "success";
-      state.news = state.news.filter(
-        (news) => news.NewsID !== action.payload.NewsID
-      );
+      state.news = state.news.filter((news) => news.NewsID !== action.payload);
     });
     builder.addCase(deleteNews.rejected, (state, action) => {
       state.newsStatus = "failed";

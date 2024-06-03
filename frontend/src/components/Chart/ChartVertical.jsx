@@ -10,6 +10,8 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { getTopMoviesByRevenue } from "../../services/function";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../../stores/loadingSlice";
 
 ChartJS.register(
   CategoryScale,
@@ -52,7 +54,7 @@ const ChartVertical = () => {
   const [labels, setLabels] = useState([]);
   const [revenue, setRevenue] = useState([]);
   const [tickets, setTickets] = useState([]);
-
+  const dispatch = useDispatch();
   const data = {
     labels: labels,
     datasets: [
@@ -72,17 +74,20 @@ const ChartVertical = () => {
   };
   useEffect(() => {
     const fetchData = async () => {
+      dispatch(setLoading(true));
       try {
         const data = await getTopMoviesByRevenue();
         setLabels(data.map((item) => item.Name));
         setRevenue(data.map((item) => item.Revenue));
         setTickets(data.map((item) => item.NumberOfTicketsSold));
+        dispatch(setLoading(false));
       } catch (error) {
+        dispatch(setLoading(false));
         console.log(error);
       }
     };
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

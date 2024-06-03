@@ -8,24 +8,28 @@ import {
 } from "chart.js";
 import { PolarArea } from "react-chartjs-2";
 import { getTopTimeFramesByRevenue } from "../../services/function";
-
+import { useDispatch } from "react-redux";
+import { setLoading } from "../../stores/loadingSlice";
 ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
 const ChartPolarArea = () => {
   const [startTime, setStartTime] = useState([]);
   const [totalBooking, setTotalBooking] = useState([]);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
+      dispatch(setLoading(true));
       try {
         const res = await getTopTimeFramesByRevenue();
         setTotalBooking(res.map((item) => item.TotalBookings));
         setStartTime(res.map((item) => item.StartTime));
+        dispatch(setLoading(false));
       } catch (error) {
+        dispatch(setLoading(false));
         console.log(error);
       }
     };
     fetchData();
-  }, []);
+  }, [dispatch]);
   const data = {
     labels: startTime,
     datasets: [

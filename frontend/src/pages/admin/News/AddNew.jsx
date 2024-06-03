@@ -68,7 +68,7 @@ const AddNews = () => {
   return (
     <div>
       <div className="flex justify-center">
-        <h1 className="text-xl text-yellow-500">Chỉnh sửa tin tức</h1>
+        <h1 className="text-xl text-yellow-500">Thêm tin tức</h1>
       </div>
 
       <div>

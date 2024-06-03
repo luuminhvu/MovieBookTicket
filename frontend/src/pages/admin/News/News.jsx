@@ -39,7 +39,7 @@ const News = () => {
         </div>
 
         <DataTable
-          title="Danh sách suất chiếu"
+          title="Danh sách tin tức"
           columns={column}
           data={news}
           pagination

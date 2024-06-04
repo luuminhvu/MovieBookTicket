@@ -14,7 +14,7 @@ const genAccessToken = (user) => {
       active: user.active,
     },
     accessKey,
-    { expiresIn: "5d" }
+    { expiresIn: "1d" }
   );
   return token;
 };

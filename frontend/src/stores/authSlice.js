@@ -185,7 +185,6 @@ const authSlice = createSlice({
       state.loginStatus = "loading";
     });
     builder.addCase(checkActive.fulfilled, (state, action) => {
-      console.log(action.payload);
       return {
         ...state,
         active: action.payload.activeStatus,

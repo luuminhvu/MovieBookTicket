@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { updateUser } from "../../services/function";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../stores/loadingSlice";
-import { toast } from "react-toastify";
+
 export default function Modal({ setOpenModal, id }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();

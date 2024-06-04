@@ -28,6 +28,7 @@ export const getUserInfo = async (UserID) => {
 };
 export const updateUser = async (user, id) => {
   try {
+    showToast("Cập nhật thành công", "success");
     return await api.put(`/user/profile`, { id, user });
   } catch (error) {
     toast.error(error.message);

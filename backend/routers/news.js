@@ -8,11 +8,12 @@ const {
   updateNews,
   deleteNews,
 } = require("../controllers/news.controller");
+const { isAdmin } = require("../middlewares/auth");
 
 router.get("/", getNews);
 router.get("/:id", getNewsById);
-router.post("/", addNews);
-router.put("/", updateNews);
-router.delete("/:id", deleteNews);
+router.post("/", isAdmin, addNews);
+router.put("/", isAdmin, updateNews);
+router.delete("/:id", isAdmin, deleteNews);
 
 module.exports = router;

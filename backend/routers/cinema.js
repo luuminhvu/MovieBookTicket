@@ -10,13 +10,14 @@ const {
   addCinemaHall,
   editCinemaHall,
 } = require("../controllers/cinema.controller");
+const { isAdmin, auth } = require("../middlewares/auth");
 
 router.get("/", getCinemas);
-router.get("/cinemahall", getCinemaHall);
-router.post("/cinemahall", getCinemaHallByCinemaID);
-router.post("/add", addCinema);
-router.put("/edit", editCinema);
-router.post("/cinemahall/add", addCinemaHall);
-router.put("/cinemahall/edit", editCinemaHall);
+router.get("/cinemahall", auth, getCinemaHall);
+router.post("/cinemahall", auth, getCinemaHallByCinemaID);
+router.post("/add", isAdmin, addCinema);
+router.put("/edit", isAdmin, editCinema);
+router.post("/cinemahall/add", isAdmin, addCinemaHall);
+router.put("/cinemahall/edit", isAdmin, editCinemaHall);
 
 module.exports = router;

@@ -8,9 +8,10 @@ const {
   getRequestReturnMomo,
 } = require("../controllers/payment.controller");
 const { checkSeats } = require("../middlewares/checkSeat");
-router.post("/", [checkSeats, createPaymentRequest]);
-router.post("/return", getRequestReturn);
-router.post("/momo", [checkSeats, createPaymentRequestMomo]);
-router.post("/return/momo", getRequestReturnMomo);
+const { isUser } = require("../middlewares/auth");
+router.post("/", isUser, [checkSeats, createPaymentRequest]);
+router.post("/return", isUser, getRequestReturn);
+router.post("/momo", isUser, [checkSeats, createPaymentRequestMomo]);
+router.post("/return/momo", isUser, getRequestReturnMomo);
 
 module.exports = router;

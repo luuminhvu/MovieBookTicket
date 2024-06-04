@@ -6,9 +6,10 @@ const {
   addShow,
   editShow,
 } = require("../controllers/showtime.controller");
+const { isAdmin } = require("../middlewares/auth");
 
 router.get("/", getShowtime);
-router.post("/add", addShow);
-router.put("/edit", editShow);
+router.post("/add", isAdmin, addShow);
+router.put("/edit", isAdmin, editShow);
 
 module.exports = router;

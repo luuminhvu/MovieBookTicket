@@ -5,9 +5,10 @@ const {
   addTimeframe,
   editTimeFrame,
 } = require("../controllers/timeframe.controller");
+const { isAdmin } = require("../middlewares/auth");
 
-router.get("/", getAllTimeFrame);
-router.post("/add", addTimeframe);
-router.put("/edit", editTimeFrame);
+router.get("/", isAdmin, getAllTimeFrame);
+router.post("/add", isAdmin, addTimeframe);
+router.put("/edit", isAdmin, editTimeFrame);
 
 module.exports = router;

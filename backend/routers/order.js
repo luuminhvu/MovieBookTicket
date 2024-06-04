@@ -5,8 +5,9 @@ const {
   getOrderByUser,
   getOrders,
 } = require("../controllers/order.controller");
+const { isAdmin, isUser } = require("../middlewares/auth");
 
-router.get("/all", getOrders);
-router.post("/", getOrderByUser);
+router.get("/all", isAdmin, getOrders);
+router.post("/", isUser, getOrderByUser);
 
 module.exports = router;

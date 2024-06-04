@@ -8,11 +8,12 @@ const {
   getTopGenresByRevenue,
   getTopTimeFramesByRevenue,
 } = require("../controllers/statistical.controller");
+const { isAdmin } = require("../middlewares/auth");
 
-router.get("/revenue-by-day", getRevenueAndTicketsByDay);
-router.post("/revenue-by-month", getRevenueByDayOfMonth);
-router.get("/top-movies-by-revenue", getTopMoviesByRevenue);
-router.get("/top-genres-by-revenue", getTopGenresByRevenue);
-router.get("/top-timeframes-by-revenue", getTopTimeFramesByRevenue);
+router.get("/revenue-by-day", isAdmin, getRevenueAndTicketsByDay);
+router.post("/revenue-by-month", isAdmin, getRevenueByDayOfMonth);
+router.get("/top-movies-by-revenue", isAdmin, getTopMoviesByRevenue);
+router.get("/top-genres-by-revenue", isAdmin, getTopGenresByRevenue);
+router.get("/top-timeframes-by-revenue", isAdmin, getTopTimeFramesByRevenue);
 
 module.exports = router;

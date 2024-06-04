@@ -5,10 +5,11 @@ const {
   editPoster,
   addPoster,
 } = require("../controllers/poster.controller");
+const { isAdmin } = require("../middlewares/auth");
 const router = express.Router();
 
 router.get("/", getPosters);
-router.post("/add", addPoster);
-router.put("/edit", editPoster);
-router.delete("/delete/:id", deletePoster);
+router.post("/add", isAdmin, addPoster);
+router.put("/edit", isAdmin, editPoster);
+router.delete("/delete/:id", isAdmin, deletePoster);
 module.exports = router;

@@ -22,6 +22,11 @@ export default function Login() {
   const values = { email, password };
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
+    const { email, password } = values;
+    if (!email || !password) {
+      alert("Email and password are required");
+      return;
+    }
     dispatch(setLoading(true));
     try {
       await dispatch(login(values));
@@ -30,6 +35,7 @@ export default function Login() {
       dispatch(setLoading(false));
     }
   };
+
   const [showPassword, setShowPassword] = useState(false);
   useEffect(() => {
     if (auth.username) {

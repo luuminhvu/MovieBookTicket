@@ -26,6 +26,7 @@ export const register = createAsyncThunk(
       showToast(response.data.message, response.data.status);
       return response.data.data;
     } catch (error) {
+      showToast(error.response.data.message, error.response.data.status);
       return rejectWithValue(error.response.data);
     }
   }
@@ -39,6 +40,7 @@ export const login = createAsyncThunk(
       showToast(response.data.message, response.data.status);
       return response.data.data;
     } catch (error) {
+      showToast(error.response.data.message, error.response.data.status);
       return rejectWithValue(error.response.data);
     }
   }

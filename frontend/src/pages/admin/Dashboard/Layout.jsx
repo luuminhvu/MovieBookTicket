@@ -12,6 +12,7 @@ import CommandIcon from "../../../components/icons/Command";
 import Clock from "../../../components/icons/Clock";
 import SettingIcon from "../../../components/icons/Setting";
 import BookIcon from "../../../components/icons/Book";
+import VoucherIcon from "../../../components/icons/Voucher";
 export default function Sidebar() {
   return (
     <>
@@ -28,10 +29,10 @@ export default function Sidebar() {
 
             <MenuItem icon={ProfileIcon} text="Quản lý tài khoản" path="user" />
             <MenuItem icon={MovieIcon} text="Quản lý phim" path="movie" />
-            <MenuItem icon={TiviIcon} text="Quản lí rạp" path="cinema" />
+            <MenuItem icon={TiviIcon} text="Quản lý rạp" path="cinema" />
             <MenuItem
               icon={FourKIcon}
-              text="Quản lí phòng chiếu"
+              text="Quản lý phòng chiếu"
               path="cinemahall"
             />
             <MenuItem
@@ -51,6 +52,11 @@ export default function Sidebar() {
               path={"slider"}
             />
             <MenuItem icon={BookIcon} text={"Quản lý tin tức"} path={"news"} />
+            <MenuItem
+              icon={VoucherIcon}
+              text={"Quản lý voucher"}
+              path={"vouchers"}
+            />
             <div
               role="button"
               tabIndex="0"

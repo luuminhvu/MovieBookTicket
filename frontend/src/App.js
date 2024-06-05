@@ -21,6 +21,7 @@ import SliderSetting from "./pages/admin/Slide/Slider";
 import News from "./pages/admin/News/News";
 import EditNews from "./pages/admin/News/EditNews";
 import AddNews from "./pages/admin/News/AddNew";
+import Vouchers from "./pages/admin/Vouchers/Vouchers";
 
 function App() {
   const isLoading = useSelector((state) => state.loading.loading);
@@ -60,6 +61,7 @@ function App() {
             <Route path="news/add" element={<AddNews />} />
             <Route path="news" element={<News />} />
             <Route path="news/:id" element={<EditNews />} />
+            <Route path="vouchers" element={<Vouchers />} />
           </Route>
         )}
       </Routes>

@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../utils/api";
 import { toast } from "react-toastify";
@@ -43,7 +44,7 @@ export const addVoucher = createAsyncThunk(
 );
 export const editVoucher = createAsyncThunk(
   "vouchers/editVoucher",
-  async (id, voucher) => {
+  async ({ id, voucher }) => {
     try {
       const response = await api.put(`/voucher/${id}`, voucher);
       toast.success(response.data.message);
@@ -107,9 +108,7 @@ const voucherSlice = createSlice({
     builder.addCase(editVoucher.fulfilled, (state, action) => {
       state.status = "success";
       state.vouchers = state.vouchers.map((voucher) =>
-        voucher.VoucherID === action.payload.VoucherID
-          ? action.payload
-          : voucher
+        voucher.VoucherID == action.payload.VoucherID ? action.payload : voucher
       );
     });
     builder.addCase(editVoucher.rejected, (state) => {

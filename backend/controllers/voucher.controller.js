@@ -4,7 +4,7 @@ const db = require("../config/dbconfig");
 
 const getVoucher = async (req, res) => {
   try {
-    const query = "SELECT * FROM voucher";
+    const query = "SELECT * FROM Voucher";
     db.query(query, (err, result) => {
       if (err) {
         ErrorResponse(res, 500, "Internal Server Error", err);
@@ -40,23 +40,32 @@ const getVoucherByID = async (req, res) => {
 };
 const addVoucher = async (req, res) => {
   try {
-    const { VoucherCode, Description, Discount, ExpiryDate, Active } = req.body;
+    const { VoucherCode, Description, Discount, ExpiryDate } = req.body;
     const query =
       "INSERT INTO Voucher (VoucherCode, Description, Discount, ExpiryDate, Active) VALUES (?,?,?,?,?)";
     db.query(
       query,
-      [VoucherCode, Description, Discount, ExpiryDate, Active],
+      [VoucherCode, Description, Discount, ExpiryDate, 1],
       (err, result) => {
         if (err) {
           return ErrorResponse(res, 500, "Internal Server Error", err);
         }
-        SuccessResponse(res, 200, "Success", result);
+        const insertedVoucher = {
+          VoucherID: result.insertId,
+          VoucherCode,
+          Description,
+          Discount,
+          ExpiryDate,
+          Active: 1,
+        };
+        SuccessResponse(res, 200, "Thêm Voucher thành công", insertedVoucher);
       }
     );
   } catch (error) {
     ErrorResponse(res, 500, "Internal Server Error", error);
   }
 };
+
 const updateVoucher = async (req, res) => {
   try {
     const { VoucherCode, Description, Discount, ExpiryDate, Active } = req.body;
@@ -70,7 +79,20 @@ const updateVoucher = async (req, res) => {
         if (err) {
           return ErrorResponse(res, 500, "Internal Server Error", err);
         }
-        SuccessResponse(res, 200, "Success", result);
+        const updatedVoucher = {
+          VoucherID: id,
+          VoucherCode,
+          Description,
+          Discount,
+          ExpiryDate,
+          Active,
+        };
+        SuccessResponse(
+          res,
+          200,
+          "Cập nhật Voucher thành công",
+          updatedVoucher
+        );
       }
     );
   } catch (error) {

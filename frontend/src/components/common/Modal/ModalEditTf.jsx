@@ -35,7 +35,7 @@ export default function ModalEditTf({ setOpenModal, row }) {
 
   return (
     <>
-      <div className="fixed inset-0 z-10 overflow-y-auto">
+      <div className="fixed inset-8 z-10 overflow-y-auto">
         <div
           className="fixed inset-0 w-full h-full bg-black opacity-40"
           onClick={() => setOpenModal(false)}

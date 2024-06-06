@@ -115,28 +115,152 @@ const deleteVoucher = async (req, res) => {
 };
 const deleteUserVoucher = async (req, res) => {
   try {
-    const { userId, voucherId } = req.body;
-    const checkQuery = `SELECT * FROM UserVoucher WHERE UserID = ? AND VoucherID = ?`;
-    db.query(checkQuery, [userId, voucherId], (checkErr, checkResult) => {
+    const { id: UserVoucherID } = req.params;
+    const checkQuery = `SELECT * FROM UserVoucher WHERE UserVoucherID = ?`;
+    db.query(checkQuery, [UserVoucherID], (checkErr, checkResult) => {
       if (checkErr) {
         return ErrorResponse(res, 500, "Internal Server Error", checkErr);
       }
       if (checkResult.length === 0) {
-        return ErrorResponse(res, 404, "Voucher not found for this user");
+        return ErrorResponse(res, 404, "User voucher not found");
       }
-
-      const deleteQuery = `DELETE FROM UserVoucher WHERE UserID = ? AND VoucherID = ?`;
-      db.query(deleteQuery, [userId, voucherId], (deleteErr, deleteResult) => {
+      const deleteQuery = `DELETE FROM UserVoucher WHERE UserVoucherID = ?`;
+      db.query(deleteQuery, [UserVoucherID], (deleteErr, deleteResult) => {
         if (deleteErr) {
           return ErrorResponse(res, 500, "Internal Server Error", deleteErr);
         }
-        SuccessResponse(res, 200, "Voucher deleted successfully");
+        SuccessResponse(res, 200, "User voucher deleted successfully");
       });
     });
   } catch (error) {
     ErrorResponse(res, 500, "Internal Server Error", error);
   }
 };
+
+const getAllUserVoucher = async (req, res) => {
+  try {
+    const query = `
+        SELECT uv.*, v.VoucherCode, v.Description, v.Discount, v.ExpiryDate, v.Active, u.UserID, u.Username, u.Email 
+        FROM UserVoucher uv 
+        JOIN Voucher v ON uv.VoucherID = v.VoucherID
+        JOIN user u ON uv.UserID = u.UserID`;
+
+    db.query(query, (err, result) => {
+      if (err) {
+        return ErrorResponse(res, 500, "Internal Server Error", err);
+      }
+      const groupedResult = result.reduce((acc, curr) => {
+        const { UserID, Email, ...voucherDetails } = curr;
+        if (!acc[UserID]) {
+          acc[UserID] = {
+            UserID,
+            Email,
+            Vouchers: [],
+          };
+        }
+        acc[UserID].Vouchers.push(voucherDetails);
+        return acc;
+      }, {});
+
+      // Chuyển đối tượng thành mảng
+      const groupedArray = Object.values(groupedResult);
+
+      SuccessResponse(res, 200, "Success", groupedArray);
+    });
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error", error);
+  }
+};
+const addVoucherToUser = async (req, res) => {
+  try {
+    const { UserID, VoucherID } = req.body;
+
+    if (UserID === "all") {
+      const getAllUsersQuery = `SELECT UserID FROM user`;
+      db.query(getAllUsersQuery, (fetchUsersErr, fetchUsersResult) => {
+        if (fetchUsersErr) {
+          return ErrorResponse(
+            res,
+            500,
+            "Internal Server Error",
+            fetchUsersErr
+          );
+        }
+        const userIDs = fetchUsersResult.map((user) => user.UserID);
+        const insertPromises = userIDs.map((userId) => {
+          return new Promise((resolve, reject) => {
+            const checkQuery = `SELECT * FROM UserVoucher WHERE UserID = ? AND VoucherID = ?`;
+            db.query(
+              checkQuery,
+              [userId, VoucherID],
+              (checkErr, checkResult) => {
+                if (checkErr) {
+                  return reject(checkErr);
+                }
+                if (checkResult.length > 0) {
+                  return resolve();
+                }
+
+                const insertQuery = `INSERT INTO UserVoucher (UserID, VoucherID) VALUES (?, ?)`;
+                db.query(
+                  insertQuery,
+                  [userId, VoucherID],
+                  (insertErr, insertResult) => {
+                    if (insertErr) {
+                      return reject(insertErr);
+                    }
+                    resolve();
+                  }
+                );
+              }
+            );
+          });
+        });
+
+        Promise.all(insertPromises)
+          .then(() => {
+            SuccessResponse(
+              res,
+              200,
+              "Voucher added to all users successfully"
+            );
+          })
+          .catch((error) => {
+            ErrorResponse(res, 500, "Internal Server Error", error);
+          });
+      });
+    } else {
+      const checkQuery = `SELECT * FROM UserVoucher WHERE UserID = ? AND VoucherID = ?`;
+      db.query(checkQuery, [UserID, VoucherID], (checkErr, checkResult) => {
+        if (checkErr) {
+          return ErrorResponse(res, 500, "Internal Server Error", checkErr);
+        }
+        if (checkResult.length > 0) {
+          return ErrorResponse(res, 400, "Voucher already added to user");
+        }
+        const insertQuery = `INSERT INTO UserVoucher (UserID, VoucherID) VALUES (?, ?)`;
+        db.query(
+          insertQuery,
+          [UserID, VoucherID],
+          (insertErr, insertResult) => {
+            if (insertErr) {
+              return ErrorResponse(
+                res,
+                500,
+                "Internal Server Error",
+                insertErr
+              );
+            }
+            SuccessResponse(res, 200, "Voucher added to user successfully");
+          }
+        );
+      });
+    }
+  } catch (error) {
+    ErrorResponse(res, 500, "Internal Server Error", error);
+  }
+};
+
 module.exports = {
   getVoucher,
   getVoucherByID,
@@ -144,4 +268,6 @@ module.exports = {
   updateVoucher,
   deleteVoucher,
   deleteUserVoucher,
+  getAllUserVoucher,
+  addVoucherToUser,
 };

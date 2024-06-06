@@ -22,6 +22,7 @@ import News from "./pages/admin/News/News";
 import EditNews from "./pages/admin/News/EditNews";
 import AddNews from "./pages/admin/News/AddNew";
 import Vouchers from "./pages/admin/Vouchers/Vouchers";
+import UserVoucher from "./pages/admin/Vouchers/UserVoucher";
 
 function App() {
   const isLoading = useSelector((state) => state.loading.loading);
@@ -62,6 +63,7 @@ function App() {
             <Route path="news" element={<News />} />
             <Route path="news/:id" element={<EditNews />} />
             <Route path="vouchers" element={<Vouchers />} />
+            <Route path="voucher-user" element={<UserVoucher />} />
           </Route>
         )}
       </Routes>

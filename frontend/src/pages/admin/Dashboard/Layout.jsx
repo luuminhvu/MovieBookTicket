@@ -13,6 +13,7 @@ import Clock from "../../../components/icons/Clock";
 import SettingIcon from "../../../components/icons/Setting";
 import BookIcon from "../../../components/icons/Book";
 import VoucherIcon from "../../../components/icons/Voucher";
+import TicketDetailIocn from "../../../components/icons/TicketDetail";
 export default function Sidebar() {
   return (
     <>
@@ -56,6 +57,11 @@ export default function Sidebar() {
               icon={VoucherIcon}
               text={"Quản lý voucher"}
               path={"vouchers"}
+            />
+            <MenuItem
+              icon={TicketDetailIocn}
+              text={"Quản lý voucher người dùng"}
+              path={"voucher-user"}
             />
             <div
               role="button"

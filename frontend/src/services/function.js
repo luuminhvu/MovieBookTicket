@@ -159,3 +159,29 @@ export const requestActiveMail = async (email) => {
     toast.error(error.response.data.message);
   }
 };
+export const getAllUserVoucher = async () => {
+  try {
+    const res = await api.get(`/voucher/user/all`);
+    return res.data.data;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+export const addVoucherForUser = async (UserID, VoucherID) => {
+  try {
+    const res = await api.post(`/voucher/user/add`, { UserID, VoucherID });
+    showToast(res.data.message, res.data.status);
+    return res.data.data;
+  } catch (error) {
+    toast.error(error.response.data.message);
+  }
+};
+export const deleteUserVoucher = async (UserVoucherID) => {
+  try {
+    const res = await api.delete(`/voucher/user/${UserVoucherID}`);
+    showToast(res.data.message, res.data.status);
+    return res.data.data;
+  } catch (error) {
+    toast.error(error.response.data.message);
+  }
+};

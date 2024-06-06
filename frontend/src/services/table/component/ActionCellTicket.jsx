@@ -3,7 +3,6 @@ import Eye from "../../../components/icons/Eye";
 
 const ActionCellTicket = ({ row, Children }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalOpenAdd, setModalOpenAdd] = useState(false);
 
   const handleEditClick = (row) => {
     setModalOpen(true);

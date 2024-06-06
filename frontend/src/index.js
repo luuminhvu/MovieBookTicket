@@ -7,7 +7,10 @@ import "./plugins/i18n";
 import loadingSlice from "./stores/loadingSlice";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import authSlice, { loadingUserLogin } from "./stores/authSlice";
+import authSlice, {
+  checkExpiredToken,
+  loadingUserLogin,
+} from "./stores/authSlice";
 import movieSlice, { fetchMovies, fetchPoster } from "./stores/movieSlice";
 import seatSlice from "./stores/seatSlice";
 import showTimeSlice from "./stores/showTimeSlice";
@@ -36,6 +39,7 @@ const store = configureStore({
 });
 // const { dispatch } = store;
 // getLocalStorage("token", dispatch(logout()));
+store.dispatch(checkExpiredToken());
 store.dispatch(loadingUserLogin());
 store.dispatch(fetchMovies());
 store.dispatch(fetchPoster());

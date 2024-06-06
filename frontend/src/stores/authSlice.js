@@ -111,6 +111,37 @@ const authSlice = createSlice({
         active: "",
       };
     },
+    checkExpiredToken(state) {
+      const token = state.token;
+      if (token) {
+        const user = jwtDecode(token);
+        const exp = user.exp;
+        const currentTime = Math.floor(Date.now() / 1000);
+
+        if (exp < currentTime) {
+          removeLocalStorage("token");
+          showToast(
+            "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại",
+            "error"
+          );
+          return {
+            ...state,
+            token: null,
+            userId: "",
+            username: "",
+            email: "",
+            role: "",
+            authType: "",
+            loginError: "",
+            loginStatus: "expired",
+            registerError: "",
+            registerStatus: "",
+            active: "",
+          };
+        }
+      }
+      return state;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(register.fulfilled, (state, action) => {
@@ -202,4 +233,5 @@ const authSlice = createSlice({
   },
 });
 export default authSlice.reducer;
-export const { loadingUserLogin, logout } = authSlice.actions;
+export const { loadingUserLogin, logout, checkExpiredToken } =
+  authSlice.actions;

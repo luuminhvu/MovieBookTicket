@@ -4,11 +4,12 @@ import { Link } from "react-router-dom";
 import Age from "../../components/common/Age18+";
 import { useState } from "react";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 const Movie = () => {
   const { movies } = useSelector((state) => state.movie);
   const [showMovies, setShowMovies] = useState("nowShowing");
-
+  const { t } = useTranslation();
   return (
     <>
       <div className="mt-15">
@@ -20,7 +21,7 @@ const Movie = () => {
                 showMovies === "comingSoon" && "active"
               }`}
             >
-              <span className="text-2xl">Phim sắp chiếu</span>
+              <span className="text-2xl">{t("comingSoon")}</span>
               {showMovies === "comingSoon" && (
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-blue-600 transition-transform"></div>
               )}
@@ -31,7 +32,7 @@ const Movie = () => {
                 showMovies === "nowShowing" && "active"
               }`}
             >
-              <span className="text-2xl">Phim đang chiếu</span>
+              <span className="text-2xl">{t("nowShowing")}</span>
               {showMovies === "nowShowing" && (
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-blue-600 transition-transform"></div>
               )}
@@ -67,16 +68,16 @@ const Movie = () => {
                     {movie.Name}
                   </Link>
                   <h2 className="text-xs mt-2 font-bold">
-                    Thể loại:
+                    {t("genres")}:
                     <span className="text-xs font-thin"> {movie.Genres}</span>
                   </h2>
                   <h2 className="text-sm mt-2 font-bold">
-                    Thời lượng:
+                    {t("runningTime")}:
                     <span className="text-sm font-thin"> {movie.Duration}</span>
-                    <span className="text-sm font-thin"> phút</span>
+                    <span className="text-sm font-thin"> {t("minutes")}</span>
                   </h2>
                   <h2 className="text-sm mt-2 font-bold">
-                    Ngày khởi chiếu:
+                    {t("startDate")}:
                     <span className="text-sm font-thin">
                       {" "}
                       {dayjs(movie.ReleaseDate).format("DD/MM/YYYY")}

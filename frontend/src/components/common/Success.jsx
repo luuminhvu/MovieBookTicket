@@ -1,6 +1,8 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 const SuccessCpn = () => {
+  const { t } = useTranslation();
   return (
     <>
       <div class="bg-gray-100 h-full">
@@ -16,18 +18,16 @@ const SuccessCpn = () => {
           </svg>
           <div class="text-center">
             <h3 class="md:text-2xl text-base text-gray-900 font-semibold text-center">
-              Thanh toán thành công
+              {t("paymentSuccess")}
             </h3>
-            <p class="text-gray-600 my-2">
-              Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi
-            </p>
-            <p> Chúc bạn một ngày tốt lành </p>
+            <p class="text-gray-600 my-2">{t("thankYouForChoosingUs")}</p>
+            <p> {t("happyDay")} </p>
             <div class="py-10 text-center">
               <Link
                 to="/"
                 class="px-12 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3"
               >
-                Trở về trang chủ
+                {t("home")}
               </Link>
             </div>
           </div>

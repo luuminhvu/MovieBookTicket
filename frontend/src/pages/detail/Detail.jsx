@@ -10,11 +10,13 @@ import dayjs from "dayjs";
 import Age from "../../components/common/Age18+";
 import Player from "../../components/common/ReactPlayer";
 import TypewriterSpinner from "../../components/common/TypewriterSpinner";
+import { useTranslation } from "react-i18next";
 const Detail = () => {
   const [loading, setLoading] = useState(false);
   const params = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const [movieTrailer, setMovieTrailer] = useState("");
+  const { t } = useTranslation();
   const handlePlay = (trailerUrl) => {
     setIsOpen(true);
     setMovieTrailer(trailerUrl);
@@ -86,7 +88,9 @@ const Detail = () => {
                 <div className="mt-6 pb-5 border-gray-200 mb-5">
                   <div className="lg:flex lg:flex-row lg:items-center lg:py-1 lg:text-lg md:flex md:flex-row md:items-center md:py-1 md:text-lg sm:flex sm:flex-row sm:items-start sm:py-1 sm:text-sm">
                     <div className="lg:w-2/5 md:w-2/5 sm:w-2/5">
-                      <span className="font-bold uppercase">ĐẠO DIỄN :</span>
+                      <span className="font-bold uppercase">
+                        {t("director")} :
+                      </span>
                     </div>
                     <div className="lg:w-4/5 md:w-3/5 sm:w-4/5">
                       <span>{movie.Directors}</span>
@@ -94,15 +98,21 @@ const Detail = () => {
                   </div>
                   <div className="lg:flex lg:flex-row lg:items-center lg:py-1 lg:text-lg md:flex md:flex-row md:items-center md:py-1 md:text-lg sm:flex sm:flex-row sm:items-start sm:py-1 sm:text-sm">
                     <div className="lg:w-2/5 md:w-2/5 sm:w-2/5">
-                      <span className="font-bold uppercase">Thời lượng :</span>
+                      <span className="font-bold uppercase">
+                        {t("runningTime")} :
+                      </span>
                     </div>
                     <div className="lg:w-4/5 md:w-3/5 sm:w-4/5">
-                      <span>{movie.Duration} phút</span>
+                      <span>
+                        {movie.Duration} {t("minutes")}
+                      </span>
                     </div>
                   </div>
                   <div className="lg:flex lg:flex-row lg:items-center lg:py-1 lg:text-lg md:flex md:flex-row md:items-center md:py-1 md:text-lg sm:flex sm:flex-row sm:items-start sm:py-1 sm:text-sm">
                     <div className="lg:w-2/5 md:w-2/5 sm:w-2/5">
-                      <span className="font-bold uppercase">Thể loại :</span>
+                      <span className="font-bold uppercase">
+                        {t("genres")} :
+                      </span>
                     </div>
                     <div className="lg:w-4/5 md:w-3/5 sm:w-4/5">
                       <span>{movie.Genres}</span>
@@ -110,7 +120,7 @@ const Detail = () => {
                   </div>
                   <div className="lg:flex lg:flex-row lg:items-start lg:py-1 lg:text-lg md:flex md:flex-row md:items-start md:py-1 md:text-lg sm:flex sm:flex-row sm:items-start sm:py-1 sm:text-sm">
                     <div className="lg:w-2/5 md:w-2/5 sm:w-2/5">
-                      <span className="font-bold uppercase">Diễn Viên :</span>
+                      <span className="font-bold uppercase">{t("cast")} :</span>
                     </div>
                     <div className="lg:w-4/5 md:w-3/5 sm:w-4/5">
                       <span>{movie.Actors}</span>
@@ -118,7 +128,9 @@ const Detail = () => {
                   </div>
                   <div className="lg:flex lg:flex-row lg:items-center lg:py-1 lg:text-lg md:flex md:flex-row md:items-center md:py-1 md:text-lg sm:flex sm:flex-row sm:items-start sm:py-1 sm:text-sm">
                     <div className="lg:w-2/5 md:w-2/5 sm:w-2/5">
-                      <span className="font-bold uppercase">Ngôn ngữ :</span>
+                      <span className="font-bold uppercase">
+                        {t("language")} :
+                      </span>
                     </div>
                     <div className="lg:w-4/5 md:w-3/5 sm:w-4/5">
                       <span>{movie.Language}</span>
@@ -127,7 +139,7 @@ const Detail = () => {
                   <div className="lg:flex lg:flex-row lg:items-center lg:py-1 lg:text-lg md:flex md:flex-row md:items-center md:py-1 md:text-lg sm:flex sm:flex-row sm:items-start sm:py-1 sm:text-sm">
                     <div className="lg:w-2/5 md:w-2/5 sm:w-2/5">
                       <span className="font-bold uppercase">
-                        Ngày khởi chiếu :
+                        {t("startDate")} :
                       </span>
                     </div>
                     <div className="lg:w-4/5 md:w-3/5 sm:w-4/5">
@@ -138,13 +150,13 @@ const Detail = () => {
                   </div>
                   <Link
                     to={`/movie/bookings/${movie.MovieID}`}
-                    className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg border-2 border-red-500 hover:border-transparent mt-5 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
+                    className="bg-red-500 uppercase hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg border-2 border-red-500 hover:border-transparent mt-5 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
                   >
-                    Mua vé
+                    {t("booking")}
                   </Link>
                   <button
                     onClick={() => handlePlay(movie.Trailer)}
-                    className="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg border-2 border-gray-500 hover:border-transparent ml-5 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
+                    className="bg-gray-500 uppercase hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg border-2 border-gray-500 hover:border-transparent ml-5 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
                   >
                     Trailer
                   </button>

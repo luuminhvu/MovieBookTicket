@@ -108,7 +108,7 @@ const Header = () => {
                           to="/profile"
                           className="px-4 py-2 text-sm border-b border-gray-200 dark:border-gray-700 hover:bg-gray-100 flex items-center"
                         >
-                          <PersonIcon /> Thông tin cá nhân
+                          <PersonIcon /> {t("personalInfo")}
                         </Link>
                       </li>
                       <li>
@@ -116,7 +116,7 @@ const Header = () => {
                           to="/orders"
                           className="flex px-4 py-2 text-sm hover:bg-gray-100 items-center"
                         >
-                          <HangbagIcon /> Vé đã đặt
+                          <HangbagIcon /> {t("historyBooking")}
                         </Link>
                       </li>
                       <li>
@@ -124,7 +124,7 @@ const Header = () => {
                           to="/coupons"
                           className="flex px-4 py-2 text-sm hover:bg-gray-100 items-center"
                         >
-                          <ArchiveIcon /> Ưu đãi
+                          <ArchiveIcon /> {t("voucher")}
                         </Link>
                       </li>
                       {role === "admin" && (

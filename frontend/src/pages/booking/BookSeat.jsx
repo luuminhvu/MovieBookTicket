@@ -9,6 +9,7 @@ import bgScreen from "../../assets/images/bg-screen.png";
 import Notice from "../../components/common/Notice";
 import { useNavigate } from "react-router-dom";
 import { checkActive } from "../../stores/authSlice";
+import { useTranslation } from "react-i18next";
 const BookSeat = () => {
   const auth = useSelector((state) => state.auth);
   const active = useSelector((state) => state.auth.active);
@@ -16,6 +17,7 @@ const BookSeat = () => {
   const navigate = useNavigate();
   const id = useParams().id;
   const date = useParams().date;
+  const { t } = useTranslation();
   const { cinemaName, cinemaHallName, startTime, cinemaHallID, showTimeID } =
     useLocation().state || {};
   const seat = useSelector((state) => state.seat.seats);
@@ -69,10 +71,13 @@ const BookSeat = () => {
     <>
       <div className="container mx-auto">
         <div className="flex flex-col items-center justify-center border-b-2 border-gray-500 mt-8">
-          <h1 className="text-3xl font-bold text-center mb-4">Chọn ghế</h1>
+          <h1 className="text-3xl font-bold text-center mb-4">
+            {t("chooseSeats")}
+          </h1>
           <p className="text-gray-600 text-center">
-            Phim: {movie.Name} - Ngày: {dayjs(date).format("DD/MM/YYYY")} - Rạp:{" "}
-            {cinemaName} - Phòng: {cinemaHallName} - Suất chiếu:{" "}
+            {t("movie")}: {movie.Name} - {t("day")}:{" "}
+            {dayjs(date).format("DD/MM/YYYY")} - {t("theater")}: {cinemaName} -
+            {t("hall")}: {cinemaHallName} - {t("showtime")}:{" "}
             {startTime.slice(0, 5)}
           </p>
         </div>
@@ -120,7 +125,7 @@ const BookSeat = () => {
         <Notice />
         <div className="flex items-stretch mt-8 my-8 bg-slate-950 p-4 rounded-lg">
           <div className="flex flex-col items-center justify-center w-1/3">
-            <h2 className="text-2xl font-bold text-white">Thông tin phim</h2>
+            <h2 className="text-2xl font-bold text-white">{t("movieInfo")}</h2>
             <img
               src={movie.Poster}
               alt={movie.Name}
@@ -131,23 +136,29 @@ const BookSeat = () => {
           </div>
           <div className="flex flex-col font-bold items-center w-1/3 justify-between">
             <h2 className="text-2xl font-bold text-white">
-              Thông tin suất chiếu
+              {t("showtimeInfo")}
             </h2>
-            <p className="text-white">Rạp: {cinemaName}</p>
-            <p className="text-white">Phòng: {cinemaHallName}</p>
-            <p className="text-white">Suất chiếu: {startTime.slice(0, 5)}</p>
             <p className="text-white">
-              Ngày: {dayjs(date).format("DD/MM/YYYY")}
+              {t("theater")}: {cinemaName}
             </p>
             <p className="text-white">
-              Ghế:{" "}
+              {t("hall")}: {cinemaHallName}
+            </p>
+            <p className="text-white">
+              {t("showtime")}: {startTime.slice(0, 5)}
+            </p>
+            <p className="text-white">
+              {t("day")}: {dayjs(date).format("DD/MM/YYYY")}
+            </p>
+            <p className="text-white">
+              {t("seat")}:{" "}
               {bookingSeats
                 .map((seat) => seat.SeatType + " " + seat.SeatName + " ")
                 .join(", ")}
             </p>
           </div>
           <div className="flex flex-col items-center w-1/3">
-            <h2 className="text-2xl font-bold text-white">Tổng tiền</h2>
+            <h2 className="text-2xl font-bold text-white">{t("total")}</h2>
             <p className="text-white">
               {bookingSeats
                 .map((seat) => parseFloat(seat.Price))
@@ -171,16 +182,14 @@ const BookSeat = () => {
                 }}
                 className="bg-green-500 px-4 py-2 rounded-lg mt-4"
               >
-                Đặt vé
+                {t("booking")}
               </button>
             ) : (
               <button
                 className="bg-gray-500 text-white rounded-lg p-2 mt-4"
                 disabled
               >
-                {active === 1
-                  ? "Chưa chọn ghế"
-                  : "Vui lòng active tài khoản để sử dụng"}
+                {active === 1 ? t("noChosenSeat") : t("pleaseActiveAccount")}
               </button>
             )}
           </div>

@@ -8,8 +8,10 @@ import { setLoading } from "../../stores/loadingSlice";
 import Search from "../../components/icons/Search";
 import { fetchShowtimes } from "../../stores/showTimeSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 const BookDate = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const showTime = useSelector((state) => state.show.showtimes);
   const id = useParams().id;
   const navigate = useNavigate();
@@ -60,10 +62,7 @@ const BookDate = () => {
         <div className="flex flex-wrap m-4">
           {showTime.length === 0 ? (
             <div className="w-full text-center">
-              <p className="text-gray-600 mb-6">
-                Xin lỗi, không có suất chiếu vào ngày này, hãy chọn một ngày
-                khác.
-              </p>
+              <p className="text-gray-600 mb-6">{t("sorryNoShowtime")}</p>
               <Search />
             </div>
           ) : (

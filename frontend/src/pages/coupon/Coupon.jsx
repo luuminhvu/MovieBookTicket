@@ -3,11 +3,13 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../stores/loadingSlice";
 import { fetchUserVouchers } from "../../stores/voucherSlice";
+import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 const DiscountCodes = () => {
   const dispatch = useDispatch();
   const userVoucher = useSelector((state) => state.voucher.userVoucher);
   const UserID = useSelector((state) => state.auth.userId);
+  const { t } = useTranslation();
   useEffect(() => {
     document.title = "Mã giảm giá đặc biệt";
     const fetchData = async () => {
@@ -30,11 +32,9 @@ const DiscountCodes = () => {
     <div className="container mx-auto p-4">
       <header className="text-center mb-8 border-b border-gray-300 pb-4">
         <h1 className="text-3xl font-bold text-indigo-600">
-          Mã giảm giá đặc biệt
+          {t("specialVoucher")}
         </h1>
-        <p className="mt-2 text-lg text-gray-700">
-          Hãy sử dụng mã giảm giá để nhận ưu đãi hấp dẫn!
-        </p>
+        <p className="mt-2 text-lg text-gray-700">{t("useDiscount")}</p>
       </header>
       {userVoucher.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -47,7 +47,7 @@ const DiscountCodes = () => {
                 Mã giảm giá đặc biệt
               </div>
               <div className="text-lg mb-4">{discount.Description}</div>
-              <div className="text-base mb-4">Mã Voucher:</div>
+              <div className="text-base mb-4">{t("voucherCode")}:</div>
               <div className="bg-white text-gray-800 rounded-lg px-4 py-2 flex items-center justify-between">
                 <span className="text-2xl font-semibold">
                   {discount.VoucherCode}
@@ -61,7 +61,7 @@ const DiscountCodes = () => {
               </div>
               <div className="text-sm mt-4">
                 <p>
-                  Hạn sử dụng:{" "}
+                  {t("expiryDate")}:{" "}
                   <span className="font-semibold">
                     {dayjs(discount.ExpiryDate).format("DD/MM/YYYY")}
                   </span>

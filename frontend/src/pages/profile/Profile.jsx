@@ -13,6 +13,7 @@ import ModalPassword from "../../components/common/ModalChangePassword";
 import { AVATAR_DEFAULT } from "../../constants/define";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../stores/loadingSlice";
+import { useTranslation } from "react-i18next";
 const Profile = () => {
   const dispatch = useDispatch();
   const UserID = useSelector((state) => state.auth.userId);
@@ -22,6 +23,7 @@ const Profile = () => {
   const [showModalPassword, setShowModalPassword] = useState(false);
   const [avatar, setAvatar] = useState("");
   const [user, setUser] = useState([]);
+  const [t] = useTranslation();
   useEffect(() => {
     const fetchData = async () => {
       dispatch(setLoading(true));
@@ -76,7 +78,7 @@ const Profile = () => {
     <>
       <div className="">
         <h1 className="text-2xl text-center bg-black text-white py-5">
-          Thông tin chung
+          {t("generalInformation")}
         </h1>
       </div>
       <div className="bg-gray-100">
@@ -107,7 +109,7 @@ const Profile = () => {
                 </p>
                 <ul className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                   <li className="flex items-center py-3">
-                    <span>Trạng thái tài khoản</span>
+                    <span>{t("accountStatus")}</span>
                     <span className="ml-auto">
                       <span
                         className={
@@ -123,14 +125,14 @@ const Profile = () => {
                           className="bg-orange-500 px-2 py-1 ml-2 rounded text-white text-sm hover:bg-green-700 cursor-pointer"
                           onClick={handleRequestActive}
                         >
-                          Kích hoạt
+                          {t("active")}
                         </span>
                       )}
                     </span>
                   </li>
 
                   <li className="flex items-center py-3">
-                    <span>Ngày đăng ký</span>
+                    <span>{t("dateRegistered")}</span>
                     <span className="ml-auto">
                       {user?.DateRegister
                         ? dayjs(user.DateRegister).format("DD/MM/YYYY")
@@ -160,7 +162,7 @@ const Profile = () => {
                       />
                     </svg>
                   </span>
-                  <span className="tracking-wide">Thông tin cá nhân</span>
+                  <span className="tracking-wide">{t("personalInfo")}</span>
                 </div>
                 <div className="text-gray-700">
                   <div className="grid md:grid-cols-2 text-sm">
@@ -169,27 +171,29 @@ const Profile = () => {
                       <div className="px-4 py-2">{user?.Username}</div>
                     </div>
                     <div className="grid grid-cols-2">
-                      <div className="px-4 py-2 font-semibold">Họ và tên</div>
+                      <div className="px-4 py-2 font-semibold">
+                        {t("fullName")}
+                      </div>
                       <div className="px-4 py-2">{user?.FullName}</div>
                     </div>
                     <div className="grid grid-cols-2">
-                      <div className="px-4 py-2 font-semibold">Giới tính</div>
+                      <div className="px-4 py-2 font-semibold">{t("sex")}</div>
                       <div className="px-4 py-2">Male</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">
-                        Số điện thoại
+                        {t("phone")}
                       </div>
                       <div className="px-4 py-2">0{user?.Phone}</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">
-                        Địa chỉ hiện tại
+                        {t("nowAddress")}
                       </div>
                       <div className="px-4 py-2">{user?.Address}</div>
                     </div>
                     <div className="grid grid-cols-2">
-                      <div className="px-4 py-2 font-semibold">Quyền</div>
+                      <div className="px-4 py-2 font-semibold">{t("role")}</div>
                       <div className="px-4 py-2">{user?.Role}</div>
                     </div>
                     <div className="grid grid-cols-2">
@@ -204,7 +208,9 @@ const Profile = () => {
                       </div>
                     </div>
                     <div className="grid grid-cols-2">
-                      <div className="px-4 py-2 font-semibold">Ngày sinh</div>
+                      <div className="px-4 py-2 font-semibold">
+                        {t("birthday")}
+                      </div>
                       <div className="px-4 py-2">
                         {user?.Birthday
                           ? dayjs(user.Birthday).format("DD/MM/YYYY")
@@ -218,14 +224,14 @@ const Profile = () => {
                     onClick={() => setShowModal(true)}
                     className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-1 rounded"
                   >
-                    Chỉnh sửa thông tin
+                    {t("editProfile")}
                   </button>
                   {authType === "default" && (
                     <button
                       onClick={() => setShowModalPassword(true)}
                       className="bg-red-500 hover:bg-red-700 text-white py-1 px-1 rounded"
                     >
-                      Đổi mật khẩu
+                      {t("changePassword")}
                     </button>
                   )}
                   <input
@@ -239,7 +245,7 @@ const Profile = () => {
                       onClick={() => handleChangeAvatar(avatar, UserID)}
                       className="bg-green-500 hover:bg-green-700 text-white py-1 px-1 rounded"
                     >
-                      Lưu ảnh đại diện
+                      {t("saveAvatar")}
                     </button>
                   ) : (
                     ""

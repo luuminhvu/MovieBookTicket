@@ -9,7 +9,7 @@ import { setLoading } from "../../stores/loadingSlice";
 const PaymentSuccess = () => {
   const query = useLocation().search;
   const userId = useSelector((state) => state.auth.userId);
-  const [code, setCode] = useState(null);
+  const [code, setCode] = useState("00");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const PaymentSuccess = () => {
         setCode(res.data.data.code);
       } catch (error) {
         console.log(error);
-        setCode("error"); // set a specific error code or handle it differently if needed
+        setCode("error");
       } finally {
         dispatch(setLoading(false));
       }

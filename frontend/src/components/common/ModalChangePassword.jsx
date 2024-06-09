@@ -20,11 +20,11 @@ export default function ModalPassword({ setOpenModal, id }) {
       currentPassword: Yup.string()
         .min(6, t("tooShort"))
         .max(50, t("tooLong"))
-        .required("Mật khẩu hiện tại không được để trống"),
+        .required(t("required")),
       newPassword: Yup.string()
         .min(6, t("tooShort"))
         .max(50, t("tooLong"))
-        .required("Mật khẩu mới không được để trống"),
+        .required(t("required")),
     }),
     onSubmit: async (values) => {
       try {
@@ -65,7 +65,7 @@ export default function ModalPassword({ setOpenModal, id }) {
               </div>
               <div className="mt-2 text-center sm:ml-4 sm:text-left">
                 <h4 className="text-lg font-medium text-gray-800 text-center">
-                  Cập nhật mật khẩu
+                  {t("changePassword")}
                 </h4>
                 <form onSubmit={formik.handleSubmit}>
                   <div className="mt-3 text-sm text-gray-600">
@@ -73,7 +73,7 @@ export default function ModalPassword({ setOpenModal, id }) {
                       className="block text-left"
                       htmlFor="currentPassword"
                     >
-                      Mật khẩu hiện tại
+                      {t("currentPassword")}
                     </label>
                     <input
                       type="password"
@@ -93,7 +93,7 @@ export default function ModalPassword({ setOpenModal, id }) {
                   </div>
                   <div className="mt-3 text-sm text-gray-600">
                     <label className="block text-left" htmlFor="newPassword">
-                      Mật khẩu mới
+                      {t("newPassword")}
                     </label>
                     <input
                       type="password"
@@ -115,14 +115,14 @@ export default function ModalPassword({ setOpenModal, id }) {
                       type="submit"
                       className="w-full mt-2 p-2.5 flex-1 text-white bg-red-600 rounded-md outline-none ring-offset-2 ring-red-600 focus:ring-2"
                     >
-                      Xác nhận
+                      {t("save")}
                     </button>
                     <button
                       type="button"
                       className="w-full mt-2 p-2.5 flex-1 text-gray-800 rounded-md outline-none border ring-offset-2 ring-indigo-600 focus:ring-2"
                       onClick={() => setOpenModal(false)}
                     >
-                      Hủy
+                      {t("cancel")}
                     </button>
                   </div>
                 </form>

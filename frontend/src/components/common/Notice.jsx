@@ -1,4 +1,7 @@
+import { useTranslation } from "react-i18next";
+
 const Notice = () => {
+  const { t } = useTranslation();
   return (
     <>
       <div
@@ -8,23 +11,23 @@ const Notice = () => {
         <div className="flex items-center justify-center">
           <div className="flex items-center justify-center">
             <div className="w-8 h-8 border rounded border-gray-400"></div>
-            <span className="ml-2">Ghế thường</span>
+            <span className="ml-2">{t("seatNormal")}</span>
           </div>
           <div className="flex items-center justify-center ml-4">
             <div className="w-8 h-8 border rounded bg-green-500"></div>
-            <span className="ml-2">Ghế đã chọn</span>
+            <span className="ml-2">{t("seatChosen")}</span>
           </div>
           <div className="flex items-center justify-center ml-4">
             <div className="w-8 h-8 border rounded border-blue-600"></div>
-            <span className="ml-2">Ghế VIP</span>
+            <span className="ml-2"> {t("seatVip")}</span>
           </div>
           <div className="flex items-center justify-center ml-4">
             <div className="w-8 h-8 border rounded bg-red-400"></div>
-            <span className="ml-2">Ghế đã có người đặt</span>
+            <span className="ml-2">{t("seatBooked")}</span>
           </div>
           <div className="flex items-center justify-center ml-4">
             <div className="w-8 h-8 border rounded bg-yellow-400"></div>
-            <span className="ml-2">Ghế không thể chọn</span>
+            <span className="ml-2">{t("seatHolding")}</span>
           </div>
         </div>
       </div>

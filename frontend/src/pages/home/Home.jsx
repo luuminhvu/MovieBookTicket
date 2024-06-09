@@ -7,11 +7,13 @@ import Age from "../../components/common/Age18+";
 import Play from "../../components/icons/Play";
 import Player from "../../components/common/ReactPlayer";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
   const { movies, status } = useSelector((state) => state.movie);
   const [isOpen, setIsOpen] = useState(false);
   const [movieTrailer, setMovieTrailer] = useState("");
+  const { t } = useTranslation();
   const handlePlay = (trailerUrl) => {
     setIsOpen(true);
     setMovieTrailer(trailerUrl);
@@ -28,8 +30,8 @@ const Home = () => {
           <SwiperCarousel />
           <div className="mt-15">
             <div className="w-screen">
-              <h1 className="text-2xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-center border-b-2 w-2/4 mx-auto border-black">
-                PHIM ĐANG CHIẾU
+              <h1 className="text-2xl uppercase sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-center border-b-2 w-2/4 mx-auto border-black">
+                {t("nowShowing")}
               </h1>
             </div>
             {isOpen ? (
@@ -63,25 +65,27 @@ const Home = () => {
                         {movie.Name}
                       </Link>
                       <h2 className="text-sm mt-2 font-bold">
-                        Thể loại:
+                        {t("genres")}:
                         <span className="text-xs font-thin">
                           {" "}
-                          {movie.Genres}
+                          {movie.Genres}{" "}
                         </span>
                       </h2>
                       <h2 className="text-sm mt-2 font-bold">
-                        Thời lượng:
+                        {t("runningTime")}:
                         <span className="text-sm font-thin">
                           {" "}
-                          {movie.Duration}
+                          {movie.Duration}{" "}
                         </span>
-                        <span className="text-sm font-thin"> phút</span>
+                        <span className="text-sm font-thin">
+                          {t("minutes")}
+                        </span>
                       </h2>
                       <Link
                         to={`/movie/bookings/${movie.MovieID}`}
                         className="btn btn-primary block text-center mt-5 text-white text-tranform: uppercase bg-sky-600 hover:bg-sky-700 p-2 rounded-3xl"
                       >
-                        Mua vé
+                        {t("booking")}
                       </Link>
                       {movie.Age == 18
                         ? Age({ Age: 18 })
@@ -91,8 +95,8 @@ const Home = () => {
                     </div>
                   ))}
             </div>
-            <h1 className="text-2xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-center border-b-2 w-2/4 mx-auto border-black">
-              PHIM SẮP CHIẾU
+            <h1 className="text-2xl uppercase sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-center border-b-2 w-2/4 mx-auto border-black">
+              {t("comingSoon")}
             </h1>
             <div className="mx-auto sm:w-full md:w-3/4 p-4 sm:p-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mt-5">
               {movies.length > 0 &&
@@ -122,25 +126,27 @@ const Home = () => {
                         {movie.Name}
                       </Link>
                       <h2 className="text-sm mt-2 font-bold">
-                        Thể loại:
+                        {t("genres")}:
                         <span className="text-xs font-thin">
                           {" "}
-                          {movie.Genres}
+                          {movie.Genres}{" "}
                         </span>
                       </h2>
                       <h2 className="text-sm mt-2 font-bold">
-                        Thời lượng:
+                        {t("runningTime")}:
                         <span className="text-sm font-thin">
                           {" "}
-                          {movie.Duration}
+                          {movie.Duration}{" "}
                         </span>
-                        <span className="text-sm font-thin"> phút</span>
+                        <span className="text-sm font-thin">
+                          {t("minutes")}
+                        </span>
                       </h2>
                       <Link
                         to={`/movie/bookings/${movie.MovieID}`}
                         className="btn btn-primary block text-center mt-5 text-white text-tranform: uppercase bg-sky-600 hover:bg-sky-700 p-2 rounded-3xl"
                       >
-                        Mua vé
+                        {t("booking")}
                       </Link>
                       {movie.Age == 18
                         ? Age({ Age: 18 })

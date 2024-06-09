@@ -7,10 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUserVouchers } from "../../stores/voucherSlice";
 import { setLoading } from "../../stores/loadingSlice";
 import { showToast } from "../../components/common/Toast";
+import { useTranslation } from "react-i18next";
 const Checkout = () => {
   const userId = useSelector((state) => state.auth.userId);
   const email = useSelector((state) => state.auth.email);
   const voucher = useSelector((state) => state.voucher.userVoucher);
+  const { t } = useTranslation();
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [agree, setAgree] = useState(false);
   const [voucherDiscount, setVoucherDiscount] = useState(0);
@@ -134,12 +136,12 @@ const Checkout = () => {
     <div className="font-[sans-serif] bg-gray-50 p-6 min-h-screen">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl font-extrabold text-[#333] text-center">
-          Thanh Toán
+          {t("payment")}
         </h2>
         <div className="grid lg:grid-cols-3 gap-8 mt-12">
           <div className="lg:col-span-2">
             <h3 className="text-xl font-bold text-[#333]">
-              Chọn phương thức thanh toán của bạn
+              {t("choosePaymentMethod")}
             </h3>
             <div className="grid gap-4 sm:grid-cols-2 mt-6">
               <div className="flex items-center">
@@ -245,11 +247,11 @@ const Checkout = () => {
           </div>
           <div className="lg:border-l lg:pl-8">
             <h3 className="text-xl font-bold text-[#333]">
-              Thông tin đơn hàng
+              {t("orderInformation")}
             </h3>
             <ul className="text-[#333] mt-6 space-y-4">
               <li className="flex flex-wrap gap-4 text-sm">
-                Giá vé{" "}
+                {t("ticketPrice")}{" "}
                 <span className="ml-auto font-bold">
                   {bookingSeats
                     .map((seat) => parseFloat(seat.Price))
@@ -258,12 +260,12 @@ const Checkout = () => {
                 </span>
               </li>
               <li className="flex flex-wrap gap-4 text-sm">
-                Chọn mã giảm giá{" "}
+                {t("chooseVoucher")}{" "}
                 <select
                   className="border rounded-md px-2 py-1 ml-auto bg-white hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ease-in-out leading-6"
                   onChange={(e) => handleSelectVoucher(e.target.value)}
                 >
-                  <option value="0">Không dùng mã giảm giá</option>
+                  <option value="0">{t("doNotUseVoucher")}</option>
                   {voucher.length > 0 &&
                     voucher.map((voucher) => (
                       <option
@@ -276,7 +278,7 @@ const Checkout = () => {
                 </select>
               </li>
               <li className="flex flex-wrap gap-4 text-sm">
-                Giảm giá{" "}
+                {t("discount")}{" "}
                 <span className="ml-auto font-bold">
                   {(bookingSeats
                     .map((seat) => parseFloat(seat.Price))
@@ -287,10 +289,10 @@ const Checkout = () => {
                 </span>
               </li>
               <li className="flex flex-wrap gap-4 text-sm">
-                Combo <span className="ml-auto font-bold">0 đ</span>
+                {t("combo")} <span className="ml-auto font-bold">0 đ</span>
               </li>
               <li className="flex flex-wrap gap-4 text-base font-bold border-t pt-4">
-                <span className="text-red-600">Tổng cộng</span>
+                <span className="text-red-600">{t("totalPayment")}</span>
                 <span className="ml-auto">
                   {bookingSeats
                     .map((seat) => parseFloat(seat.Price))
@@ -327,11 +329,11 @@ const Checkout = () => {
           <div className="flex flex-col font-bold items-center w-1/3 border-r border-l border-slate-700">
             <div className="grid grid-cols-2">
               <div className="flex flex-col">
-                <p className="text-white">Rạp:</p>
-                <p className="text-white">Phòng:</p>
-                <p className="text-white">Ngày:</p>
-                <p className="text-white">Giờ:</p>
-                <p className="text-white">Ghế:</p>
+                <p className="text-white">{t("theater")}: </p>
+                <p className="text-white">{t("hall")}: </p>
+                <p className="text-white">{t("day")}: </p>
+                <p className="text-white">{t("time")}: </p>
+                <p className="text-white">{t("seat")}: </p>
               </div>
               <div className="flex flex-col">
                 <p className="text-white">{cinemaName}</p>
@@ -349,7 +351,7 @@ const Checkout = () => {
 
           <div className="flex flex-col font-bold w-1/3">
             <div className="text-center">
-              <div className="text-white">Thời gian còn lại để thanh toán:</div>
+              <div className="text-white">{t("remainToPayment")}:</div>
               <div className="flex items-center justify-center mt-2">
                 <div className="bg-red-500 text-black border rounded-lg p-4 mr-1">
                   <span className="text-lg text-white">{formattedMinutes}</span>
@@ -372,17 +374,17 @@ const Checkout = () => {
               className="mr-2"
             />
             <label for="agree" className="text-sm">
-              Tôi đồng ý với điều khoản sử dụng và mua vé cho người có độ tuổi
-              phù hợp
+              {t("agreeToTheTerms")}
             </label>
           </div>
         </div>
         <div className="flex flex-wrap gap-4 mt-10">
           <button
+            onClick={() => navigate(-1)}
             type="button"
             className="px-6 py-3.5 text-sm bg-transparent border text-[#333] rounded-md hover:bg-gray-100"
           >
-            Huỷ
+            {t("Cancel")}
           </button>
           <button
             onClick={handleCheckout}
@@ -390,7 +392,7 @@ const Checkout = () => {
             disabled={!agree}
             className="px-6 py-3.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
-            Thanh toán
+            {t("payment")}
           </button>
         </div>
       </div>

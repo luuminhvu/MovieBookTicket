@@ -21,20 +21,18 @@ export default function Modal({ setOpenModal, id }) {
       name: Yup.string()
         .min(6, t("tooShort"))
         .max(50, t("tooLong"))
-        .required("Họ tên không được để trống"),
+        .required(t("required")),
       phone: Yup.string()
-        .required("Số điện thoại không được để trống")
+        .required(t("required"))
         .matches(
           /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/,
           "Số điện thoại không hợp lệ"
         ),
-      address: Yup.string()
-        .min(6, t("tooShort"))
-        .required("Địa chỉ không được để trống"),
+      address: Yup.string().min(6, t("tooShort")).required(t("required")),
       description: Yup.string()
         .min(6, t("tooShort"))
         .required("Mô tả không được để trống"),
-      dob: Yup.date().required("Ngày sinh không được để trống"),
+      dob: Yup.date().required(t("required")),
     }),
     onSubmit: async (values) => {
       try {
@@ -75,12 +73,12 @@ export default function Modal({ setOpenModal, id }) {
               </div>
               <div className="mt-2 text-center sm:ml-4 sm:text-left">
                 <h4 className="text-lg font-medium text-gray-800 text-center">
-                  Xác nhận thông tin
+                  {t("editProfile")}
                 </h4>
                 <form onSubmit={formik.handleSubmit}>
                   <div className="mt-3 text-sm text-gray-600">
                     <label className="block text-left" htmlFor="name">
-                      Họ Tên
+                      {t("fullName")}
                     </label>
                     <input
                       type="text"
@@ -97,7 +95,7 @@ export default function Modal({ setOpenModal, id }) {
                   </div>
                   <div className="mt-3 text-sm text-gray-600">
                     <label className="block text-left" htmlFor="phone">
-                      Số điện thoại
+                      {t("phone")}
                     </label>
                     <input
                       type="text"
@@ -114,7 +112,7 @@ export default function Modal({ setOpenModal, id }) {
                   </div>
                   <div className="mt-3 text-sm text-gray-600">
                     <label className="block text-left" htmlFor="address">
-                      Địa chỉ
+                      {t("nowAddress")}
                     </label>
                     <input
                       type="text"
@@ -133,7 +131,7 @@ export default function Modal({ setOpenModal, id }) {
                   </div>
                   <div className="mt-3 text-sm text-gray-600">
                     <label className="block text-left" htmlFor="dob">
-                      Ngày sinh
+                      {t("birthday")}
                     </label>
                     <input
                       type="date"
@@ -150,7 +148,7 @@ export default function Modal({ setOpenModal, id }) {
                   </div>
                   <div className="mt-3 text-sm text-gray-600">
                     <label className="block text-left" htmlFor="description">
-                      Mô tả
+                      {t("description")}
                     </label>
                     <textarea
                       id="description"
@@ -172,14 +170,14 @@ export default function Modal({ setOpenModal, id }) {
                       className="w-full mt-2 p-2.5 flex-1 text-white bg-red-600 rounded-md outline-none ring-offset-2 ring-red-600 focus:ring-2"
                       // onClick={() => setOpenModal(false)}
                     >
-                      Xác nhận
+                      {t("save")}
                     </button>
                     <button
                       type="button"
                       className="w-full mt-2 p-2.5 flex-1 text-gray-800 rounded-md outline-none border ring-offset-2 ring-indigo-600 focus:ring-2"
                       onClick={() => setOpenModal(false)}
                     >
-                      Hủy
+                      {t("cancel")}
                     </button>
                   </div>
                 </form>

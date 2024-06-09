@@ -18,7 +18,7 @@ const Cinema = () => {
 
           <div className="lg:w-2/3 p-8">
             <h2 className="text-2xl text-gray-800 font-semibold mb-4">
-              Rạp Đống Đa, Hà Nội
+              Đống Đa Cinemars Plex
             </h2>
             <p className="text-gray-600 leading-relaxed mb-6">
               Rạp Đống Đa nằm ở trung tâm Hà Nội, là điểm đến lý tưởng cho những
@@ -73,7 +73,7 @@ const Cinema = () => {
 
           <div className="lg:w-1/3 p-8">
             <h2 className="text-2xl text-gray-800 font-semibold mb-4">
-              Rạp Cầu Giấy, Hà Nội
+              Cinemars Cầu Giấy
             </h2>
             <p className="text-gray-600 leading-relaxed mb-6">
               Rạp Cầu Giấy nằm ở khu vực trung tâm của quận Cầu Giấy, Hà Nội.
@@ -115,7 +115,7 @@ const Cinema = () => {
         <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden lg:flex">
           <div className="lg:w-2/3 p-8">
             <h2 className="text-2xl text-gray-800 font-semibold mb-4">
-              Rạp Mỹ Đình, Hà Nội
+              Mỹ Đình Luxury Center
             </h2>
             <p className="text-gray-600 leading-relaxed mb-6">
               Rạp Mỹ Đình nằm ở khu vực Mỹ Đình, Hà Nội, gần các khu vực dân cư
@@ -166,7 +166,7 @@ const Cinema = () => {
         <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden lg:flex">
           <div className="lg:w-1/3 p-8">
             <h2 className="text-2xl text-gray-800 font-semibold mb-4">
-              Rạp Ba Đình, Hà Nội
+              Ba Đình Luxury Center
             </h2>
             <p className="text-gray-600 leading-relaxed mb-6">
               Rạp Ba Đình nằm ở khu vực Ba Đình, Hà Nội, có không gian thoáng

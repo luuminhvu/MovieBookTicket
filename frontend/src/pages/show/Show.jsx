@@ -9,6 +9,7 @@ import { fetchShowtimesAll } from "../../stores/showTimeSlice";
 import TagIcon from "../../components/icons/Tag";
 import StopWatchIcom from "../../components/icons/StopWatch";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 const Show = () => {
   const navigate = useNavigate();
   const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
@@ -19,6 +20,7 @@ const Show = () => {
   const [cinemaID, setCinemaID] = useState(1);
   const dispatch = useDispatch();
   const cinema = useSelector((state) => state.cinema.Cinema);
+  const { t } = useTranslation();
   const handleChangeCinema = (e) => {
     setCinemaID(e.target.value);
   };
@@ -62,7 +64,7 @@ const Show = () => {
         <div className="flex items-start my-2">
           <select
             onChange={handleChangeCinema}
-            className="p-2 border border-gray-600 rounded-xl mr-2 h-10 w-36"
+            className="p-2 border border-gray-600 rounded-xl mr-2 h-10 w-56"
           >
             {cinema.map((item) => (
               <option key={item.CinemaID} value={item.CinemaID}>
@@ -77,7 +79,7 @@ const Show = () => {
         </div>
         <div className="flex flex-wrap m-4">
           {showTimes.length === 0 && (
-            <span className="text-gray-600 mb-6">Không có suất chiếu</span>
+            <span className="text-gray-600 mb-6">{t("sorryNoShowtime")} </span>
           )}
           {showTimes.map((movie, index) => (
             <div key={index} className="w-full md:w-1/2">
@@ -108,12 +110,14 @@ const Show = () => {
                       </div>
                       <div className="flex items-center">
                         <StopWatchIcom className="w-4 h-4 mr-1" />
-                        <p className="ml-1">{movie.Duration} phút</p>
+                        <p className="ml-1">
+                          {movie.Duration} {t("minutes")}
+                        </p>
                       </div>
                     </div>
 
                     <p className="text-black font-bold uppercase mt-5">
-                      2D Phụ Đề : {movie.Subtitle}
+                      {t("subtitle2D")} : {movie.Subtitle}
                     </p>
                   </div>
                   <div className="flex justify-between flex-wrap">

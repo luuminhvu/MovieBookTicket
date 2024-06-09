@@ -4,7 +4,7 @@ const Logo = () => {
       <svg
         width="48"
         height="48"
-        className="mr-2 h-6 sm:h-9"
+        className="lg:mr-2 h-6 sm:h-9"
         viewBox="0 0 200 200"
         xmlns="http://www.w3.org/2000/svg"
       >

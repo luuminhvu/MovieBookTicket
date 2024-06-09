@@ -4,8 +4,13 @@ import { ModalViewTicket } from "../../components/common/Modal/ModalViewTicket";
 
 const column = [
   {
-    name: "Mã đặt vé",
+    name: "Mã vé",
     selector: (row) => row.NumberOfTickets,
+    sortable: true,
+  },
+  {
+    name: "Mã đơn hàng",
+    selector: (row) => row.BookingID,
     sortable: true,
   },
   {

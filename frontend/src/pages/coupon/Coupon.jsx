@@ -73,10 +73,8 @@ const DiscountCodes = () => {
         </div>
       ) : (
         <div className="text-center text-2xl h-96 text-gray-600 mt-8">
-          <p>Hiện tại bạn không có mã giảm giá nào.</p>
-          <p className="mt-4">
-            Hãy tham gia các chương trình khuyến mãi để nhận mã giảm giá nhé!
-          </p>
+          <p>{t("noVoucher")}</p>
+          <p className="mt-4">{t("pleaseJoinPromotion")}</p>
         </div>
       )}
     </div>

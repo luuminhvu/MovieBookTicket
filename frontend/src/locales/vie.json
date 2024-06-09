@@ -109,5 +109,7 @@
   "thankYouForChoosingUs": "Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!",
   "paymentFailedMessage": "Đã có lỗi xảy ra trong quá trình thanh toán",
   "pleaseTryAgain": "Vui lòng thử lại",
-  "happyDay": "Chúc bạn một ngày vui vẻ!"
+  "happyDay": "Chúc bạn một ngày vui vẻ!",
+  "noVoucher": "Không có mã giảm giá nào",
+  "pleaseJoinPromotion": "Hãy tham gia chương trình khuyến mãi để nhận mã giảm giá"
 }

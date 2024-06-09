@@ -17,7 +17,10 @@ const ActionCell = ({ row, Children }) => {
       >
         <EditIcon />
       </button>
-      <button className="bg-red-500 p-2 text-white rounded-md hover:bg-red-700">
+      <button
+        disabled={true}
+        className="bg-red-500 p-2 text-white rounded-md hover:bg-red-700"
+      >
         <DeleteIcon />
       </button>
       {modalOpen && <Children row={row} setOpenModal={setModalOpen} />}

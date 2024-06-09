@@ -296,6 +296,26 @@ const PaymentInfoMomo = async (inf, bookingID) => {
     throw new Error(error.message);
   }
 };
+const paymentInfoCash = async (inf, bookingID) => {
+  try {
+    const { total } = inf;
+    const date = dayjs().format("YYYY-MM-DD HH:mm:ss");
+    const q = `INSERT INTO payments (BookingID,PaymentDate,Amount,PaymentStatus,PaymentMethod,PaymentInfo,TransactionID,TransactionNo,BankCode,CardType)
+                VALUES (${bookingID},'${date}',${total},'0','CASH','CASH',NULL,NULL,NULL,NULL)`;
+    const data = new Promise((resolve, reject) =>
+      db.query(q, (err, data) => {
+        if (err) {
+          console.log(err);
+          return reject(err);
+        }
+        resolve(data);
+      })
+    );
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
 
 module.exports = {
   PaymentIntoBooking,
@@ -303,4 +323,5 @@ module.exports = {
   PaymentInfo,
   sendMailOrder,
   PaymentInfoMomo,
+  paymentInfoCash,
 };

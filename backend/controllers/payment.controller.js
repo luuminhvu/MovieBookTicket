@@ -12,11 +12,13 @@ const {
   PaymentInfo,
   sendMailOrder,
   PaymentInfoMomo,
+  paymentInfoCash,
 } = require("../common/fn/PaymentFn");
 const {
   generateBookingId,
   generateTicketCode,
 } = require("../common/fn/GenerateNumber");
+const { deleteUserVoucher } = require("../common/fn/deleteVoucher");
 const infoBooking = {};
 const createPaymentRequest = async (req, res, next) => {
   process.env.TZ = "Asia/Ho_Chi_Minh";
@@ -69,42 +71,67 @@ const createPaymentRequest = async (req, res, next) => {
   SuccessResponse(res, 200, "Success", { code: "00", data: vnpUrl });
 };
 const getRequestReturn = async (req, res) => {
-  let vnp_Params = req.query;
-  const userId = req.body.userId;
-  let secureHash = vnp_Params["vnp_SecureHash"];
-  delete vnp_Params["vnp_SecureHash"];
-  delete vnp_Params["vnp_SecureHashType"];
-  vnp_Params = sortObject(vnp_Params);
-  let tmnCode = config.vnp_TmnCode;
-  let secretKey = config.vnp_HashSecret;
-  let querystring = require("qs");
-  let signData = querystring.stringify(vnp_Params, { encode: false });
-  let crypto = require("crypto");
-  let hmac = crypto.createHmac("sha512", secretKey);
-  let signed = hmac.update(Buffer.from(signData, "utf-8")).digest("hex");
-  const bookingID = generateBookingId(8);
-  const ticketCode = generateTicketCode(8);
-  const info = infoBooking[userId];
-  if (secureHash === signed) {
-    if (vnp_Params["vnp_ResponseCode"] === "00") {
-      await PaymentSuccess(info, bookingID, ticketCode);
-      await PaymentIntoBooking(info, bookingID);
-      await PaymentInfo(vnp_Params, bookingID);
-      await sendMailOrder(info, ticketCode);
-      SuccessResponse(res, 200, "Success", {
-        code: vnp_Params["vnp_ResponseCode"],
+  try {
+    const { userId } = req.body;
+    let vnp_Params = req.query;
+    if (!userId || !infoBooking[userId]) {
+      return ErrorResponse(res, 400, "Invalid user or booking info", {
+        code: "98",
       });
-      infoBooking[userId] = null;
-    } else {
-      ErrorResponse(res, 400, "Fail", { code: vnp_Params["vnp_ResponseCode"] });
-      infoBooking[userId] = null;
     }
-  } else {
-    ErrorResponse(res, 400, "Fail", { code: "97" });
+    const secureHash = vnp_Params["vnp_SecureHash"];
+    delete vnp_Params["vnp_SecureHash"];
+    delete vnp_Params["vnp_SecureHashType"];
+
+    vnp_Params = sortObject(vnp_Params);
+
+    const tmnCode = config.vnp_TmnCode;
+    const secretKey = config.vnp_HashSecret;
+    const querystring = require("qs");
+    const crypto = require("crypto");
+
+    const signData = querystring.stringify(vnp_Params, { encode: false });
+    const hmac = crypto.createHmac("sha512", secretKey);
+    const signed = hmac.update(Buffer.from(signData, "utf-8")).digest("hex");
+
+    const bookingID = generateBookingId(8);
+    const ticketCode = generateTicketCode(8);
+
+    const info = infoBooking[userId];
+
+    if (secureHash === signed) {
+      if (vnp_Params["vnp_ResponseCode"] === "00") {
+        await Promise.all([
+          PaymentSuccess(info, bookingID, ticketCode),
+          PaymentIntoBooking(info, bookingID),
+          PaymentInfo(vnp_Params, bookingID),
+          sendMailOrder(info, ticketCode),
+          info.voucherId && deleteUserVoucher(info.voucherId), // Only include if voucherId exists
+        ]);
+
+        // Send success response
+        SuccessResponse(res, 200, "Success", {
+          code: vnp_Params["vnp_ResponseCode"],
+        });
+      } else {
+        ErrorResponse(res, 400, "Fail", {
+          code: vnp_Params["vnp_ResponseCode"],
+        });
+      }
+    } else {
+      ErrorResponse(res, 400, "Fail", { code: "97" });
+    }
+
     infoBooking[userId] = null;
+  } catch (error) {
+    console.error("Error processing payment:", error);
+    ErrorResponse(res, 400, "Fail", { code: "97" });
+    if (req.body.userId) {
+      infoBooking[req.body.userId] = null;
+    }
   }
-  infoBooking[userId] = null;
 };
+
 const createPaymentRequestMomo = async (req, res, next) => {
   const userId = req.body.userId;
   infoBooking[userId] = req.body;
@@ -197,30 +224,70 @@ const createPaymentRequestMomo = async (req, res, next) => {
 };
 const getRequestReturnMomo = async (req, res) => {
   try {
-    const userId = req.body.userId;
+    const { userId } = req.body;
     const info = infoBooking[userId];
     const data = req.query;
+    if (!userId || !info) {
+      return ErrorResponse(res, 400, "Invalid user or booking info", {
+        code: "98",
+      });
+    }
     if (data.resultCode === "0") {
       const bookingID = generateBookingId(8);
       const ticketCode = generateTicketCode(8);
-      await PaymentSuccess(info, bookingID, ticketCode);
-      await PaymentIntoBooking(info, bookingID);
-      await PaymentInfoMomo(data, bookingID);
-      await sendMailOrder(info, ticketCode);
+
+      await Promise.all([
+        PaymentSuccess(info, bookingID, ticketCode),
+        PaymentIntoBooking(info, bookingID),
+        PaymentInfoMomo(data, bookingID),
+        sendMailOrder(info, ticketCode),
+        info.voucherId && deleteUserVoucher(info.voucherId), // Only include if voucherId exists
+      ]);
       SuccessResponse(res, 200, "Success", { code: data.resultCode });
+
       infoBooking[userId] = null;
     } else {
       ErrorResponse(res, 400, "Fail", { code: "97" });
       infoBooking[userId] = null;
     }
   } catch (error) {
-    console.log(error);
+    console.error("Error processing Momo payment:", error);
     ErrorResponse(res, 400, "Fail", { code: "97" });
+    if (req.body.userId) {
+      infoBooking[req.body.userId] = null;
+    }
   }
 };
+
+const paymentRequestCash = async (req, res) => {
+  try {
+    const cashBooking = req.body;
+
+    if (!cashBooking || Object.keys(cashBooking).length === 0) {
+      return ErrorResponse(res, 400, "Invalid booking details", { code: "98" });
+    }
+    const bookingID = generateBookingId(8);
+    const ticketCode = generateTicketCode(8);
+
+    await Promise.all([
+      PaymentSuccess(cashBooking, bookingID, ticketCode),
+      PaymentIntoBooking(cashBooking, bookingID),
+      paymentInfoCash(cashBooking, bookingID),
+      cashBooking.voucherId && deleteUserVoucher(cashBooking.voucherId), // Only include if voucherId exists
+    ]);
+
+    SuccessResponse(res, 200, "Đặt vé thành công", { code: "00" });
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || error.message || "Unknown error";
+    ErrorResponse(res, 400, `Đặt vé thất bại: ${errorMessage}`, { code: "97" });
+  }
+};
+
 module.exports = {
   createPaymentRequest,
   getRequestReturn,
   createPaymentRequestMomo,
   getRequestReturnMomo,
+  paymentRequestCash,
 };

@@ -109,5 +109,7 @@
   "thankYouForChoosingUs": "Thank you for choosing us",
   "paymentFailedMessage": "An error occurred during the payment process",
   "pleaseTryAgain": "Please try again",
-  "happyDay": "Have a nice day"
+  "happyDay": "Have a nice day",
+  "noVoucher": "You currently do not have any discount codes!",
+  "pleaseJoinPromotion": "Please join promotions to receive discount codes!"
 }

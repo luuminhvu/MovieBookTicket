@@ -75,7 +75,7 @@ const Order = () => {
             columns={column}
             data={filteredOrder}
             pagination
-            paginationPerPage={10}
+            paginationPerPage={15}
             highlightOnHover
             pointerOnHover
             dense

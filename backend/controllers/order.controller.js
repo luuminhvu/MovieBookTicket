@@ -102,7 +102,8 @@ const getOrders = async (req, res, next) => {
           u.UserID,
           u.Username,
           u.Email,
-          u.Phone
+          u.Phone,
+          p.TransactionNo
       FROM
           bookings AS bk
           JOIN showseats AS ss ON bk.BookingID = ss.BookingID
@@ -113,14 +114,15 @@ const getOrders = async (req, res, next) => {
           JOIN movies AS mv ON st.MovieID = mv.MovieID
           JOIN timeframes AS tf ON st.TimeFrameID = tf.TimeFrameID
           JOIN user AS u ON bk.CustomerID = u.UserID
+          JOIN payments AS p ON bk.BookingID = p.BookingID
       GROUP BY
           bk.BookingID, bk.BookingDate, bk.NumberOfTickets, bk.TotalPrice,
           ch.Name, c.Name, mv.Name, mv.Duration, mv.MovieID, mv.Poster, mv.Age, tf.StartTime, tf.EndTime,
-          u.UserID, u.Username, u.Email, u.Phone
+          u.UserID, u.Username, u.Email, u.Phone,
+          p.TransactionNo
       ORDER BY
           bk.BookingDate DESC
     `;
-
     const rows = await new Promise((resolve, reject) => {
       db.query(q, (err, data) => {
         if (err) return ErrorResponse(res, 500, "Internal Server Error", err);

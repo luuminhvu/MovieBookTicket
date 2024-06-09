@@ -7,11 +7,13 @@ const column = [
     name: "Mã vé",
     selector: (row) => row.NumberOfTickets,
     sortable: true,
+    width: "100px",
   },
   {
     name: "Mã đơn hàng",
     selector: (row) => row.BookingID,
     sortable: true,
+    width: "100px",
   },
   {
     name: "Mã người đặt",
@@ -19,8 +21,22 @@ const column = [
     sortable: true,
   },
   {
-    name: "Tên người dùng",
-    selector: (row) => row?.Username,
+    name: "Mã giao dịch",
+    selector: (row) => row.TransactionNo,
+    sortable: true,
+  },
+  {
+    name: "Thời gian đặt",
+    selector: (row) => {
+      return (
+        <>
+          <p>{dayjs(row.BookingDate).format("DD/MM/YYYY")}</p>
+          <p>{dayjs(row.BookingDate).format("HH:mm")}</p>
+        </>
+      );
+    },
+    sortable: true,
+    width: "100px",
   },
   {
     name: "Email",

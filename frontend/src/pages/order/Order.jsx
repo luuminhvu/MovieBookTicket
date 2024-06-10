@@ -14,7 +14,6 @@ const Order = () => {
   const { t } = useTranslation();
   const UserID = useSelector((state) => state.auth.userId);
   const orders = useSelector((state) => state.order.orders);
-  console.log(orders);
   const qrRef = useRef();
   const dispatch = useDispatch();
   useEffect(() => {

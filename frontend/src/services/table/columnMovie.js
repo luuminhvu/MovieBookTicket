@@ -1,12 +1,6 @@
 import ModalEditMv from "../../components/common/Modal/ModalEditMv";
 import ActionCell from "./component/ActionCell";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-
-// Extend dayjs with plugins
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 const column = [
   {
@@ -57,8 +51,7 @@ const column = [
   },
   {
     name: "Ngày công chiếu",
-    selector: (row) =>
-      dayjs(row.ReleaseDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY"),
+    selector: (row) => dayjs(row.ReleaseDate).format("DD/MM/YYYY"),
     width: "120px",
   },
   {

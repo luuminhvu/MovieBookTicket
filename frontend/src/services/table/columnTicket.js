@@ -1,11 +1,6 @@
 import dayjs from "dayjs";
 import ActionCellTicket from "./component/ActionCellTicket";
 import { ModalViewTicket } from "../../components/common/Modal/ModalViewTicket";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 const column = [
   {
@@ -35,10 +30,8 @@ const column = [
     selector: (row) => {
       return (
         <>
-          <p>
-            {dayjs(row.BookingDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}
-          </p>
-          <p>{dayjs(row.BookingDate).tz("Asia/Ho_Chi_Minh").format("HH:mm")}</p>
+          <p>{dayjs(row.BookingDate).format("DD/MM/YYYY")}</p>
+          <p>{dayjs(row.BookingDate).format("HH:mm")}</p>
         </>
       );
     },

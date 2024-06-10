@@ -3,8 +3,9 @@ const ErrorResponse = require("../common/Response/Error");
 const db = require("../config/dbconfig");
 const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
+const timezone = require("dayjs/plugin/timezone");
 dayjs.extend(utc);
-
+dayjs.extend(timezone);
 const getCinemaShowMovie = async (req, res, next) => {
   try {
     const date = req.body.date;
@@ -19,11 +20,15 @@ const getCinemaShowMovie = async (req, res, next) => {
       });
     });
 
-    const currentTime = dayjs();
+    const currentTime = dayjs().tz("Asia/Ho_Chi_Minh");
     const groupedData = {};
     rows.forEach((row) => {
       const [hours, minutes, seconds] = row.StartTime.split(":").map(Number);
-      const startTime = dayjs().hour(hours).minute(minutes).second(seconds);
+      const startTime = dayjs()
+        .tz("Asia/Ho_Chi_Minh")
+        .set("hour", hours)
+        .set("minute", minutes)
+        .set("second", seconds);
       if (startTime.isAfter(currentTime)) {
         if (!groupedData[row.CinemaName]) {
           groupedData[row.CinemaName] = [];
@@ -36,6 +41,7 @@ const getCinemaShowMovie = async (req, res, next) => {
         });
       }
     });
+
     const responseData = Object.keys(groupedData).map((cinemaName) => ({
       CinemaName: cinemaName,
       Showtimes: groupedData[cinemaName],

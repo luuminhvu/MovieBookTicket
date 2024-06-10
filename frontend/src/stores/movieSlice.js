@@ -19,7 +19,7 @@ export const fetchMovies = createAsyncThunk("movies/fetchMovies", async () => {
       } catch (error) {
         reject(error);
       }
-    }, 2000); // Giả sử bạn muốn lấy dữ liệu sau 2 giây
+    }, 1000);
   });
 });
 export const fetchPoster = createAsyncThunk("movies/fetchPoster", async () => {
@@ -31,7 +31,7 @@ export const fetchPoster = createAsyncThunk("movies/fetchPoster", async () => {
       } catch (error) {
         reject(error);
       }
-    }, 2000); // Giả sử bạn muốn lấy dữ liệu sau 2 giây
+    }, 1000);
   });
 });
 export const addMovie = createAsyncThunk("movies/addMovie", async (movie) => {

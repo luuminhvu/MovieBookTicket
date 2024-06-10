@@ -41,8 +41,7 @@ const store = configureStore({
 // getLocalStorage("token", dispatch(logout()));
 store.dispatch(checkExpiredToken());
 store.dispatch(loadingUserLogin());
-store.dispatch(fetchMovies());
-store.dispatch(fetchPoster());
+Promise.all([store.dispatch(fetchMovies()), store.dispatch(fetchPoster())]);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>

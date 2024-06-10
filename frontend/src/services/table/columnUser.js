@@ -1,6 +1,12 @@
 import ModalEditUser from "../../components/common/Modal/ModalEditUser";
 import ActionCell from "./component/ActionCell";
 import dayjs from "dayjs";
+
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const column = [
   // {
   //   name: "ID",
@@ -62,7 +68,7 @@ const column = [
     selector: (row) => (
       <>
         {row.Birthday
-          ? dayjs(row.Birthday).format("DD/MM/YYYY")
+          ? dayjs(row.Birthday).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")
           : "Chưa cập nhật"}
       </>
     ),

@@ -1,6 +1,11 @@
 import dayjs from "dayjs";
 import ActionCell from "./component/ActionCell";
 import ModalEditSt from "../../components/common/Modal/ModalEditSt";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const column = [
   {
     name: "ID",
@@ -26,7 +31,8 @@ const column = [
   },
   {
     name: "Ngày chiếu",
-    selector: (row) => dayjs(row.Date).format("DD/MM/YYYY"),
+    selector: (row) =>
+      dayjs(row.Date).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY"),
     sortable: true,
   },
   {

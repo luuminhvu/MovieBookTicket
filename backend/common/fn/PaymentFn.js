@@ -1,7 +1,10 @@
 const db = require("../../config/dbconfig");
 const dayjs = require("dayjs");
-const nodemailer = require("nodemailer");
+const utc = require("dayjs/plugin/utc");
+const timezone = require("dayjs/plugin/timezone");
 const sendMail = require("../../utils/sendMail");
+dayjs.extend(utc);
+dayjs.extend(timezone);
 const PaymentIntoBooking = async (inf, bookingID) => {
   try {
     const { seatId, showtimeId } = inf;
@@ -29,7 +32,7 @@ const PaymentIntoBooking = async (inf, bookingID) => {
 const PaymentSuccess = async (inf, bookingID, ticketCode) => {
   try {
     const { total, showtimeId, userId } = inf;
-    const date = dayjs().format("YYYY-MM-DD HH:mm:ss");
+    const date = dayjs().tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD HH:mm:ss");
     const q = `INSERT INTO bookings (BookingID,CustomerID,ShowtimeID,TotalPrice,BookingDate,NumberOfTickets) 
                VALUES (${bookingID},${userId},${showtimeId},${total},'${date}','${ticketCode}')`;
     const data = new Promise((resolve, reject) =>
@@ -74,7 +77,7 @@ const PaymentInfo = async (inf, bookingID) => {
       vnp_TransactionStatus,
       vnp_TxnRef,
     } = inf;
-    const date = dayjs().format("YYYY-MM-DD HH:mm:ss");
+    const date = dayjs().tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD HH:mm:ss");
     const q = `INSERT INTO payments (BookingID,PaymentDate,Amount,PaymentStatus,PaymentMethod,PaymentInfo,TransactionID,TransactionNo,BankCode,CardType)
                 VALUES (${bookingID},'${date}',${vnp_Amount},'${vnp_ResponseCode}','VNPAY','${vnp_OrderInfo}','${vnp_TxnRef}','${vnp_TransactionNo}','${vnp_BankCode}','${vnp_CardType}')`;
     const data = new Promise((resolve, reject) =>
@@ -128,7 +131,9 @@ const sendMailOrder = async (inf, ticketCode) => {
       });
     });
     const movieName = data[0].Name;
-    const datePayment = dayjs().format("YYYY-MM-DD HH:mm:ss");
+    const datePayment = dayjs()
+      .tz("Asia/Ho_Chi_Minh")
+      .format("YYYY-MM-DD HH:mm:ss");
     const cinemaName = inf.cinemaName;
     const cinemaHallName = inf.cinemaHallName;
     const startTime = inf.startTime;
@@ -279,7 +284,7 @@ const PaymentInfoMomo = async (inf, bookingID) => {
   // }
   try {
     const { partnerCode, orderId, requestId, amount, orderInfo, payType } = inf;
-    const date = dayjs().format("YYYY-MM-DD HH:mm:ss");
+    const date = dayjs().tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD HH:mm:ss");
     const q = `INSERT INTO payments (BookingID,PaymentDate,Amount,PaymentStatus,PaymentMethod,PaymentInfo,TransactionID,TransactionNo,BankCode,CardType)
                 VALUES (${bookingID},'${date}',${amount},'0','${partnerCode}','${orderInfo}','${requestId}','${orderId}','MOMO','${payType}')`;
     const data = new Promise((resolve, reject) =>
@@ -299,7 +304,7 @@ const PaymentInfoMomo = async (inf, bookingID) => {
 const paymentInfoCash = async (inf, bookingID) => {
   try {
     const { total } = inf;
-    const date = dayjs().format("YYYY-MM-DD HH:mm:ss");
+    const date = dayjs().tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD HH:mm:ss");
     const q = `INSERT INTO payments (BookingID,PaymentDate,Amount,PaymentStatus,PaymentMethod,PaymentInfo,TransactionID,TransactionNo,BankCode,CardType)
                 VALUES (${bookingID},'${date}',${total},'0','CASH','CASH',NULL,NULL,NULL,NULL)`;
     const data = new Promise((resolve, reject) =>

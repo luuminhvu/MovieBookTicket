@@ -1,32 +1,41 @@
 const SuccessResponse = require("../common/Response/Success");
 const ErrorResponse = require("../common/Response/Error");
 const db = require("../config/dbconfig");
+const dayjs = require("dayjs");
+const utc = require("dayjs/plugin/utc");
+dayjs.extend(utc);
 
 const getCinemaShowMovie = async (req, res, next) => {
   try {
     const date = req.body.date;
     const MovieID = req.body.MovieID;
     const q =
-      "SELECT c.Name as CinemaName, ch.CinemaHallID, ch.Name as CinemaHallName,st.ShowtimeID, st.MovieID, tf.StartTime as StartTime FROM `showtimes` as st JOIN `cinemahalls` as ch ON st.CinemaHallID = ch.CinemaHallID JOIN `cinemas` as c ON ch.CinemaID = c.CinemaID JOIN `timeframes` as tf ON st.TimeFrameID = tf.TimeFrameID WHERE st.MovieID = ? AND DATE(st.Date) = ?";
+      "SELECT c.Name as CinemaName, ch.CinemaHallID, ch.Name as CinemaHallName, st.ShowtimeID, st.MovieID, tf.StartTime as StartTime FROM `showtimes` as st JOIN `cinemahalls` as ch ON st.CinemaHallID = ch.CinemaHallID JOIN `cinemas` as c ON ch.CinemaID = c.CinemaID JOIN `timeframes` as tf ON st.TimeFrameID = tf.TimeFrameID WHERE st.MovieID = ? AND DATE(st.Date) = ?";
+
     const rows = await new Promise((resolve, reject) => {
       db.query(q, [MovieID, date], (err, data) => {
         if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
         resolve(data);
       });
     });
+
+    const currentTime = dayjs();
     const groupedData = {};
     rows.forEach((row) => {
-      if (!groupedData[row.CinemaName]) {
-        groupedData[row.CinemaName] = [];
+      const [hours, minutes, seconds] = row.StartTime.split(":").map(Number);
+      const startTime = dayjs().hour(hours).minute(minutes).second(seconds);
+      if (startTime.isAfter(currentTime)) {
+        if (!groupedData[row.CinemaName]) {
+          groupedData[row.CinemaName] = [];
+        }
+        groupedData[row.CinemaName].push({
+          CinemaHallName: row.CinemaHallName,
+          StartTime: row.StartTime,
+          CinemaHallID: row.CinemaHallID,
+          ShowtimeID: row.ShowtimeID,
+        });
       }
-      groupedData[row.CinemaName].push({
-        CinemaHallName: row.CinemaHallName,
-        StartTime: row.StartTime,
-        CinemaHallID: row.CinemaHallID,
-        ShowtimeID: row.ShowtimeID,
-      });
     });
-
     const responseData = Object.keys(groupedData).map((cinemaName) => ({
       CinemaName: cinemaName,
       Showtimes: groupedData[cinemaName],
@@ -37,6 +46,7 @@ const getCinemaShowMovie = async (req, res, next) => {
     ErrorResponse(res, 500, "Internal Server Error", error);
   }
 };
+
 const getAllShowMovieByCinema = async (req, res, next) => {
   try {
     const cinemaID = req.body.cinemaID;

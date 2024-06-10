@@ -30,7 +30,7 @@ const Home = () => {
           <SwiperCarousel />
           <div className="mt-15">
             <div className="w-screen">
-              <h1 className="text-2xl uppercase sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-center border-b-2 w-2/4 mx-auto border-black">
+              <h1 className="text-2xl text-[#03599D] uppercase sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-center border-b-2 w-2/4 mx-auto border-black">
                 {t("nowShowing")}
               </h1>
             </div>
@@ -95,7 +95,7 @@ const Home = () => {
                     </div>
                   ))}
             </div>
-            <h1 className="text-2xl uppercase sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-center border-b-2 w-2/4 mx-auto border-black">
+            <h1 className="text-2xl text-[#03599D] uppercase sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-center border-b-2 w-2/4 mx-auto border-black">
               {t("comingSoon")}
             </h1>
             <div className="mx-auto sm:w-full md:w-3/4 p-4 sm:p-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mt-5">

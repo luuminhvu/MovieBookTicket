@@ -3,14 +3,18 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrder } from "../../stores/orderSlice";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import QRCode from "qrcode.react";
 import { setLoading } from "../../stores/loadingSlice";
 import { useTranslation } from "react-i18next";
-
+dayjs.extend(utc);
+dayjs.extend(timezone);
 const Order = () => {
   const { t } = useTranslation();
   const UserID = useSelector((state) => state.auth.userId);
   const orders = useSelector((state) => state.order.orders);
+  console.log(orders);
   const qrRef = useRef();
   const dispatch = useDispatch();
   useEffect(() => {

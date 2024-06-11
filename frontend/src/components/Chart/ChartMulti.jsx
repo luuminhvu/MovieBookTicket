@@ -74,6 +74,7 @@ const ChartMulti = () => {
   const [day, setDay] = useState([]);
   const [numberOfTickets, setNumberOfTickets] = useState([]);
   const [revenue, setRevenue] = useState([]);
+  const totalRevenue = revenue.reduce((acc, cur) => parseFloat(cur) + acc, 0);
 
   const data = {
     labels: day,
@@ -118,6 +119,7 @@ const ChartMulti = () => {
       Revenue: revenue[index],
       NumberOfTickets: numberOfTickets[index],
     }));
+
     const worksheet = XLSX.utils.json_to_sheet(worksheetData, { origin: "A6" });
     XLSX.utils.sheet_add_aoa(
       worksheet,
@@ -140,9 +142,13 @@ const ChartMulti = () => {
       { origin: "A1" }
     );
 
+    XLSX.utils.sheet_add_aoa(
+      worksheet,
+      [[], ["Tổng doanh thu", "", totalRevenue]],
+      { origin: `A${worksheetData.length + 6}` }
+    );
     const columnWidths = [{ wch: 10 }, { wch: 20 }, { wch: 15 }];
     worksheet["!cols"] = columnWidths;
-
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Revenue Report");
     XLSX.writeFile(workbook, `Revenue_Report_${year}_${month}.xlsx`);
@@ -150,40 +156,53 @@ const ChartMulti = () => {
 
   return (
     <div className="m-auto w-3/4">
-      <div className="flex gap-4">
-        <button
-          onClick={exportToExcel}
-          className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
-        >
-          Xuất Excel
-        </button>
-        <div className="flex items-center">
-          <label className="text-lg mr-2">Chọn năm:</label>
-          <select
-            className="bg-gray-200 p-2 rounded-md"
-            defaultValue={currentYear}
-            onChange={handleChangeYear}
-          >
-            <option value={currentYear - 1}>{currentYear - 1}</option>
-            <option value={currentYear}>{currentYear}</option>
-          </select>
-        </div>
-        <div className="flex items-center">
-          <label className="text-lg mr-2">Chọn tháng:</label>
-          <select
-            className="bg-gray-200 p-2 rounded-md"
-            defaultValue={currentMonth}
-            onChange={handleChangeMonth}
-          >
-            {Array.from({ length: 12 }, (_, index) => {
-              const monthNumber = index + 1;
-              return (
-                <option key={monthNumber} value={monthNumber}>
-                  Tháng {monthNumber}
-                </option>
-              );
-            })}
-          </select>
+      <div className="container">
+        <div className="flex justify-between items-center gap-4 w-full">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={exportToExcel}
+              className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+            >
+              Xuất Excel
+            </button>
+            <div className="flex items-center">
+              <label className="text-lg mr-2">Chọn năm:</label>
+              <select
+                className="bg-gray-200 p-2 rounded-md"
+                defaultValue={currentYear}
+                onChange={handleChangeYear}
+              >
+                <option value={currentYear - 1}>{currentYear - 1}</option>
+                <option value={currentYear}>{currentYear}</option>
+              </select>
+            </div>
+            <div className="flex items-center">
+              <label className="text-lg mr-2">Chọn tháng:</label>
+              <select
+                className="bg-gray-200 p-2 rounded-md"
+                defaultValue={currentMonth}
+                onChange={handleChangeMonth}
+              >
+                {Array.from({ length: 12 }, (_, index) => {
+                  const monthNumber = index + 1;
+                  return (
+                    <option key={monthNumber} value={monthNumber}>
+                      Tháng {monthNumber}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <div className="flex flex-col items-end">
+              <div className="text-lg">Tổng doanh thu: {totalRevenue} VNĐ</div>
+              <div className="text-lg">
+                Tổng số vé bán ra:{" "}
+                {numberOfTickets.reduce((acc, cur) => cur + acc, 0)}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Booking from "../../components/common/Booking";
 import DateSelector from "../../components/common/DatePicker";
 import dayjs from "dayjs";
@@ -37,20 +37,19 @@ const BookDate = () => {
     });
   };
 
+  const fetchData = useCallback(async () => {
+    // dispatch(setLoading(true));
+    try {
+      await dispatch(fetchShowtimes({ MovieID: id, date }));
+    } catch (error) {
+      console.error("Lỗi khi lấy lịch chiếu:", error);
+    } finally {
+      dispatch(setLoading(false));
+    }
+  }, [dispatch, id, date]);
   useEffect(() => {
-    setLoading(true);
-    const fetchData = async () => {
-      dispatch(setLoading(true));
-      try {
-        dispatch(fetchShowtimes({ MovieID: id, date: date }));
-        dispatch(setLoading(false));
-      } catch (error) {
-        dispatch(setLoading(false));
-        throw error;
-      }
-    };
     fetchData();
-  }, [id, date, dispatch]);
+  }, [fetchData]);
 
   return (
     <>

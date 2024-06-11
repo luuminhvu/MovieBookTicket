@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { setLoading } from "../../stores/loadingSlice";
 import { getDetailMovie } from "../../services/function";
@@ -42,22 +42,25 @@ const BookSeat = () => {
       navigate("/login");
     }
   }, [auth, navigate]);
+  const fetchData = useCallback(async () => {
+    dispatch(setLoading(true));
+    try {
+      const [movieResponse] = await Promise.all([
+        getDetailMovie(id),
+        dispatch(checkActive(UserID)),
+        dispatch(fetchSeats([showTimeID, cinemaHallID])),
+      ]);
+      setMovie(movieResponse[0]);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu:", error);
+    } finally {
+      dispatch(setLoading(false));
+    }
+  }, [dispatch, id, showTimeID, cinemaHallID, UserID]);
   useEffect(() => {
-    const fetchData = async () => {
-      dispatch(setLoading(true));
-      try {
-        const response = await getDetailMovie(id);
-        setMovie(response[0]);
-        dispatch(checkActive(UserID));
-        dispatch(fetchSeats([showTimeID, cinemaHallID]));
-        dispatch(setLoading(false));
-      } catch (error) {
-        dispatch(setLoading(false));
-        throw error;
-      }
-    };
     fetchData();
-  }, [id, showTimeID, dispatch, cinemaHallID, UserID]);
+  }, [fetchData]);
+
   const seatsByRow = {};
 
   seat.forEach((seat) => {

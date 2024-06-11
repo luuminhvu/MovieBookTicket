@@ -16,8 +16,10 @@ const CinemaHall = () => {
     const fetchData = async () => {
       dispatch(setLoading(true));
       try {
-        await dispatch(fetchCinemaHall());
-        await dispatch(fetchCinema());
+        await Promise.all([
+          dispatch(fetchCinema()),
+          dispatch(fetchCinemaHall()),
+        ]);
         dispatch(setLoading(false));
       } catch (error) {
         dispatch(setLoading(false));

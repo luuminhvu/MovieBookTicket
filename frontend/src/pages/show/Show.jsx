@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import DateSelector from "../../components/common/DatePicker";
 import { useSelector } from "react-redux";
@@ -24,21 +24,23 @@ const Show = () => {
   const handleChangeCinema = (e) => {
     setCinemaID(e.target.value);
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      dispatch(setLoading(true));
-      try {
-        new Promise.all([
-          dispatch(fetchCinema()),
-          dispatch(fetchShowtimesAll({ date, cinemaID })),
-        ]);
-        dispatch(setLoading(false));
-      } catch (error) {
-        dispatch(setLoading(false));
-      }
-    };
-    fetchData();
+  const fetchData = useCallback(async () => {
+    // dispatch(setLoading(true));
+    try {
+      await Promise.all([
+        dispatch(fetchCinema()),
+        dispatch(fetchShowtimesAll({ date, cinemaID })),
+      ]);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu:", error);
+    } finally {
+      dispatch(setLoading(false));
+    }
   }, [dispatch, date, cinemaID]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
   const handleButtonClick = (
     cinemaName,
     cinemaHallName,

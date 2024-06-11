@@ -39,6 +39,7 @@ const store = configureStore({
 });
 // const { dispatch } = store;
 // getLocalStorage("token", dispatch(logout()));
+
 store.dispatch(checkExpiredToken());
 store.dispatch(loadingUserLogin());
 Promise.all([store.dispatch(fetchMovies()), store.dispatch(fetchPoster())]);

@@ -85,10 +85,12 @@ const getCinemaShowMovie = async (req, res, next) => {
 
 const getAllShowMovieByCinema = async (req, res, next) => {
   try {
-    const cinemaID = req.body.cinemaID;
-    const date = req.body.date;
+    const { cinemaID, date } = req.body;
+    const requestDate = dayjs(date).tz("Asia/Ho_Chi_Minh");
+    const currentTime = dayjs().tz("Asia/Ho_Chi_Minh");
+    const currentDate = currentTime.startOf("day");
 
-    const q = `
+    const query = `
       SELECT 
         c.Name as CinemaName, 
         ch.CinemaHallID, 
@@ -100,7 +102,8 @@ const getAllShowMovieByCinema = async (req, res, next) => {
         m.Genres,
         m.Duration,
         m.Poster,
-        m.Subtitle
+        m.Subtitle,
+        st.Date as ShowtimeDate
       FROM 
         showtimes as st 
         JOIN cinemahalls as ch ON st.CinemaHallID = ch.CinemaHallID 
@@ -113,35 +116,67 @@ const getAllShowMovieByCinema = async (req, res, next) => {
     `;
 
     const rows = await new Promise((resolve, reject) => {
-      db.query(q, [cinemaID, date], (err, data) => {
-        if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
-        resolve(data);
-      });
+      db.query(
+        query,
+        [cinemaID, requestDate.format("YYYY-MM-DD")],
+        (err, data) => {
+          if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+          resolve(data);
+        }
+      );
     });
-
-    // Tạo một đối tượng Map để nhóm các phim theo ID
     const movieMap = new Map();
     rows.forEach((row) => {
-      if (!movieMap.has(row.MovieID)) {
-        movieMap.set(row.MovieID, {
-          MovieID: row.MovieID,
-          MovieName: row.MovieName,
-          Genres: row.Genres,
-          Duration: row.Duration,
-          Poster: row.Poster,
-          Subtitle: row.Subtitle,
-          CinemaName: row.CinemaName,
-          Showtimes: [],
+      const showtimeDateTime = dayjs(`${row.ShowtimeDate}T${row.StartTime}`).tz(
+        "Asia/Ho_Chi_Minh"
+      );
+
+      if (requestDate.isAfter(currentDate)) {
+        if (!movieMap.has(row.MovieID)) {
+          movieMap.set(row.MovieID, {
+            MovieID: row.MovieID,
+            MovieName: row.MovieName,
+            Genres: row.Genres,
+            Duration: row.Duration,
+            Poster: row.Poster,
+            Subtitle: row.Subtitle,
+            CinemaName: row.CinemaName,
+            Showtimes: [],
+          });
+        }
+        const movie = movieMap.get(row.MovieID);
+        movie.Showtimes.push({
+          ShowtimeID: row.ShowtimeID,
+          StartTime: row.StartTime,
+          CinemaHallID: row.CinemaHallID,
+          CinemaHallName: row.CinemaHallName,
+        });
+      } else if (
+        requestDate.isSame(currentDate, "day") &&
+        showtimeDateTime.isAfter(currentTime)
+      ) {
+        if (!movieMap.has(row.MovieID)) {
+          movieMap.set(row.MovieID, {
+            MovieID: row.MovieID,
+            MovieName: row.MovieName,
+            Genres: row.Genres,
+            Duration: row.Duration,
+            Poster: row.Poster,
+            Subtitle: row.Subtitle,
+            CinemaName: row.CinemaName,
+            Showtimes: [],
+          });
+        }
+        const movie = movieMap.get(row.MovieID);
+        movie.Showtimes.push({
+          ShowtimeID: row.ShowtimeID,
+          StartTime: row.StartTime,
+          CinemaHallID: row.CinemaHallID,
+          CinemaHallName: row.CinemaHallName,
         });
       }
-      const movie = movieMap.get(row.MovieID);
-      movie.Showtimes.push({
-        ShowtimeID: row.ShowtimeID,
-        StartTime: row.StartTime,
-        CinemaHallID: row.CinemaHallID,
-        CinemaHallName: row.CinemaHallName,
-      });
     });
+
     const responseData = [...movieMap.values()];
 
     SuccessResponse(res, 200, "Showtimes fetched successfully", responseData);

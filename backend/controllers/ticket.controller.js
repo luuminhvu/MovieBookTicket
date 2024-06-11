@@ -8,28 +8,58 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 const getCinemaShowMovie = async (req, res, next) => {
   try {
-    const date = req.body.date;
-    const MovieID = req.body.MovieID;
-    const q =
-      "SELECT c.Name as CinemaName, ch.CinemaHallID, ch.Name as CinemaHallName, st.ShowtimeID, st.MovieID, tf.StartTime as StartTime FROM `showtimes` as st JOIN `cinemahalls` as ch ON st.CinemaHallID = ch.CinemaHallID JOIN `cinemas` as c ON ch.CinemaID = c.CinemaID JOIN `timeframes` as tf ON st.TimeFrameID = tf.TimeFrameID WHERE st.MovieID = ? AND DATE(st.Date) = ?";
+    const { date, MovieID } = req.body;
+    const requestDate = dayjs(date).tz("Asia/Ho_Chi_Minh");
+    const currentTime = dayjs().tz("Asia/Ho_Chi_Minh");
+    const currentDate = currentTime.startOf("day");
+
+    const query = `
+      SELECT 
+        c.Name as CinemaName, 
+        ch.CinemaHallID, 
+        ch.Name as CinemaHallName, 
+        st.ShowtimeID, 
+        st.MovieID, 
+        st.Date as ShowtimeDate, 
+        tf.StartTime as StartTime 
+      FROM showtimes as st 
+      JOIN cinemahalls as ch ON st.CinemaHallID = ch.CinemaHallID 
+      JOIN cinemas as c ON ch.CinemaID = c.CinemaID 
+      JOIN timeframes as tf ON st.TimeFrameID = tf.TimeFrameID 
+      WHERE st.MovieID = ? AND DATE(st.Date) = ?`;
 
     const rows = await new Promise((resolve, reject) => {
-      db.query(q, [MovieID, date], (err, data) => {
-        if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
-        resolve(data);
-      });
+      db.query(
+        query,
+        [MovieID, requestDate.format("YYYY-MM-DD")],
+        (err, data) => {
+          if (err) return ErrorResponse(res, 500, "Internal Server Error", err);
+          resolve(data);
+        }
+      );
     });
 
-    const currentTime = dayjs().tz("Asia/Ho_Chi_Minh");
     const groupedData = {};
+
     rows.forEach((row) => {
-      const [hours, minutes, seconds] = row.StartTime.split(":").map(Number);
-      const startTime = dayjs()
-        .tz("Asia/Ho_Chi_Minh")
-        .set("hour", hours)
-        .set("minute", minutes)
-        .set("second", seconds);
-      if (startTime.isAfter(currentTime)) {
+      const showtimeDateTime = dayjs(`${row.ShowtimeDate}T${row.StartTime}`).tz(
+        "Asia/Ho_Chi_Minh"
+      );
+
+      if (requestDate.isAfter(currentDate)) {
+        if (!groupedData[row.CinemaName]) {
+          groupedData[row.CinemaName] = [];
+        }
+        groupedData[row.CinemaName].push({
+          CinemaHallName: row.CinemaHallName,
+          StartTime: row.StartTime,
+          CinemaHallID: row.CinemaHallID,
+          ShowtimeID: row.ShowtimeID,
+        });
+      } else if (
+        requestDate.isSame(currentDate, "day") &&
+        showtimeDateTime.isAfter(currentTime)
+      ) {
         if (!groupedData[row.CinemaName]) {
           groupedData[row.CinemaName] = [];
         }

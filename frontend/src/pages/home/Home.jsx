@@ -60,7 +60,7 @@ const Home = () => {
 
                       <Link
                         to={`/movie/${movie.MovieID}`}
-                        className="text-sm mt-2 text-[#337ab7] font-bold cursor-pointer hover:underline"
+                        className="text-sm mt-2 text-[#337ab7] font-bold cursor-pointer hover:underline line-clamp-1"
                       >
                         {movie.Name}
                       </Link>

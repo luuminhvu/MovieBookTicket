@@ -319,14 +319,16 @@ const Checkout = () => {
                 >
                   <option value="0">{t("doNotUseVoucher")}</option>
                   {voucher.length > 0 &&
-                    voucher.map((voucher) => (
-                      <option
-                        key={voucher.UserVoucherID}
-                        value={voucher.UserVoucherID}
-                      >
-                        {voucher?.VoucherCode}
-                      </option>
-                    ))}
+                    voucher
+                      .filter((voucher) => voucher.Active == 1)
+                      .map((voucher) => (
+                        <option
+                          key={voucher.UserVoucherID}
+                          value={voucher.UserVoucherID}
+                        >
+                          {voucher?.VoucherCode}
+                        </option>
+                      ))}
                 </select>
               </li>
               <li className="flex flex-wrap gap-4 text-sm">

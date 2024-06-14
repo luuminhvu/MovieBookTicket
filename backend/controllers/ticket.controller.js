@@ -42,10 +42,9 @@ const getCinemaShowMovie = async (req, res, next) => {
     const groupedData = {};
 
     rows.forEach((row) => {
-      const showtimeDateTime = dayjs(`${row.ShowtimeDate}T${row.StartTime}`).tz(
-        "Asia/Ho_Chi_Minh"
-      );
-
+      const showtimeDateTime = dayjs(
+        `${dayjs(row.ShowtimeDate).format("YYYY-MM-DD")}T${row.StartTime}`
+      ).tz("Asia/Ho_Chi_Minh");
       if (requestDate.isAfter(currentDate)) {
         if (!groupedData[row.CinemaName]) {
           groupedData[row.CinemaName] = [];
@@ -127,9 +126,9 @@ const getAllShowMovieByCinema = async (req, res, next) => {
     });
     const movieMap = new Map();
     rows.forEach((row) => {
-      const showtimeDateTime = dayjs(`${row.ShowtimeDate}T${row.StartTime}`).tz(
-        "Asia/Ho_Chi_Minh"
-      );
+      const showtimeDateTime = dayjs(
+        `${dayjs(row.ShowtimeDate).format("YYYY-MM-DD")}T${row.StartTime}`
+      ).tz("Asia/Ho_Chi_Minh");
 
       if (requestDate.isAfter(currentDate)) {
         if (!movieMap.has(row.MovieID)) {

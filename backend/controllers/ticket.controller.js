@@ -38,12 +38,15 @@ const getCinemaShowMovie = async (req, res, next) => {
         }
       );
     });
+    console;
 
     const groupedData = {};
 
     rows.forEach((row) => {
       const showtimeDateTime = dayjs(
-        `${dayjs(row.ShowtimeDate).format("YYYY-MM-DD")}T${row.StartTime}`
+        `${dayjs(row.ShowtimeDate)
+          .tz("Asia/Ho_Chi_Minh")
+          .format("YYYY-MM-DD")}T${row.StartTime}`
       ).tz("Asia/Ho_Chi_Minh");
       if (requestDate.isAfter(currentDate)) {
         if (!groupedData[row.CinemaName]) {

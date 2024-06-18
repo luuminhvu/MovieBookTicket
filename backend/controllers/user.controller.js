@@ -220,9 +220,10 @@ const updateUserPassword = async (req, res) => {
     }
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(newPassword, salt);
-    const qUpdate = `UPDATE User SET Password = ? WHERE UserID = ?`;
+    const qUpdate = `UPDATE user SET Password = ? WHERE UserID = ?`;
     db.query(qUpdate, [hashedPassword, UserID], (err, data) => {
       if (err) {
+        console.log(err);
         return ErrorResponse(res, 500, "Internal Server Error", err);
       }
       return SuccessResponse(res, 200, "Password updated successfully");
